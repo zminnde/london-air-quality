@@ -2,6 +2,8 @@ import pandas
 import numpy
 import holidays
 
+UK_HOLIDAYS = pandas.to_datetime(list(holidays.country_holidays('UK', years=range(2011, 2026)).keys()))
+
 raw_csv_directory = 'data/1_raw'
 output_directory = 'data/2_unscaled_features'
 start_year = 2011
@@ -22,10 +24,10 @@ raw_features, target_features = zip(*[
 ])
 
 
-def add_day_category(df):
+def add_day_category(df, country):
     current_date = pandas.to_datetime(df['date'])
     next_date = current_date + pandas.Timedelta(days=1)
-    is_off_day = lambda date: is_weekend(date) | is_holiday(date)
+    is_off_day = lambda date: is_weekend(date) | is_holiday(date, country)
 
     category = numpy.select(
         [is_off_day(current_date), is_off_day(next_date)],
@@ -41,8 +43,9 @@ def is_weekend(date):
     return date.dt.day_name().isin(['Saturday', 'Sunday'])
 
 
-def is_holiday(date):
-    return False
+def is_holiday(date, country_holidays):
+    isIn = date.isin(country_holidays)
+    return isIn
 
 
 for year in range(start_year, end_year + 1):
@@ -55,5 +58,5 @@ for year in range(start_year, end_year + 1):
         engine='python')
      .rename(columns=dict(zip(raw_features, target_features)))
      .reindex(columns=target_features)
-     .pipe(add_day_category)
+     .pipe(add_day_category, UK_HOLIDAYS)
      .to_csv(f"{output_directory}/{year}_unscaled.csv", index=False))
