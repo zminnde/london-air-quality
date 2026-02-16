@@ -2,10 +2,10 @@ import pandas
 import numpy
 import holidays
 
-raw_csv_directory = '../data/1_raw'
-output_directory = '../data/2_unscaled_features'
+raw_csv_directory = 'data/1_raw'
+output_directory = 'data/2_unscaled_features'
 start_year = 2011
-end_year = 2011
+end_year = 2025
 rows_to_skip = 17
 raw_features, target_features = zip(*[
     ('Date', 'date'),
