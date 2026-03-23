@@ -1,4 +1,5 @@
 raw_csv = 'data/1_raw'
+min_max_csv = 'data/3_scaled/min_max_values.csv'
 rows_to_skip = 17
 start_year = 2012
 end_year = 2025
