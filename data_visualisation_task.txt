@@ -1,0 +1,2 @@
+Visualize multidimensional data set using at least three direct visualization methods. Matlab (Statistical Toolbox), Orange, Visulab, Xmdv, Pandas, or other software may be used. Include at least three images in the report and comment them. Include general conclusions describing insights about the data and comparing results of different methods indicating which one is most useful for the analyzed data.
+
