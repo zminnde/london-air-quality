@@ -59,6 +59,7 @@
 
     \subsection{Duomenų valymas}
 
+    \paragraph{CO šalinimas.}
     Duomenų rinkinys apima 2012--2025 metų valandinius matavimus iš Londono Merilebono kelio stoties -- iš viso 122\,736 eilutės.
     Iš jų 30\,770 eilučių (25,1\,\%) turi bent vieną trūkstamą reikšmę. \ref{tab:missing} lentelėje pateikiamas trūkstamų reikšmių skaičius ir procentas kiekvienam požymiui.
 
@@ -88,7 +89,9 @@
     \ce{CO} turi didžiausią trūkstamų reikšmių dalį iš visų požymių (10,4\,\%). Dėl šių priežasčių \ce{CO} pašalintas iš duomenų rinkinio.
     Pašalinus \ce{CO}, eilučių su bent viena trūkstama reikšme liko 21\,636 (17,6\,\%).
 
-    Trūkstamų reikšmių analizė parodo, kad 66,9\% visų trūkstamų reikšmių sudaro tarpai, ilgesni nei 24 val. \ref{tab:gap_distribution} lentelėje pateikiamas trūkstamų reikšmių pasiskirstymas pagal tarpo ilgį.
+    \paragraph{Trūkstamų eilučių šalinimas.}
+    Pašalinus CO, atliekama tarpų analizė.
+    Analizė parodo, kad 66,9\% visų trūkstamų reikšmių sudaro tarpai, ilgesni nei 24 val. \ref{tab:gap_distribution} lentelėje pateikiamas trūkstamų reikšmių pasiskirstymas pagal tarpo ilgį.
 
     \begin{table}[H]
         \centering
@@ -171,7 +174,11 @@
         \label{tab:stats}
     \end{table}
 
-    \ce{NO} pasižymi labai dideliu maksimumu (max 872,83 \textmu g/m\textsuperscript{3}), 18 kartų didesniu nei mediana. \ce{KD_{2,5}} maksimumas (127,60 \textmu g/m\textsuperscript{3}) daugiau nei 8 kartus didesnis už medianą. Tai rodo retų, bet intensyvių taršos epizodų egzistavimą.
+    \ce{NO} pasižymi labai dideliu maksimumu (max 872,83 \textmu g/m\textsuperscript{3}), 18 kartų didesniu nei mediana. \ce{KD_{2,5}} maksimumas (127,60 \textmu g/m\textsuperscript{3}) daugiau nei 8 kartus didesnis už medianą.
+    Tai rodo retų, bet intensyvių taršos epizodų egzistavimą.
+
+    Taip pat pastebimos neigiamos minimalios reikšmės. Fiziškai koncentracija negali būti neigiama.
+    Tai matavimų klaidos arba sugadinti duomenys.
 
     \subsection{Sezoniniai teršalų trendai}
 
@@ -204,7 +211,9 @@
         \label{tab:seasonal}
     \end{table}
 
-    Galima būtų tobulinti K-NN metodą: kaimynų paiešką galima apriboti tuo pačiu sezonu arba mėnesiu, arba sezoninius faktorius įtraukti kaip papildomą svorį Euklido atstumo formulėje.
+    Sezoniniai skirtumai rodo, kad modelio prognozavimui įtaką gali turėti sezoniškumas.
+    Sezoniškumą galima būtų įtraukti į K-NN metodą.
+    Kaimynų paiešką galima apriboti tuo pačiu sezonu arba mėnesiu, arba sezoninius faktorius įtraukti kaip papildomą svorį Euklido atstumo formulėje.
 
     \subsection{Min-max normalizavimas}
 
