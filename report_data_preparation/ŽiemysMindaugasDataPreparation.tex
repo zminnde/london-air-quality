@@ -1,0 +1,526 @@
+%%%%%
+%%%%%  Naudokite LUALATEX, ne LATEX.
+%%%%%
+%%%%
+\documentclass[]{VUMIFTemplateClass}
+
+\usepackage{indentfirst}
+\usepackage{amsmath, amsthm, amssymb, amsfonts}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage[hidelinks]{hyperref}
+\usepackage{color,algorithm,algorithmic}
+\usepackage[nottoc]{tocbibind}
+\usepackage{tocloft}
+\usepackage[version=4]{mhchem}
+\usepackage{textgreek}
+\usepackage{textcomp}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{listings}
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\bfseries,
+    commentstyle=\itshape,
+    stringstyle=\ttfamily,
+    breaklines=true,
+    frame=single,
+    showstringspaces=false,
+    numbers=left,
+    numberstyle=\tiny,
+    xleftmargin=1.5em,
+}
+
+\usepackage{titlesec}
+\newcommand{\sectionbreak}{\clearpage}
+
+\makeatletter
+\renewcommand{\fnum@algorithm}{\thealgorithm}
+\makeatother
+\renewcommand\thealgorithm{\arabic{algorithm} algoritmas}
+
+\usepackage{biblatex}
+\bibliography{bibliografija}
+
+\newcommand{\EE}{\mathbb{E}\,}
+\newcommand{\ee}{{\mathrm e}}
+\newcommand{\RR}{\mathbb{R}}
+
+\studijuprograma{Informatikos}
+\darbotipas{Ataskaita}
+\darbopavadinimas{Kietųjų dalelių koncentracijos prognozavimas laiko eilutėse}
+\darbopavadinimasantras{Duomenų paruošimas}
+\autorius{Mindaugas Žiemys}
+
+\vadovas{Linas Litvinas, Asist., Dr.}
+
+\begin{document}
+    \selectlanguage{lithuanian}
+
+    \onehalfspacing
+    \input{titulinis}
+
+    \singlespacing
+
+    \tableofcontents
+    \onehalfspacing
+
+
+    \section{Duomenų paruošimas}
+    Pradinis duomenų rinkinys apima 2012--2025 metų valandinius oro taršos matavimus iš Londono Merilebono kelio stoties -- iš viso 122\,736 eilutės.
+    Duomenų paruošimo seką apima šie pagrindiniai žingsniai:
+    \begin{itemize}
+        \item \ce{CO} stulpelio pašalinimas.
+        \item COVID--19 pandemijos 2020--2022 m. laikotarpio pašalinimas.
+        \item Neigiamų reikšmių pašalinimas.
+        \item Eilučių su trūkstamomis reikšmėmis pašalinimas.
+        \item Vėjo krypties $\sin$ ir $\cos$ dedamųjų pridėjimas.
+        \item Dienos kategorijos stulpelio sukūrimas.
+        \item Min-Max normalizavimas -- verčių perkėlimas į intervalą $[-1, 1]$.
+    \end{itemize}
+
+    \subsection{CO pašalinimas}
+    Iš visų 122\,736 eilučių, 30\,770 (25,1\,\%) turi bent vieną trūkstamą reikšmę.
+    \ref{tab:missing} lentelėje pateikiamas eilučių su trūkstamomis reikšmėmis kiekis ir jų dalis, skaičiuojama nuo viso pradinio duomenų rinkinio ($N=122\,736$).
+
+    \begin{table}[H]
+        \centering
+        \caption{Trūkstamos reikšmės pagal atributą ($N = 122\,736$)}
+        \small
+        \setlength{\tabcolsep}{6pt}
+        \begin{tabular}{|l|r|r|}
+            \hline
+            \textbf{Atributas} & \textbf{Kiekis} & \textbf{Dalis (\%)} \\
+            \hline
+            \ce{CO}            & 12\,704         & 10,35               \\
+            \ce{KD_{10}}       & 10\,379         & 8,46                \\
+            \ce{KD_{2,5}}      & 9\,649          & 7,86                \\
+            \ce{O3}            & 4\,359          & 3,55                \\
+            \ce{NO}            & 3\,653          & 2,98                \\
+            \ce{NO2}           & 3\,653          & 2,98                \\
+            Vėjo greitis       & 3\,168          & 2,58                \\
+            Temperatūra        & 3\,168          & 2,58                \\
+            Vėjo kryptis       & 3\,168          & 2,58                \\
+            \hline
+        \end{tabular}
+        \label{tab:missing}
+    \end{table}    \ce{CO} turi didžiausią trūkstamų reikšmių dalį (10,35\,\%). Dėl šių priežasčių \ce{CO} pašalintas iš duomenų rinkinio.
+    Pašalinus \ce{CO}, eilučių su trūkstamomis reikšmėmis liko 21\,636 (17,6\,\%).
+
+    \subsection{COVID--19 pandemijos 2020--2022 m. laikotarpio pašalinimas}
+    Sprendimą pašalinti šio laikotarpio duomenis lėmė dvi priežastys.
+    Pirma, COVID--19 pandemijos metu dėl taikytų ribojimų oro taršos tendencijos buvo netipiškos.
+    Antra, šiuo laikotarpiu fiksuotas žymiai didesnis \ce{KD_{2,5}} duomenų trūkumas (žr. \ref{tab:pm25_yearly_comparison} lentelę).
+    \begin{table}[H]
+        \centering
+        \caption{Vidutinis trūkstamų \ce{KD_{2,5}} reikšmių kiekis ir dalis per metus}
+        \small
+        \setlength{\tabcolsep}{12pt}
+        \begin{tabular}{|l|c|r|}
+            \hline
+            \textbf{Laikotarpis}                & \textbf{Kiekis (vid.)} & \textbf{Dalis (\%)} \\
+            \hline
+            2012--2019 m.                       & 483                    & 5,51                \\
+            \textbf{2020--2022 m. (Pandeminis)} & \textbf{1\,476}        & \textbf{16,84}      \\
+            2023--2025 m.                       & 436                    & 4,97                \\
+            \hline
+        \end{tabular}
+        \label{tab:pm25_yearly_comparison}
+    \end{table}
+    Pašalinus COVID--19 laikotarpio įrašus, pilnas duomenų rinkinį sudaro 96\,432 įrašai, iš jų 13\,875 (14,4\%) -- turi bent vieną trūkstamą reikšmę.
+
+    \subsection{Neigiamų reikšmių pašalinimas}
+    Kadangi koncentracija fiziškai negali būti mažesnė už nulį, tokie duomenys laikomi matavimo įrangos paklaidomis ir yra pašalinami.
+    \begin{table}[H]
+        \centering
+        \caption{Teršalų koncentracijų ribinės reikšmės ir neigiamų įrašų kiekis}
+        \small
+        \setlength{\tabcolsep}{8pt}
+        \begin{tabular}{|l|r|r|c|}
+            \hline
+            \textbf{Atributas} & \textbf{Min} & \textbf{Max} & \textbf{Neigiamų kiekis} \\
+            \hline
+            \ce{O3}            & $-0,93$      & 156,46       & 22                       \\
+            \ce{NO}            & $-0,37$      & 872,83       & 9                        \\
+            \ce{PM_{10}}       & $-2,90$      & 187,90       & 44                       \\
+            \ce{PM_{2,5}}      & $-5,00$      & 127,60       & 280                      \\
+            \ce{NO2}           & 0,00         & 321,91       & 0                        \\
+            \hline
+            \textbf{Iš viso}   & --           & --           & \textbf{355}             \\
+            \hline
+        \end{tabular}
+        \label{tab:negative_concentrations}
+    \end{table}
+    Pašalinus neigiamas reikšmes, duomenų rinkinį sudaro 96\,211 įrašai, iš jų 13\,855 (14,4\%) -- turi bent vieną trūkstamą reikšmę.
+
+    \subsection{Eilučių su trūkstamomis reikšmėmis pašalinimas}
+    Analizė parodo, kad 69,1\% visų duomenų spragų (žr. \ref{tab:gap_distribution} lentelę) sudaro laikotarpiai, ilgesni nei 24 val.
+
+    \begin{table}[H]
+        \centering
+        \caption{Įrašų su trūkstamomis reikšmėmis pasiskirstymas pagal trukmę}
+        \small
+        \setlength{\tabcolsep}{8pt}
+        \begin{tabular}{|l|r|r|}
+            \hline
+            \textbf{Tarpo ilgis} & \textbf{Eilučių kiekis} & \textbf{Dalis (\%)} \\
+            \hline
+            1 val.               & 470                     & 3,4                 \\
+            2 val.               & 301                     & 2,2                 \\
+            3--5 val.            & 322                     & 2,3                 \\
+            6--12 val.           & 573                     & 4,1                 \\
+            12--24 val.          & 2\,612                  & 18,9                \\
+            24+ val.             & 9\,577                  & 69,1                \\
+            \hline
+            \textbf{Iš viso}     & \textbf{13\,855}        & \textbf{100,0}      \\
+            \hline
+        \end{tabular}
+        \label{tab:gap_distribution}
+    \end{table}
+    Visos eilutės su trūkstamomis reikšmėmis yra pašalinamos.
+    Pašalinus trūkstamus įrašus, pilną duomenų rinkinį sudaro 82\,356 įrašai.
+
+    \subsection{Vėjo krypties sin ir cos dedamųjų pridėjimas.}
+
+    Vėjo kryptis (laipsniais, 0--360\textdegree) konvertuota į dvi dedamąsias: sinusą ir kosinusą:
+
+    \begin{equation}
+        s = \sin\!\left(\alpha \cdot \frac{\pi}{180}\right), \qquad
+        c = \cos\!\left(\alpha \cdot \frac{\pi}{180}\right)
+        \label{eq:windsincos}
+    \end{equation}
+
+    Trigonometrinės funkcijos $\sin$ ir $\cos$ naudojamos su radianų argumentais, todėl vėjo krypties matavimai laipsniais ($\alpha$) konvertuojami taikant $\pi/180$.
+
+    Transformavimas į $\sin$ ir $\cos$ išsprendžia cikliškumo problemą.
+    Kampai 0\textdegree{} ir 360\textdegree{} yra identiški, tačiau skaitiškai skiriasi: $|360 - 0| = 360$, nors faktinis skirtumas 0\textdegree.
+    Sinuso ir kosinuso atvaizdavime šie kampai duoda identiškas reikšmių poras.
+    Originalus vėjo krypties stulpelis pašalintas.
+
+    \subsection{Dienos kategorijos sukūrimas}
+    Kiekviena laiko eilutė susieta su dienos kategorija, kurią galima aprašyti:
+
+    \begin{equation}
+        \text{kategorija}(d) =
+        \begin{cases}
+            1, & \text{jei } d \text{ yra poilsio diena} \\
+            2, & \text{jei } d+1 \text{ yra poilsio diena} \\
+            0, & \text{kitais atvejais (darbo diena)}
+        \end{cases}
+        \label{eq:daycat}
+    \end{equation}
+
+    čia poilsio diena -- savaitgalis (šeštadienis arba sekmadienis) arba JK valstybinė šventė.
+    Dienos kategorija bus naudojamas kaip filtras -- prognozei naudojami įrašai apribojami tik tais įrašais, kurie priklauso tai pačiai kategorijai.
+    Tokiu būdu užtikrinama, kad, pavyzdžiui, sekmadienio tarša nebūtų prognozuojama remiantis pirmadienio duomenimis, nes transporto intensyvumas šiomis dienomis skiriasi.
+
+    \subsection{Sezoniniai teršalų trendai}
+
+    \ref{tab:seasonal_trends} lentelėje pateikiami pagrindinių teršalų mėnesiniai vidurkiai.
+    Sausio -- kovo mėn. vidutinė \ce{KD_{2,5}} koncentracija išauga. NO koncentracija padidėja lapkričio -- sausio mėn.
+
+    \begin{table}[H]
+        \centering
+        \caption{Teršalų vidutinės mėnesinės koncentracijos (\textmu g/m\textsuperscript{3})}
+        \small
+        \setlength{\tabcolsep}{5pt}
+        \begin{tabular}{|l|r|r|r|r|r|}
+            \hline
+            \textbf{Mėnuo} & \textbf{\ce{O3}} & \textbf{\ce{NO}} & \textbf{\ce{NO2}} & \textbf{\ce{KD_{10}}} & \textbf{\ce{KD_{2,5}}} \\
+            \hline
+            Sausis         & 15,25            & \textbf{122,16}  & 76,36             & 26,67                 & \textbf{17,08}         \\
+            Vasaris        & 18,50            & 108,38           & 72,93             & 27,38                 & \textbf{17,82}         \\
+            Kovas          & 23,71            & 92,03            & 73,72             & 29,23                 & \textbf{19,99}         \\
+            Balandis       & 30,55            & 81,20            & 72,36             & 25,27                 & 16,63                  \\
+            Gegužė         & 32,42            & 75,45            & 68,53             & 22,69                 & 15,11                  \\
+            Birželis       & 27,13            & 87,40            & 72,36             & 20,49                 & 13,16                  \\
+            Liepa          & 22,48            & 88,32            & 72,83             & 19,62                 & 12,91                  \\
+            Rugpjūtis      & 20,33            & 83,07            & 68,15             & 21,05                 & 12,94                  \\
+            Rugsėjis       & 18,00            & 95,17            & 70,47             & 22,46                 & 14,94                  \\
+            Spalis         & 14,60            & 108,68           & 71,47             & 23,83                 & 14,58                  \\
+            Lapkritis      & 13,09            & \textbf{121,73}  & 71,55             & 25,44                 & 15,77                  \\
+            Gruodis        & 16,03            & \textbf{122,40}  & 73,90             & 24,31                 & 15,03                  \\
+            \hline
+        \end{tabular}
+        \label{tab:seasonal_trends}
+    \end{table}
+    Sezoniniai skirtumai rodo, kad modelio prognozavimui įtaką gali turėti sezoniškumas.
+    Sezoniškumas bus įtrauktas į K-NN metodą, apribojant paiešką $\pm 20$ dienų tolerancijos intervalu aplink tikslinę datą, per visų turimų metų duomenų rinkinį.
+    Pavyzdžiui, prognozuojant 2023 m. rugpjūčio 2 d. taršą, paieškoa apima visų metų laikotarpius nuo liepos 13 d. iki rugpjūčio 22 d.
+
+    \subsection{Min-max normalizavimas}
+
+    Skaitiniai matavimų atributai normalizuoti į $[-1, 1]$ intervalą pagal formulę:
+
+    \begin{equation}
+        x' = \frac{2(x - x_{\min})}{x_{\max} - x_{\min}} - 1
+        \label{eq:minmax}
+    \end{equation}
+
+    čia $x$ -- originali reikšmė, $x_{\min}$ ir $x_{\max}$ -- atitinkamo atributo minimali ir maksimali reikšmės visoje duomenų aibėje, $x'$ -- normalizuota reikšmė.
+    Normalizavimas atliekamas kiekvienam atributui atskirai, naudojant tik jam būdingas minimalias ir maksimalias reikšmes.
+    Tokiu būdu visų kintamųjų vertės suvienodinamas iki $[-1, 1]$ intervalo.
+
+    \ref{tab:minmax_final} lentelėje pateikiamos normalizuojamų atributų minimalios ir maksimalios reikšmės.
+    Neigiamos minimalios reikšmės buvo pašalintos praeitame žingsnyje.
+
+    \begin{table}[H]
+        \centering
+        \caption{Atributų minimalios ir maksimalios reikšmės, naudojamos normalizavimui}
+        \small
+        \setlength{\tabcolsep}{8pt}
+        \begin{tabular}{|l|c|r|r|}
+            \hline
+            \textbf{Atributas} & \textbf{Vnt.}                  & \textbf{$x_{\min}$} & \textbf{$x_{\max}$} \\
+            \hline
+            \ce{O3}            & \textmu g/m\textsuperscript{3} & 0,00                & 151,47              \\
+            \ce{NO}            & \textmu g/m\textsuperscript{3} & 0,00                & 872,83              \\
+            \ce{NO2}           & \textmu g/m\textsuperscript{3} & 0,00                & 321,91              \\
+            \ce{KD_{10}}       & \textmu g/m\textsuperscript{3} & 0,00                & 187,90              \\
+            \ce{KD_{2,5}}      & \textmu g/m\textsuperscript{3} & 0,00                & 127,60              \\
+            Vėjo greitis       & m/s                            & 0,00                & 13,70               \\
+            Temperatūra        & \textdegree C                  & $-10,50$            & 33,40               \\
+            \hline
+        \end{tabular}
+        \label{tab:minmax_final}
+    \end{table}
+    Vėjo krypties sinuso ir kosinuso komponentai nebuvo normalizuoti papildomai, nes pagal apibrėžimą jau patenka į $[-1,\,1]$ intervalą.
+    Dienos kategorija ir valanda yra kategoriniai atributai, jų normalizuoti nereikia.
+
+
+    \section{Prognozavimo metodika}
+
+    Oro taršos prognozavimui naudojamas modifikuotas $K$ artimiausių kaimynų (KNN) metodas su svoriais.
+    Modelio esmė -- rasti istorinius 5~valandų laikotarpius, kurių meteorologinės ir taršos sąlygos yra panašiausios į dabartinę situaciją, ir pagal jų tęsinį prognozuoti \ce{KD_{2,5}} koncentraciją ateinančioms 12~valandų.
+
+    Panašumui įvertinti naudojamas svertinis Euklido atstumas, sudarytas iš penkių atskirų atstumo funkcijų.
+    Kiekviena funkcija apima tam tikrą atributų poaibį ir matuoja atstumą tarp dabartinio 5~valandų lango $\mathbf{x}$ ir istorinio lango $\mathbf{y}$.
+    Funkcijoms priskiriami svorio koeficientai, o galutinis panašumas skaičiuojamas kaip svertinė suma.
+
+    \subsection{Atstumo funkcijos}
+
+    \subsubsection*{1 funkcija. Vėjo dinamika ($d_1$)}
+    Apima vėjo greitį ($v$) ir vėjo krypties dedamąsias ($s = \sin\alpha$, $c = \cos\alpha$).
+    Vėjas yra pagrindinis teršalų sklaidos horizontalioje kryptyje veiksnys.
+    Iš viso Euklido atstumas skaičiuojamas per 3 \times 5 = 15 matmenų.
+    \begin{equation}
+        d_1 = \sqrt{\sum_{h=1}^{5} \left[ (s_{x,h} - s_{y,h})^2 + (c_{x,h} - c_{y,h})^2 + (v_{x,h} - v_{y,h})^2 \right]}
+    \end{equation}
+
+    \subsubsection*{2 funkcija. Temperatūra ($d_2$)}
+    Temperatūra veikia teršalų sklaidą vertikalioje kryptyje.
+    Apima 5 temperatūros ($T$) matavimus.
+    \begin{equation}
+        d_2 = \sqrt{\sum_{h=1}^{5} (T_{x,h} - T_{y,h})^2}
+    \end{equation}
+
+    \subsubsection*{3 funkcija. Dujiniai teršalai ($d_3$)}
+    Apima visus dujinius teršalus, išskyrus kietąsias daleles: \ce{O3}, \ce{NO} ir \ce{NO2} koncentracijas.
+    Iš viso: $3 \text{ atributai} \times 5 \text{ valandos} = 15$ reikšmių.
+    \begin{equation}
+        d_3 = \sqrt{\sum_{h=1}^{5} \left[ ({\ce{O3}}_{x,h} - {\ce{O3}}_{y,h})^2 + ({\ce{NO}}_{x,h} - {\ce{NO}}_{y,h})^2 + ({\ce{NO2}}_{x,h} - {\ce{NO2}}_{y,h})^2 \right]}
+    \end{equation}
+
+    \subsubsection*{4 funkcija. \ce{KD_{10}} ($d_4$)}
+    Apima 5 stambiųjų kietųjų dalelių \ce{KD_{10}} matavimus.
+    \begin{equation}
+        d_4 = \sqrt{\sum_{h=1}^{5} ({\ce{KD_{10}}}_{x,h} - {\ce{KD_{10}}}_{y,h})^2}
+    \end{equation}
+
+    \subsubsection*{5 funkcija. \ce{KD_{2,5}} dabartinis lygis ($d_5$)}
+    Apima 5 tikslinio kintamojo \ce{KD_{2,5}} matavimus.
+    Užtikrina, kad rastas kaimynas turėtų panašų dabartinį \ce{KD_{2,5}} lygį.
+    \begin{equation}
+        d_5 = \sqrt{\sum_{h=1}^{5} ({\ce{KD_{2,5}}}_{x,h} - {\ce{KD_{2,5}}}_{y,h})^2}
+    \end{equation}
+
+    \subsection{Bendra atstumo funkcijos išraiška}
+
+    Visos penkios funkcijos turi tą pačią struktūrą -- Euklido atstumą per 5 valandų langą.
+    Bet kurią iš jų galima užrašyti bendra forma:
+    \begin{equation}
+        d_j = \sqrt{\sum_{h=1}^{5} \sum_{f \in F_j} (x_{h,f} - y_{h,f})^2}
+        \label{eq:dist_group}
+    \end{equation}
+    čia $F_j$ -- $j$-osios funkcijos atributų aibė (pvz., $F_1 = \{v, s, c\}$, $F_2 = \{T\}$), $x_{h,f}$ ir $y_{h,f}$ -- atitinkamai dabartinė ir istorinė normalizuoto atributo $f$ reikšmė $h$~valandą.
+
+    \subsection{Agreguotas svertinis atstumas}
+
+    Visos penkios funkcijos apjungiamos į vieną svertinę sumą:
+    \begin{equation}
+        D = w_1 d_1 + w_2 d_2 + w_3 d_3 + w_4 d_4 + w_5 d_5
+        \label{eq:total_dist}
+    \end{equation}
+    čia $w_j$ -- svorio koeficientai, tenkinantys sąlygą $\sum_{j=1}^{5} w_j = 1$.
+    Svoriai leidžia reguliuoti kiekvienos funkcijos įtaką bendram panašumui.
+    Pradiniuose eksperimentuose visiems svoriams bus priskirta vienoda reikšmė $w_j = 0{,}2$.
+    Optimalūs svoriai bus parinkti eksperimentų metu, siekiant minimizuoti prognozės paklaidą.
+
+    \subsection{Paieškos erdvės apribojimai}
+
+    Potencialių kaimynų paieška istoriniuose duomenyse apribojama šiais filtrais:
+    \begin{itemize}
+        \item \textbf{Laiko sinchronizacija:} lyginami tik tie istoriniai langai, kurie prasideda tą pačią paros valandą kaip ir dabartinė situacija. Pavyzdžiui, jei dabartinis langas apima 8--12~val., istoriniai langai taip pat turi prasidėti nuo 8~val.
+        \item \textbf{Dienos kategorija:} darbo dienų langai lyginami tik su darbo dienų langais, savaitgalių -- tik su savaitgalių.
+        \item \textbf{Sezoniškumas:} paieška apribojama $\pm 20$~dienų intervalu aplink tikslinę datą per visus turimus metus. Pavyzdžiui, prognozuojant rugpjūčio 2~d. taršą, paieška apima laikotarpius nuo liepos 13~d. iki rugpjūčio 22~d. visais turimais metais.
+        \item \textbf{Duomenų vientisumas:} įtraukiami tik tie blokai, kuriuose nėra trūkių nei 5~valandų įvesties, nei 12~valandų prognozės lange. Pavyzdžiui, jei istorinis langas prasideda 8~val., tai visos įvesties reikšmės nuo 8 iki 12~val. ir prognozės nuo 13 iki 24~val. turi būti be trūkstamų reikšmių.
+    \end{itemize}
+
+    \subsection{Slenksčio taikymas ir baltosios dėžės principas}
+
+    Modelis remiasi baltosios dėžės (\textit{White Box}) principu -- kaimynų atranka pagrįsta ne fiksuotu skaičiumi $K$, o slenksčio konstanta $S$:
+
+    \begin{equation}
+        \text{Sprendimas} =
+        \begin{cases}
+            \text{Prognozuoti}, & \text{jei } \min(D) \le S \\
+            \text{Neprognozuoti}, & \text{jei } \min(D) > S
+        \end{cases}
+        \label{eq:threshold}
+    \end{equation}
+
+    Jei nė vienas istorinis langas netenkiną slenksčio sąlygos, modelis informuoja, kad prognozė negali būti sudaryta -- istorijoje nėra pakankamai panašios situacijos.
+    Tai esminis skirtumas nuo juodosios dėžės metodų (pvz., dirbtinių neuroninių tinklų), kurie prognozę pateikia visada, neatsižvelgiant į tai, ar ji pagrįsta analogija su istoriniais duomenimis.
+    Slenksčio konstanta $S$ taip pat bus parenkama eksperimentiškai -- ieškant balanso tarp prognozės tikslumo ir padengimo (dalies atvejų, kuriems modelis pateikia prognozę).
+
+    \subsection{Prognozės sudarymas}
+
+    Atrenkami visi kaimynai, tenkinantys sąlygą $D \le S$.
+    Galutinė 12~valandų \ce{KD_{2,5}} prognozė kiekvienam laiko žingsniui $t \in \{1, \dots, 12\}$ skaičiuojama kaip atrinktų kaimynų ateities reikšmių vidurkis:
+
+    \begin{equation}
+        \hat{y}_{t} = \frac{1}{K} \sum_{k=1}^{K} y_{t}^{(k)}
+        \label{eq:forecast}
+    \end{equation}
+    čia $K$ -- kaimynų, patenkančių į slenksčio zoną, skaičius, $y_{t}^{(k)}$ -- $k$-ojo kaimyno užfiksuota \ce{KD_{2,5}} koncentracija po $t$~valandų nuo atskaitos taško.
+
+
+    \section{Rezultatai}
+
+    \subsection{Validžių duomenų iškarpa}
+    Lentelėje \ref{tab:raw_data_sample} pateikiama validžių originalių duomenų iškarpa prieš normalizavimą.
+    \begin{table}[H]
+        \centering
+        \caption{Validžių originalių duomenų iškarpa}
+        \small
+        \resizebox{\textwidth}{!}{
+            \begin{tabular}{|l|c|r|r|r|r|r|r|r|r|r|}
+                \hline
+                \textbf{Data} & \textbf{Laikas} & \textbf{\ce{O3}} & \textbf{\ce{NO}} & \textbf{\ce{NO2}} & \textbf{\ce{CO}} & \textbf{\ce{KD_{10}}} & \textbf{\ce{KD_{2,5}}} & \textbf{Vėjo krypt.} & \textbf{Vėjo greit.} & \textbf{Temp.} \\
+                \hline
+                2016-03-30    & 06:00:00        & 3,79             & 289,29           & 134,73            & 0,595            & 31,9                  & 14,17                  & 246,8                & 2,6                  & 1,6            \\
+                2016-03-30    & 07:00:00        & 2,94             & 404,42           & 160,86            & 0,863            & 35,2                  & 16,35                  & 253,6                & 3,5                  & 3,4            \\
+                2016-03-30    & 08:00:00        & 3,04             & 442,75           & 169,61            & 0,952            & 35,4                  & 16,95                  & 257,8                & 3,5                  & 6,2            \\
+                2016-03-30    & 09:00:00        & 3,44             & 455,46           & 194,32            & 0,833            & 45,0                  & 18,23                  & 264,3                & 4,2                  & 8,5            \\
+                2016-03-30    & 10:00:00        & 5,09             & 391,30           & 167,55            & 0,862            & 43,9                  & 16,95                  & 270,5                & 4,8                  & 10,0           \\
+                2016-03-30    & 11:00:00        & 9,08             & 231,78           & 138,45            & 0,595            & 27,7                  & 11,00                  & 266,9                & 4,6                  & 11,0           \\
+                2016-03-30    & 12:00:00        & 7,28             & 282,47           & 148,30            & 0,714            & 37,1                  & 16,25                  & 267,2                & 4,3                  & 11,8           \\
+                2016-03-30    & 13:00:00        & 8,68             & 265,75           & 139,28            & 0,535            & 32,4                  & 16,25                  & 259,4                & 4,3                  & 12,0           \\
+                2016-03-30    & 14:00:00        & 12,27            & 159,92           & 104,98            & 0,417            & 19,3                  & 8,92                   & 255,7                & 4,2                  & 11,7           \\
+                2016-03-30    & 15:00:00        & 13,02            & 164,73           & 108,93            & 0,476            & 20,5                  & 10,21                  & 252,9                & 3,7                  & 11,1           \\
+                2016-03-30    & 16:00:00        & 12,17            & 182,46           & 135,16            & 0,684            & 28,4                  & 10,60                  & 256,4                & 3,3                  & 10,4           \\
+                2016-03-30    & 17:00:00        & 7,83             & 279,46           & 141,91            & 0,952            & 30,4                  & 13,58                  & 250,0                & 1,8                  & 9,2            \\
+                2016-03-30    & 18:00:00        & 13,32            & 145,24           & 114,01            & 0,595            & 22,1                  & 12,49                  & 227,0                & 1,8                  & 7,5            \\
+                \hline
+            \end{tabular}
+        }
+        \label{tab:raw_data_sample}
+    \end{table}
+
+    Lentelėje \ref{tab:normalized_sample} pateikiama šios iškarpos normalizuota ir transformuota versija.
+    \begin{table}[H]
+        \centering
+        \caption{Validžių normalizuotų ir transformuotų duomenų škarpa}
+        \small
+        \resizebox{\textwidth}{!}{
+            \begin{tabular}{|l|c|r|r|r|r|r|r|r|c|r|r|}
+                \hline
+                \textbf{Data} & \textbf{Val.} & \textbf{\ce{O3}} & \textbf{\ce{NO}} & \textbf{\ce{NO2}} & \textbf{\ce{KD_{10}}} & \textbf{\ce{KD_{2,5}}} & \textbf{Vėjo gr.} & \textbf{Temp.} & \textbf{Dienos kat.} & \textbf{Vėjo $\sin$} & \textbf{Vėjo $\cos$} \\
+                \hline
+                2016-03-30    & 6             & -0,94            & -0,34            & -0,16             & -0,66                 & -0,78                  & -0,62             & -0,45          & 0                    & -0,92                & -0,39                \\
+                2016-03-30    & 7             & -0,95            & -0,07            & 0,00              & -0,63                 & -0,74                  & -0,49             & -0,37          & 0                    & -0,96                & -0,28                \\
+                2016-03-30    & 8             & -0,95            & 0,01             & 0,05              & -0,62                 & -0,73                  & -0,49             & -0,24          & 0                    & -0,98                & -0,21                \\
+                2016-03-30    & 9             & -0,94            & 0,04             & 0,21              & -0,52                 & -0,71                  & -0,39             & -0,13          & 0                    & -1,00                & -0,10                \\
+                2016-03-30    & 10            & -0,92            & -0,10            & 0,04              & -0,53                 & -0,73                  & -0,30             & -0,07          & 0                    & -1,00                & 0,01                 \\
+                2016-03-30    & 11            & -0,85            & -0,47            & -0,14             & -0,71                 & -0,83                  & -0,33             & -0,02          & 0                    & -1,00                & -0,05                \\
+                2016-03-30    & 12            & -0,88            & -0,35            & -0,08             & -0,61                 & -0,75                  & -0,37             & 0,02           & 0                    & -1,00                & -0,05                \\
+                2016-03-30    & 13            & -0,86            & -0,39            & -0,13             & -0,66                 & -0,75                  & -0,37             & 0,03           & 0                    & -0,98                & -0,18                \\
+                2016-03-30    & 14            & -0,80            & -0,63            & -0,35             & -0,79                 & -0,86                  & -0,39             & 0,01           & 0                    & -0,97                & -0,25                \\
+                2016-03-30    & 15            & -0,79            & -0,62            & -0,32             & -0,78                 & -0,84                  & -0,46             & -0,02          & 0                    & -0,96                & -0,29                \\
+                2016-03-30    & 16            & -0,80            & -0,58            & -0,16             & -0,70                 & -0,83                  & -0,52             & -0,05          & 0                    & -0,97                & -0,24                \\
+                2016-03-30    & 17            & -0,87            & -0,36            & -0,12             & -0,68                 & -0,79                  & -0,74             & -0,10          & 0                    & -0,94                & -0,34                \\
+                2016-03-30    & 18            & -0,78            & -0,67            & -0,29             & -0,76                 & -0,80                  & -0,74             & -0,18          & 0                    & -0,73                & -0,68                \\
+                2016-03-30    & 19            & -0,68            & -0,87            & -0,46             & -0,87                 & -0,91                  & -0,75             & -0,24          & 0                    & -0,76                & -0,65                \\
+                \hline
+            \end{tabular}        }
+        \label{tab:normalized_sample}
+    \end{table}
+
+    \subsection{Iškarpa su nevalidžiais duomenimis}
+
+    Lentelėje \ref{tab:missing_data} pateikiama duomenų iškarpa su trūkstamomis reikšmėmis 11, 12, 13 valandomis bei su neigiama \ce{KD_{2,5}} reikšme 6 valandą.
+    \begin{table}[H]
+        \centering
+        \caption{Originalių duomenų iškarpa su trūkstamomis ir neigiamomis reikšmėmis}
+        \small
+        \resizebox{\textwidth}{!}{
+            \begin{tabular}{|l|c|r|r|r|r|r|r|r|r|r|}
+                \hline
+                \textbf{Data} & \textbf{Laikas} & \textbf{\ce{O3}} & \textbf{\ce{NO}} & \textbf{\ce{NO2}} & \textbf{\ce{CO}} & \textbf{\ce{KD_{10}}} & \textbf{\ce{KD_{2,5}}} & \textbf{Vėjo krypt.} & \textbf{Vėjo greit.} & \textbf{Temp.} \\
+                \hline
+                2023-08-02    & 06:00:00        & 6,79             & 27,94            & 15,30             & 0,140            & 7,73                  & \textbf{-1,0}          & 240,6                & 6,0                  & 17,7           \\
+                2023-08-02    & 07:00:00        & 8,18             & 32,31            & 19,13             & 0,198            & 10,63                 & 1,0                    & 246,1                & 6,0                  & 17,7           \\
+                2023-08-02    & 08:00:00        & 8,98             & 45,15            & 37,10             & 0,221            & 9,66                  & 4,0                    & 247,8                & 6,3                  & 18,2           \\
+                2023-08-02    & 09:00:00        & 16,56            & 43,03            & 41,12             & 0,221            & 7,73                  & 4,0                    & 241,9                & 6,6                  & 19,0           \\
+                2023-08-02    & 10:00:00        & 17,56            & 38,79            & 39,78             & 0,244            & 8,70                  & 3,0                    & 234,7                & 6,9                  & 18,9           \\
+                2023-08-02    & 11:00:00        & \textbf{NaN}     & \textbf{NaN}     & \textbf{NaN}      & \textbf{NaN}     & 9,66                  & 6,0           & 225,6 & 5,5 & 16,5 \\
+                2023-08-02    & 12:00:00        & \textbf{NaN}     & \textbf{NaN}     & \textbf{NaN}      & \textbf{NaN}     & \textbf{NaN} & \textbf{NaN} & 222,1 & 4,7 & 16,6 \\
+                2023-08-02    & 13:00:00        & 10,58            & 50,52            & 51,26             & 0,256            & \textbf{NaN}          & \textbf{NaN}           & 223,2                & 4,8                  & 16,8           \\
+                2023-08-02    & 14:00:00        & 5,79             & 72,59            & 59,86             & 0,361            & 24,16                 & 24,0                   & 220,8                & 5,2                  & 16,8           \\
+                2023-08-02    & 15:00:00        & 6,98             & 51,01            & 54,51             & 0,303            & 7,73                  & 7,0                    & 204,2                & 4,0                  & 17,9           \\
+                2023-08-02    & 16:00:00        & 6,79             & 50,89            & 57,38             & 0,349            & 9,66                  & 11,0                   & 232,1                & 3,8                  & 19,0           \\
+                2023-08-02    & 17:00:00        & 16,76            & 16,96            & 37,29             & 0,210            & 6,76                  & 6,0                    & 260,0                & 2,7                  & 18,5           \\
+                2023-08-02    & 18:00:00        & 13,57            & 14,34            & 35,19             & 0,221            & 8,70                  & 10,0                   & 313,8                & 3,2                  & 18,0           \\
+                \hline
+            \end{tabular}
+        }
+        \label{tab:missing_data}
+    \end{table}
+
+    Lentelėje \ref{tab:normalized_missing_data} pateikiama šios iškarpos išvalyta, normalizuota ir transformuota versija.
+    6 valanda buvo pašalinta dėl neigiamos \ce{KD_{2,5}} reikšmės, o valandos 11, 12, 13 -- dėl trūkstamų reikšmių.
+    \begin{table}[H]
+        \centering
+        \caption{Normalizuotų duomenų iškarpa su trūkstamomis ir neigiamomis reikšmėmis}
+        \small
+        \resizebox{\textwidth}{!}{
+            \begin{tabular}{|l|c|r|r|r|r|r|r|r|c|r|r|}
+                \hline
+                \textbf{Data} & \textbf{Val.} & \textbf{\ce{O3}} & \textbf{\ce{NO}} & \textbf{\ce{NO2}} & \textbf{\ce{KD_{10}}} & \textbf{\ce{KD_{2,5}}} & \textbf{Vėjo gr.} & \textbf{Temp.} & \textbf{Dienos kat.} & \textbf{Vėjo $\sin$} & \textbf{Vėjo $\cos$} \\
+                \hline
+                2023-08-02    & 5             & -0,82            & -0,96            & -0,89             & -0,91                 & -0,95                  & -0,27             & 0,28           & 0                    & -0,88                & -0,47                \\
+                2023-08-02    & 7             & -0,87            & -0,93            & -0,88             & -0,89                 & -0,98                  & -0,12             & 0,28           & 0                    & -0,91                & -0,41                \\
+                2023-08-02    & 8             & -0,85            & -0,90            & -0,77             & -0,90                 & -0,94                  & -0,08             & 0,31           & 0                    & -0,93                & -0,38                \\
+                2023-08-02    & 9             & -0,73            & -0,90            & -0,74             & -0,92                 & -0,94                  & -0,04             & 0,34           & 0                    & -0,88                & -0,47                \\
+                2023-08-02    & 10            & -0,71            & -0,91            & -0,75             & -0,91                 & -0,95                  & 0,01              & 0,34           & 0                    & -0,82                & -0,58                \\
+                2023-08-02    & 14            & -0,91            & -0,83            & -0,63             & -0,74                 & -0,62                  & -0,24             & 0,24           & 0                    & -0,65                & -0,76                \\
+                2023-08-02    & 15            & -0,89            & -0,88            & -0,66             & -0,92                 & -0,89                  & -0,42             & 0,29           & 0                    & -0,41                & -0,91                \\
+                2023-08-02    & 16            & -0,89            & -0,88            & -0,64             & -0,90                 & -0,83                  & -0,45             & 0,34           & 0                    & -0,79                & -0,61                \\
+                2023-08-02    & 17            & -0,73            & -0,96            & -0,77             & -0,93                 & -0,91                  & -0,61             & 0,32           & 0                    & -0,98                & -0,17                \\
+                2023-08-02    & 18            & -0,78            & -0,97            & -0,78             & -0,91                 & -0,84                  & -0,53             & 0,30           & 0                    & -0,72                & 0,69                 \\
+                \hline
+            \end{tabular}
+        }
+        \label{tab:normalized_missing_data}
+    \end{table}
+
+    \subsection{Valandų blokų filtravimas}
+    KNN modelio prognozavimui bus naudojami nepertraukiami penkių valandų įvesties ir dvylikos valandų prognozės blokai.
+    Bus taikomas duomenų filtravimo kriterijus: jei pasirinktame laiko bloke (tiek įvesties, tiek prognozės lange) aptinkama bent viena trūkstama reikšmė, visas blokas yra pašalinamas iš tyrimo ir laikomas netinkamu analizei.
+
+    \printbibliography[title = {Literatūra ir šaltiniai}]
+
+\end{document}
