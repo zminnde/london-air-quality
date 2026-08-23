@@ -1,0 +1,143 @@
+I need you to extend my existing PCA notebook (attached: pca.ipynb) with a new
+section implementing Multidimensional Scaling (MDS) on the same London Marylebone
+Road air quality dataset. ADD cells to the existing notebook rather than create
+a new one — keep all existing data loading, preparation and PCA code intact.
+Add the new MDS section after the PCA results.
+
+## Context
+
+This is the third task in a multidimensional data visualisation course. The
+course slides (attached: MDV3D__1_.pdf) emphasise two key points:
+
+1. MDS minimises a stress function that has MANY local minima. Different
+   initial configurations can converge to different local minima, producing
+   genuinely different embeddings (not just rotated/reflected versions of
+   the same solution).
+2. The dimensionality of the embedding space m matters. The slides show
+   stress vs m curves: stress drops sharply from m=1 to m=2 to m=3, then
+   levels off. This justifies (or challenges) the choice of m=2 for
+   visualisation.
+
+The course task is: "Visualize multidimensional data set using
+Multidimensional Scaling. Investigate, how images are different when different
+initial solutions are specified. Include and compare at least two images in
+the report. Compare with previous exercises."
+
+The CORE deliverable is showing how initial solutions affect the result.
+
+## Data preparation (reuse from notebook)
+
+- Same 3,473 daily-mean records as PCA
+- Same 8 features: CO, O3, NO, NO2, PM10, PM2.5, wind speed, temperature
+- Years 2020-2022 excluded, days with any missing values dropped, CO required
+- Standardise features to zero mean unit variance (same as PCA)
+- Same PM2.5 tertile colouring (blue / orange / red)
+
+## Implementation
+
+### 1. Subsampling
+
+MDS is O(n²) memory and slow on 3,473 points. Use a random subsample of
+800-1000 days (fixed seed for reproducibility, e.g. 42). State the sample
+size in a markdown cell with brief justification — MDS sklearn becomes
+impractical above ~1500 points and the visualisation does not benefit from
+more anyway.
+
+### 2. Sensitivity to initial solutions (the main task)
+
+This is the critical part. Read the slides carefully — the lecturer's point
+is that MDS has many local minima.
+
+Run sklearn.manifold.MDS at least 6 times with DIFFERENT initial configurations:
+- Use random_state values: 0, 1, 7, 42, 100, 2024
+- IMPORTANT: set n_init=1 for each run. Do NOT use n_init=4 or higher,
+  because sklearn would then run 4 inits internally per call and return
+  the best — that would defeat the experiment by hiding the differences.
+- Use max_iter=300 (sklearn default) or higher (500) to give each
+  initialisation a fair chance to converge.
+
+For each run record:
+- Final stress value
+- 2D embedding coordinates
+- Number of iterations until convergence (mds.n_iter_)
+- Time taken
+
+### 3. Quantify how different the embeddings actually are
+
+To confirm whether different stress values come from genuinely different
+geometric solutions, OR from solutions that are equivalent up to
+rotation/reflection, use Procrustes analysis from scipy.spatial.procrustes
+between pairs of embeddings.
+
+- Procrustes disparity ≈ 0 means the two embeddings are the same shape,
+  just rotated/reflected/scaled. Same local minimum.
+- Procrustes disparity substantially > 0 means genuinely different
+  geometric solutions. Different local minima.
+
+Build a small symmetric table or heatmap of Procrustes disparities between
+all pairs of seeds. This directly addresses the lecturer's claim about
+local minima — empirical evidence one way or the other.
+
+### 4. Investigate embedding dimensionality m (bonus, mirrors lecture content)
+
+The slides show "f* vs m" curves for several empirical datasets. Reproduce
+this analysis for the air quality data:
+
+- Run MDS for m = 1, 2, 3, 4, 5 (use the same subsample, fixed seed)
+- Plot final stress vs m
+- This mirrors slide 4 (empirical f* vs m) and lets the report justify
+  why m=2 is or is not a reasonable choice
+
+This is a secondary analysis but ties the work directly to the lecture
+material and strengthens the report.
+
+### 5. Compare metric vs non-metric MDS (optional, if time allows)
+
+Run metric MDS (metric=True, default) and non-metric MDS (metric=False)
+once each on the same subsample with the same seed. Compare stress and
+visual appearance. Note in markdown which one is used for the main figures.
+
+## Figures to save
+
+1. images/mds_seeds.png — 2x3 grid (or 3x2) showing all 6 MDS embeddings
+   coloured by PM2.5 tertile. Subplot titles must include seed AND final
+   stress. dpi=200, bbox_inches='tight'.
+
+2. images/mds_primary.png — single large MDS scatter plot of the
+   lowest-stress run. Coloured by PM2.5 tertile. Same dpi.
+
+3. images/mds_stress_vs_dim.png — line plot of stress vs embedding
+   dimensionality m, mirroring the lecture slide style. Mark m=2 with
+   a vertical guideline. Same dpi.
+
+4. (Optional) images/mds_procrustes.png — heatmap of pairwise Procrustes
+   disparities between seeds. Small (6x6) heatmap with numeric annotations.
+
+## Markdown explanation
+
+In markdown cells, briefly explain:
+- What MDS does: preserves pairwise distances, iterative optimisation
+- Why stress has many local minima (lecture content, paraphrased)
+- Why standardised Euclidean distance is used as the input dissimilarity
+- Why we test multiple seeds (the task explicitly asks for this)
+- What Procrustes disparity measures and how to interpret it
+- What the m sweep tells us about choosing the embedding dimension
+
+Keep tone factual and concise, matching existing PCA markdown cells. No
+exclamation marks, no marketing language.
+
+## Final summary cell
+
+Print to stdout for easy copy-paste into LaTeX:
+- Sample size used
+- Stress value per seed (sorted)
+- Lowest stress and its seed
+- Procrustes disparity matrix (or its range/max)
+- Stress per m (m=1 through m=5)
+- Brief note on whether different seeds gave genuinely different solutions
+  or just rigid transformations of the same one
+
+## Output files
+
+- Modified notebook (save as pca_mds.ipynb to keep the original safe)
+- Figures listed above in images/

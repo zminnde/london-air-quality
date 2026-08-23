@@ -1,0 +1,146 @@
+I need you to add new content on Multidimensional Scaling (MDS) to my LaTeX
+report on multidimensional data visualisation. The current report and the
+lecture slides on MDS /Users/mziemys/PycharmProjects/LondonAirQuality/data_visualisation/task1/report/Data_Description_Ziemys.tex are attached. The notebook output with
+all numerical results will be in the conversation context — use those numbers,
+do NOT invent any.
+
+## Where the new content goes
+
+Create a NEW top-level section called "Nonlinear projection methods" with a
+subsection "Multidimensional Scaling" inside it. Place it after the existing
+"Linear projection methods" section and before the final "Conclusions"
+subsection. The existing Conclusions subsection should be ELEVATED to a
+top-level section called "Overall conclusions" and EXPANDED to include MDS
+findings — see instructions below.
+
+## Style requirements (match existing report)
+
+- Concise, factual, academic but not pompous
+- Short paragraphs
+- No filler phrases like "It is important to note that..."
+- Use \ce{...} for chemistry symbols, \textsubscript{} for PM\textsubscript{2.5}
+- Figures use [H] placement and \includegraphics[width=\textwidth]
+- Tables follow the same \begin{tabular}{|...|} style
+- Percentages use \,\% in prose
+- Same paragraph structure as PCA section: short intro, data preparation
+  paragraph referring back, results, interpretation
+- Decimal numbers consistent (3 decimal places throughout)
+
+## Section structure
+
+### Section: "Nonlinear projection methods"
+
+A 2-3 sentence intro distinguishing nonlinear methods from PCA. State that
+nonlinear methods preserve relationships (such as pairwise distances) that
+linear projections cannot, at the cost of computational complexity, no
+explicit projection matrix, and an optimisation problem with multiple local
+minima.
+
+### Subsection: "Multidimensional Scaling"
+
+1. **Introduction paragraph** (3-5 sentences):
+   - MDS takes a pairwise dissimilarity matrix as input and finds a
+     low-dimensional embedding that preserves those dissimilarities as well
+     as possible
+   - Quality is measured by stress (sum of squared differences between input
+     dissimilarities and embedded distances) — lower is better
+   - Stress is non-convex with many local minima, so different initialisations
+     can converge to different solutions
+   - Unlike PCA, MDS produces only coordinates, not a projection matrix —
+     new points cannot be projected without re-running the algorithm
+
+
+2. **"Data preparation" paragraph**:
+   - Subsample of [XXX] days drawn from the 3,473 standardised daily-mean
+     records used for PCA (mark XXX as a placeholder, leave a % TODO)
+   - Justify subsampling: MDS is O(n²) and computationally expensive on
+     the full dataset; the subsample is sufficient for the visualisation
+     and the sensitivity analysis
+   - Euclidean distance on standardised features is used as the input
+     dissimilarity, matching the metric used implicitly by PCA
+   - Reference PCA data preparation rather than repeat it
+
+3. **"Sensitivity to initial solutions" paragraph** (THE CORE OF THE TASK):
+   - State that MDS was run with N different random seeds, all using
+     n_init=1 so that the initial configuration is genuinely different
+     each time (this matters — leave a brief remark explaining why this
+     setup is required)
+   - Refer to Table~\ref{tab:mds_stress} for stress per seed
+   - Comment on whether stress values are similar or differ substantially
+   - Reference Figure~\ref{fig:mds_seeds} showing the 6 embeddings side by side
+   - State the visual interpretation: do embeddings look like
+     rotations/reflections of one another, or are they genuinely different?
+
+4. **Table titled "MDS final stress per random seed"**:
+   - Columns: Seed | Final stress | Iterations | Time (s)
+   - Use placeholders with % TODO comments — agent should fill from
+     notebook output if numbers are in context, otherwise leave clearly
+     marked
+
+5. **Figure: 2x3 grid of MDS embeddings** (images/mds_seeds.png) with caption:
+   "MDS embeddings obtained from six different random initialisations.
+   Each subplot title shows the seed and final stress value. Points are
+   coloured by PM\textsubscript{2.5} tertile."
+
+6. **Procrustes paragraph**:
+   - Explain that Procrustes analysis was used to quantify whether
+     embeddings differ only by rigid transformation (rotation, reflection,
+     scaling) or by actual geometry
+   - Report the range or maximum of pairwise Procrustes disparities
+   - Interpret: if disparities are small (≪ 0.1), embeddings are
+     essentially the same up to rotation. If large, the algorithm
+     converged to genuinely different local minima — consistent with the
+     lecturer's point that stress has many local minima.
+
+7. **"Embedding dimensionality" paragraph** (mirrors lecture slides):
+   - State that stress was computed for m = 1 to 5
+   - Reference Figure~\ref{fig:mds_stress_vs_dim}
+   - Comment on the curve shape: typically stress drops sharply from m=1
+     to m=2, then plateaus around m=3-4
+   - Justify the choice of m=2 for visualisation: gain in stress
+     reduction beyond m=2 is small, while interpretability drops sharply
+     above 2D
+
+8. **Figure: stress vs m** (images/mds_stress_vs_dim.png) with caption:
+   "MDS final stress as a function of embedding dimensionality m.
+   Computed on the same subsample with a fixed random seed."
+
+9. **"Primary embedding and interpretation" paragraph**:
+   - The lowest-stress run is shown in Figure~\ref{fig:mds_primary}
+   - Reference figure
+   - Interpret: do PM\textsubscript{2.5} groups separate in MDS space?
+   - Compare visually to the PCA scatter plot — is the separation
+     better, worse, or similar?
+   - Note that MDS axes have no inherent meaning — unlike PCA loadings
+     they cannot be interpreted in terms of original features
+
+10. **Figure: primary MDS scatter** (images/mds_primary.png) with caption
+    matching the PCA scatter style.
+
+### Section: "Overall conclusions" (replaces existing "Conclusions")
+
+The existing Conclusions subsection currently covers only direct methods
+and PCA. Promote it to a top-level section and expand:
+
+- Keep the existing key sentences about PC1 (overall traffic-pollution
+  intensity) and PC2 (wind-driven particulate dispersion)
+- Add 3-5 sentences integrating MDS findings:
+  - MDS confirms / does not confirm the PCA separation (conditional —
+    based on actual results)
+  - Sensitivity to initial conditions showed [genuine local minima /
+    essentially identical solutions up to rigid transformation]
+  - Stress vs m curve supports m=2 as a reasonable dimensionality for
+    visualisation
+  - Three perspectives (direct, PCA, MDS) together give a fuller picture
+    than any single method
+
+## Constraints
+
+- Do NOT invent numerical values. If a number is not visible in the
+  conversation context, use a clearly marked placeholder like XX.XXX
+  with a "% TODO" comment.
+- Output only the new LaTeX content, not the full document. Indicate
+  where each piece goes (e.g. "INSERT AFTER existing line: '...PCA confirms
+  this:'") so I can paste accurately.
+- Decimal numbers consistent across the report (3 dp for stress, loadings,
+  Procrustes; 1 dp for percentages).

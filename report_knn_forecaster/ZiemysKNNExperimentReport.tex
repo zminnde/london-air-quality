@@ -1,0 +1,258 @@
+%%%%%
+%%%%%  Naudokite LUALATEX, ne LATEX.
+%%%%%
+%%%%
+\documentclass[]{VUMIFTemplateClass}
+
+\usepackage{indentfirst}
+\usepackage{amsmath, amsthm, amssymb, amsfonts}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage[hidelinks]{hyperref}
+\usepackage{color,algorithm,algorithmic}
+\usepackage[nottoc]{tocbibind}
+\usepackage{tocloft}
+\usepackage[version=4]{mhchem}
+\usepackage{textgreek}
+\usepackage{textcomp}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{listings}
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\bfseries,
+    commentstyle=\itshape,
+    stringstyle=\ttfamily,
+    breaklines=true,
+    frame=single,
+    showstringspaces=false,
+    numbers=left,
+    numberstyle=\tiny,
+    xleftmargin=1.5em,
+}
+
+\usepackage{titlesec}
+\newcommand{\sectionbreak}{\clearpage}
+
+\makeatletter
+\renewcommand{\fnum@algorithm}{\thealgorithm}
+\makeatother
+\renewcommand\thealgorithm{\arabic{algorithm} algoritmas}
+
+\usepackage{biblatex}
+\bibliography{bibliografija}
+
+\newcommand{\EE}{\mathbb{E}\,}
+\newcommand{\ee}{{\mathrm e}}
+\newcommand{\RR}{\mathbb{R}}
+
+\studijuprograma{Informatikos}
+\darbotipas{Ataskaita}
+\darbopavadinimas{Kietųjų dalelių koncentracijos prognozavimas laiko eilutėse}
+\darbopavadinimasantras{Bazinio KNN metodo su svoriais rezultatai}
+\autorius{Mindaugas Žiemys}
+
+\vadovas{Linas Litvinas, Asist., Dr.}
+
+\begin{document}
+    \selectlanguage{lithuanian}
+
+    \onehalfspacing
+    \input{titulinis}
+
+    \singlespacing
+
+    \tableofcontents
+    \onehalfspacing
+
+
+    \section{Eksperimento konfigūracija}
+
+    Bazinė KNN metodo su svoriais konfigūracija: vienodi svoriai $w_j = 0{,}2$ visoms penkioms atstumo funkcijoms, slenkstis $S = 0{,}5$, sezoniškumo intervalas $\pm 20$~dienų aplink tikslinę datą per visus turimus metus.
+    Įvesties langas 5 valandos, o prognozės langas -- 12 valandų.
+
+    Duomenys padalinti į mokymo (2012--2024 m.) ir testavimo (2025 m.) rinkinius.
+    Iš jų sudaromi 17 valandų blokai (5 valandų įvestis ir 12 valandų \ce{KD_{2,5}} prognozė).
+    Blokai sudaromi slenkančio lango principu -- einama per duomenis vienos valandos žingsniu ir kiekvienoje pozicijoje formuojamas 17 valandų iš eilės duomenų blokas.
+    Iš taip suformuotų blokų atmetami tie, kuriuose yra bent vienos valandos tarpas.
+    Po šio filtravimo gauti:
+    \begin{itemize}
+        \item Mokymo rinkinys: 61\,335 blokai.
+        \item Testavimo rinkinys: 5\,630 blokai.
+    \end{itemize}
+
+    Testavimo metu kiekvieno bloko pirmosios 5 valandos sudaro įvesties langą, o paskutinės 12 -- tikrąsias reikšmes, kurios lyginamos su modelio prognoze.
+
+    Modelio prognozavimo tikslumas vertinamas normalizuota vidutine absoliučiąja paklaida (NMAE), apibrėžta ankstesnėje metodologijos ataskaitoje:
+    \begin{equation}
+        NAE_t = \frac{|y_t - \hat{y}_t|}{y_{\max} - y_{\min}} \times 100\%, \qquad
+        NMAE_H = \frac{1}{H} \sum_{t=1}^{H} NAE_t
+    \end{equation}
+    čia $y_t$ -- tikroji \ce{KD_{2,5}} reikšmė $t$-ąją prognozuojamą valandą, $\hat{y}_t$ -- modelio prognozė, $y_{\max}, y_{\min}$ -- \ce{KD_{2,5}} maksimumas ir minimumas testavimo rinkinyje, $H$ -- prognozuojamų valandų skaičius.
+
+    Min-max normalizavimo parametrai ($x_{\min}$ ir $x_{\max}$ kiekvienam atributui) apskaičiuoti tik iš mokymo duomenų (2012--2024 m.) ir įsiminti.
+    Testinio rinkinio reikšmės normalizuotos pagal tas pačias mokymo $x_{\min}$, $x_{\max}$ reikšmes, neperskaičiuojant jų iš 2025~m. duomenų.
+    Tai užtikrina, kad testiniai duomenys neturi įtakos modelio prognozei, nėra duomenų nutekėjimo.
+
+    Dėl šios priežasties testavimo rinkinio normalizuotas \ce{KD_{2,5}} rėžis nebūtinai užima visą $[-1, 1]$ intervalą.
+    Faktinis testinių duomenų rėžis yra $y_{\max} - y_{\min} = 1{,}27$, kur $y_{\max} = 0{,}27$ ir $y_{\min} = -1{,}00$.
+    Maksimumas $0{,}27$ gautas todėl, kad 2025 m. didžiausia \ce{KD_{2,5}} koncentracija buvo 81~µg/m\textsuperscript{3}, o istorinis maksimumas -- 127{,}60~µg/m\textsuperscript{3}, fiksuotas 2017-01-23.
+    Vertinimo metrikoms apskaičiuoti naudojamas šis faktinis rėžis, o visi rezultatai pateikiami procentais nuo jo.
+
+
+    \section{Bazinio KNN modelio paklaidos}
+
+    Bazinio modelio metrikos testavimo rinkinyje pateiktos \ref{tab:baseline}~lentelėje.
+    Čia $\mu_H$ -- vidutinė normalizuota absoliučioji paklaida (NMAE) $H$ valandoms, apskaičiuota per visus testinius langus, kuriems modelis pateikė prognozę, $\sigma_H$ -- tos paklaidos standartinis nuokrypis.
+    Padengimas $C$ nusako kuriai daliai testinių duomenų modelis pateikė prognozę.
+    \begin{table}[H]
+        \centering
+        \caption{Bazinio modelio metrikos ($w_j = 0{,}2$, $S = 0{,}5$)}
+        \small
+        \setlength{\tabcolsep}{10pt}
+        \begin{tabular}{|l|r|}
+            \hline
+            \textbf{Metrika} & \textbf{Reikšmė} \\
+            \hline
+            $\mu_5$          & 5{,}87\,\%       \\
+            $\sigma_5$       & 4{,}24\,\%       \\
+            $\mu_{12}$       & 6{,}57\,\%       \\
+            $\sigma_{12}$    & 4{,}27\,\%       \\
+            Padengimas $C$   & 84{,}71\,\%       \\
+            \hline
+        \end{tabular}
+        \label{tab:baseline}
+    \end{table}
+
+    Modelis pateikė prognozę 84,71\% testinių langų. Likusiems 15,3\% atvejų istoriniame rinkinyje nerasta pakankamai panašių 5 valandų langų pagal slenksčio sąlygą $D \le S$.
+    12 valandų vidutinė normalizuota absoliučioji paklaida sudaro 6,57\%, o 5 valandų -- 5,87\%.
+
+    0,7 procentinio punkto skirtumas tarp $\mu_5$ ir $\mu_{12}$ atsiranda todėl, kad kaimynai parenkami pagal pirmas 5 valandas, o prognozuojama 12~valandų į priekį -- per ilgesnį laikotarpį meteorologinės sąlygos pasikeičia, ir kaimyno taršos eiga nutolsta nuo tikslo realios eigos.
+
+
+    \section{Paklaida pagal prognozės valandą}
+
+    Vidutinė normalizuota absoliučioji paklaida $\mu_t$ ir jos standartinis nuokrypis $\sigma_t$ apskaičiuoti atskirai kiekvienai iš 12~prognozės valandų.
+    Rezultatai pateikiami \ref{tab:perhour}~lentelėje.
+
+    \begin{table}[H]
+        \centering
+        \caption{Vidutinė paklaida ir standartinis nuokrypis pagal prognozės valandą}
+        \small
+        \setlength{\tabcolsep}{10pt}
+        \begin{tabular}{|c|r|r|}
+            \hline
+            \textbf{Valanda $t$} & \textbf{$\mu_t$ (\%)} & \textbf{$\sigma_t$ (\%)} \\
+            \hline
+            1                    & 5{,}28                & 4{,}74                   \\
+            2                    & 5{,}6                 & 5{,}17                   \\
+            3                    & 5{,}93                & 5{,}52                   \\
+            4                    & 6{,}17                & 5{,}67                   \\
+            5                    & 6{,}36                & 5{,}75                   \\
+            6                    & 6{,}57                & 5{,}9                    \\
+            7                    & 6{,}77                & 6{,}08                   \\
+            8                    & 6{,}98                & 6{,}22                   \\
+            9                    & 7{,}15                & 6{,}28                   \\
+            10                   & 7{,}21                & 6{,}4                    \\
+            11                   & 7{,}33                & 6{,}62                   \\
+            12                   & 7{,}43                & 6{,}81                   \\
+            \hline
+        \end{tabular}
+        \label{tab:perhour}
+    \end{table}
+
+    Pirmosios valandos paklaida yra 5,28\%, dvyliktosios -- 7,43\%.
+    Paklaida didėja kiekvieną valandą ir per 12 valandų išauga 2,14 procentino punkto.
+    Standartinis nuokrypis taip pat auga: nuo 4,74\% pirmajai valandai iki 6,81\% dvyliktajai.
+    Tai reiškia, kad tolimesnėms valandoms ne tik vidutinė paklaida didesnė, bet ir atskirų langų paklaidos labiau skiriasi viena nuo kitos.
+
+
+    \section{Atvejai kai modelis nepateikia prognozės}
+
+    Modelyje numatytas atsisakymo mechanizmas: jei istoriniame rinkinyje nerandama pakankamai panašių situacijų pagal slenksčio sąlygą $D \le S$, modelis nepateikia prognozės.
+    Bazinei konfigūracijai iš 5\,630 testinių langų prognozė nepateikta 861~atveju (15,29\%).
+
+    \begin{table}[H]
+        \centering
+        \caption{Atvejų, kai nėra prognozės, pasiskirstymas pagal dienos kategoriją}
+        \small
+        \setlength{\tabcolsep}{10pt}
+        \begin{tabular}{|l|r|r|r|}
+            \hline
+            \textbf{Kategorija} & \textbf{Iš viso langų} & \textbf{Nėra prognozės} & \textbf{Dalis (\%)} \\
+            \hline
+            Darbo diena         & 2\,974                 & 359                     & 12{,}07             \\
+            Poilsio diena       & 1\,693                 & 247                     & 14{,}59             \\
+            Prieššventinė       & 963                    & 255                     & 26{,}48             \\
+            \hline
+        \end{tabular}
+        \label{tab:no_pred_cat}
+    \end{table}
+
+    Prieššventinės dienos turi žymiai didesnę dalį, kai prognozės nėra (26,48\%) nei darbo (12,07\%) ar poilsio (14,59\%) dienos.
+    Prieššventinės dienos sudaro apie 15\% bendro duomenų rinkinio, kandidatų rinkinys po visų filtrų (valanda, dienos kategorija, $\pm 20$~dienų sezonas) tampa maždaug 3--4~kartus mažesnis nei darbo dienų rinkinys.
+
+    Šis atsisakymo mechanizmas yra svarbus modelio bruožas, kurio neuroniniai tinklai ir kiti juodosios dėžės metodai neturi -- jie prognozuoja visais atvejais, net kai istoriniame rinkinyje nėra pagrindo prognozei, todėl jų prognozės gali būti klaidingai užtikrintos retoms ar nepažintoms situacijoms.
+
+
+    \section{Prognozių pavyzdžiai}
+
+    Norint vizualiai pamatyti modelio elgseną įvairiais atvejais, atrenkami trys testinių langų rinkiniai pagal $\text{NMAE}_{12}$: šeši sėkmingiausi, šeši vidutiniai (apie medianą) ir šeši blogiausi atvejai.
+    Kiekvieno grafiko antraštėje pateikiama testinio lango pradžios data, valanda, $\text{NMAE}_{12}$ ir slenkstį tenkinusių kaimynų skaičius.
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\textwidth]{images/examples_best.png}
+        \caption{Šeši sėkmingiausi prognozės atvejai (mažiausias $\text{NMAE}_{12}$). Prognozės kreivė beveik sutampa su tikrąja, paklaidos siekia 1--2\%.}
+        \label{fig:best_examples}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\textwidth]{images/examples_typical.png}
+        \caption{Šeši vidutiniai prognozės atvejai (atrinkti apie $\text{NMAE}_{12}$ medianą $\approx 5{,}4\,\%$).}
+        \label{fig:typical_examples}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\textwidth]{images/examples_worst.png}
+        \caption{Šeši blogiausi prognozės atvejai (didžiausias $\text{NMAE}_{12}$, iki $\approx 47\,\%$).}
+        \label{fig:worst_examples}
+    \end{figure}
+
+    Sėkmingiausi ir vidutiniai atvejai rodo tipinę modelio elgseną: bendras taršos lygis pagaunamas teisingai, bet staigūs šuoliai, pavyzdžiui, 2025-12-09 h11 pikas lieka neaptikti, nes prognozė yra kelių kaimynų vidurkis.
+    Blogiausi atvejai yra kitokios prigimties -- visi šeši 2025~m. kovo mėnesį, modelis remiasi 1--3~kaimynais, kurių taršos lygis stipriai skiriasi nuo tikrojo.
+
+
+    \section{Dienos kategorijos filtro tobulinimas}
+
+    Modelio filtravimas pagal dienos kategoriją taikomas tik įvesties lango pradžios valandai.
+    Tai garantuoja, kad istoriniai kaimynai prasideda toje pačioje dienos kategorijoje, bet negarantuoja, kad jų 12 valandų prognozė patenka į tą pačią kategoriją kaip ir tikslinio lango.
+
+    Pavyzdžiui, jei tikslinis įvesties langas yra darbo dienos vakaras (23:00), o po jo seka prieššventinė diena, tikslinio lango prognozė iš dalies patenka į prieššventinę dieną.
+    Filtravimui problemiški yra du perėjimai: darbo $\to$ prieššventinė (10,1\% testinių langų) ir poilsio $\to$ darbo (9,1\%) -- iš viso 19,2\%.
+    Trečiasis kategorijos pokytis, prieššventinė $\to$ poilsio (11,5\%), yra deterministinis, nes prieššventinė pagal apibrėžimą reiškia, kad kita diena yra poilsio, todėl filtravimo trūkumo nesukuria.
+    Galimas sprendimas -- į filtravimą įtraukti ne tik įvesties lango pradžios, bet ir prognozės pabaigos dienos kategoriją.
+
+
+    \section{Rezultatai}
+
+    Eksperimento metu realizuotas svertinis KNN metodas su bazine konfigūracija ($w_j = 0{,}2$, $S = 0{,}5$).
+    Pagrindinės išvados:
+
+    \begin{itemize}
+        \item Bazinis modelis pasiekia vidutinę 12~valandų paklaidą 6,57\% su 84,71\% padengimu.
+        Kas valandinė analizė parodė, kad paklaida didėja nuo 5,28\% pirmajai prognozės valandai iki 7,43\% dvyliktajai.
+
+        \item Iš 5\,630 testinių langų 15,29\% atveju modelis atsisakė pateikti prognozę.
+        Didžiausią dalį atvejų, kai modelis nepateikia prognozės, sudaro prieššventinės dienos (26,48\%). Tai paaiškinama mažesniu prieššventinių dienų duomenų kiekiu.
+        Tai parodo baltosios dėžės principą -- modelis informuoja apie istorinio konteksto trūkumą, o ne pateikia nepatikimą prognozę.
+
+        \item Identifikuotas dienos kategorijos filtravimo trūkumas: 19,2\% testinių langų patenka į nedeterministinius dienos kategorijos perėjimus (darbo $\to$ prieššventinė ir poilsio $\to$ darbo). Galimas sprendimas -- į filtravimą įtraukti ir prognozės pabaigos dienos kategoriją. Padengimas šiek tiek sumažės.
+    \end{itemize}
+
+\end{document}

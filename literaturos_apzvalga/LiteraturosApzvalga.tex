@@ -1,0 +1,192 @@
+%%%%%
+%%%%%  Naudokite LUALATEX, ne LATEX.
+%%%%%
+%%%%
+\documentclass[]{VUMIFTemplateClass}
+
+\usepackage{indentfirst}
+\usepackage{amsmath, amsthm, amssymb, amsfonts}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage[hidelinks]{hyperref}
+\usepackage{color,algorithm,algorithmic}
+\usepackage[nottoc]{tocbibind}
+\usepackage{tocloft}
+\usepackage[version=4]{mhchem}
+\usepackage{textgreek}
+\usepackage{textcomp}
+\usepackage{float}
+\usepackage{booktabs}
+
+\usepackage{titlesec}
+\newcommand{\sectionbreak}{\clearpage}
+
+\usepackage{biblatex}
+\bibliography{bibliografija}
+
+\newcommand{\EE}{\mathbb{E}\,}
+\newcommand{\ee}{{\mathrm e}}
+\newcommand{\RR}{\mathbb{R}}
+
+\studijuprograma{Informatikos}
+\darbotipas{Literatūros apžvalga}
+\darbopavadinimas{Kietųjų dalelių koncentracijos prognozavimas laiko eilutėse}
+\darbopavadinimasantras{Literatūros apžvalga}
+\autorius{Mindaugas Žiemys}
+
+\vadovas{Linas Litvinas, Asist., Dr.}
+
+\begin{document}
+    \selectlanguage{lithuanian}
+
+    \onehalfspacing
+    \input{titulinis}
+
+    \singlespacing
+
+    \tableofcontents
+    \onehalfspacing
+
+
+    %==================================================================
+    \section*{Įvadas}
+    \addcontentsline{toc}{section}{Įvadas}
+    %==================================================================
+
+    Kietosios dalelės ore yra viena iš pagrindinių neigiamų sveikatos poveikių žmogui aplinkoje priežasčių. Jos dažniausiai klasifikuojamos į \ce{KD_{2,5}} -- mažesnes nei 2{,}5~µm skersmens ir \ce{KD10} -- kurių skersmuo mažesnis už 10~µm. \ce{KD10} dažniausiai yra sulaikomos viršutiniuose kvėpavimo takuose, gali sukelti kosulį, astmą, rečiau patenka į kraujotaką ir yra mažiau pavojingos žmogaus sveikatai (Zhang ir kt., 2019).
+
+    Tarptautinė vėžio tyrimų agentūra nustatė, kad smulkiosios \ce{KD_{2,5}} dalelės yra kancerogeniškos žmonėms (IARC, 2016), per plaučius gali patekti į kraujotaką, širdį ir kitus organus bei sukelti širdies ir kraujagyslių ligas, smegenų pažeidimus, vėžį. \ce{KD_{2,5}} jutikliai yra brangūs, dažnai genda, taip pat susiduriama su priežiūros ir remonto problemomis. Tyrime bus prognozuojama kelių valandų laikotarpio į priekį \ce{KD_{2,5}} koncentracija ore.
+
+    Remiantis šaltiniu (Walton ir kt., 2015) apskaičiuota, kad 2010 metų lygio oro tarša žmogaus gyvenimą Londone sutrumpintų apie 9--16 mėnesių. Londono Merilebono kelias yra judri gatvė, pro kurią per dieną vidutiniškai pravažiuoja apie 80\,000 motorinių transporto priemonių (UK GOV). Tai yra viena labiausiai užterštų gatvių Londone, kurioje vyksta intensyvus pėsčiųjų ir dviračių eismo judėjimas. Ši gatvė yra unikali tuo, jog susidaro gatvės kanjono (angl. \textit{street canyon}) efektas, kai pastatų išdėstymas, gatvės pločio ir pastatų aukščio santykis lemia teršalų sulaikymą gatvėje ir neleidžia jiems greitai išsisklaidyti.
+
+    Taršos matavimų eksperimentų metu (Harrison ir kt., 2012) nustatyta, kad 71{,}9\% visų išmatuotų kietųjų dalelių kyla tiesiogiai iš eismo šioje gatvėje. Taip pat ištirta, jog oro tarša yra netiesinė ir stipriai priklauso nuo sudėtingų aerodinaminių sąlygų, tokių kaip vėjo kryptis ir greitis. Preliminarioje literatūros apžvalgoje nustatyta, jog \ce{KD_{2,5}} prognozavimui K-NN metodas (Cover \& Hart, 1967) dažniausiai naudojamas su paprastu Euklido atstumu, nededant svorių atskiriems požymiams. Taip pat naudojami ir LSTM, transformeriai (Zhou ir kt., 2024).
+
+    Ši literatūros apžvalga skirta apžvelgti, kaip KNN metodas tobulinamas laiko eilučių prognozavimui, ypatingą dėmesį skiriant požymių ar atstumo funkcijų svorių parinkimui. Apžvelgiamos pagrindinės temos: KNN tobulinimo būdai laiko eilutėse, svorių radimas kaip centrinė apžvalgos ašis, kaimynų skaičiaus parinkimas ir atsisakymo mechanizmas, neuroniniai tinklai bei gilieji modeliai (daugiasluoksnis perceptronas ir laiko suliejimo transformeris) ir jų palyginimas su KNN, taikymo sritys, triukšmo apdorojimas bei oro taršos ir \ce{KD_{2,5}} prognozės būklė ir tyrimo spraga. Apžvalga yra prieš-realizacinė -- ja siekiama nustatyti esamą lauko būklę ir neištirtas kryptis, o ne pristatyti konkretų autoriaus siūlomą sprendimą.
+
+
+    %==================================================================
+    \section{KNN tobulinimo būdai laiko eilutėse}
+    %==================================================================
+
+    K artimiausių kaimynų metodas grindžiamas prielaida, kad panašiose situacijose stebimos panašios baigtys: prognozuojant naują tašką, surandami artimiausi istoriniai pavyzdžiai pagal pasirinktą atstumo matą, o prognozė sudaroma iš jų reikšmių. Dėl savo paprastumo ir prielaidų nedarymo apie duomenų pasiskirstymą metodas plačiai taikomas, tačiau turi gerai žinomų trūkumų -- visų pirma, skaičiavimo kaštus ir efektyvumo mažėjimą didelės dimensijos duomenyse (Halder ir kt., 2024). [TIKRINTI: Halder ir kt. (2024) tikslūs autoriai ir DOI -- patvirtinti per Scopus.]
+
+    Naujausioje KNN modifikacijų apžvalgoje (Halder ir kt., 2024) metodo patobulinimai skirstomi į kelias kryptis: paieškos efektyvumo gerinimą (indeksavimo struktūros, lygiagretieji ir paskirstytieji skaičiavimai), svorių priskyrimą, kaimynų skaičiaus parinkimą, atstumo matų pasirinkimą ir triukšmo apdorojimą. [TIKRINTI: Halder ir kt. (2024).] Didžioji dalis šios apžvalgos skirta paieškos greičiui dideliuose duomenų rinkiniuose, o ne prognozės tikslumui; vis dėlto ji rodo, kad KNN tobulinimas yra plati ir aktyvi tyrimų sritis. Tikslumui ir prognozės kokybei svarbesnės kryptys -- svorių parinkimas, kaimynų skaičiaus nustatymas ir atstumo matas -- toliau apžvelgiamos remiantis pirminiais darbais.
+
+    Sisteminį svorių vaidmens pagrindą KNN metode pateikia Wettschereck, Aha ir Mohri (1997), apžvelgdami ir palygindami požymių svėrimo metodus tingiojo mokymosi (angl. \textit{lazy learning}) algoritmuose. Autoriai siūlo penkių dimensijų klasifikaciją, pagal kurią svėrimo metodai skiriasi: (1) ar svoriai parenkami pagal prognozavimo kokybės grįžtamąjį ryšį, ar nustatomi iš anksto; (2) ar svoriai tolydūs, ar tik dvejetainiai (požymių atranka); (3) duotos ar transformuotos požymių erdvės naudojimas; (4) globalūs ar lokalūs svoriai; (5) domeninio žinojimo naudojimas. Ši klasifikacija sudaro terminologinį pagrindą tolesniam svorių radimo nagrinėjimui ir leidžia atskirti dvi pagrindines mokyklas -- iš anksto nustatomus (a priori) svorius ir svorius, parenkamus optimizuojant pagal paklaidą. Reikia pažymėti, kad šis darbas nagrinėja klasifikaciją, o ne regresiją ar laiko eilutes. % jungiamasis apibendrinimas, be atskiro šaltinio
+
+
+    %==================================================================
+    \section{Svorių radimas}
+    %==================================================================
+
+    Svorių parinkimas yra centrinis KNN tobulinimo klausimas: atstumo funkcijoje skirtingiems požymiams ar jų grupėms priskiriami svoriai lemia, kurie istoriniai pavyzdžiai laikomi panašiais. Remiantis Wettschereck, Aha ir Mohri (1997) pasiūlyta klasifikacija, šiame skyriuje svorių radimo būdai grupuojami į keturias kryptis: iš anksto nustatomus (a priori) svorius, svorius, optimizuojamus pagal prognozės paklaidą, adaptyvius bei teoriškai grindžiamus svorius ir daugiakriterinį svorių optimizavimą.
+
+    %------------------------------------------------------------------
+    \subsection{Iš anksto nustatomi (a priori) svoriai}
+    %------------------------------------------------------------------
+
+    Pirmoji kryptis svorius nustato iš anksto, remiantis duomenų statistinėmis savybėmis, be prognozavimo kokybės grįžtamojo ryšio. Chen ir Hao (2017) požymių svorius parenka pagal informacijos prieaugį (angl. \textit{information gain}) ir taiko svertinį KNN kartu su svertine atramos vektorių mašina akcijų indeksų prognozei. [TIKRINTI: Chen \& Hao (2017) tiksli citata ir detalės -- spėtos, patvirtinti.] Šis darbas iliustruoja a priori svorių principą, nors priklauso finansų sričiai, o KNN jame yra tik vienas iš dviejų modelių.
+
+    Geofizikos ir hidrologijos srityse a priori požymių atranka dažnai grindžiama informacijos teorijos matais. Zamani, Solomatine, Azimian ir Heemink (2008) vėjo bangų aukščio prognozei Kaspijos jūroje taiko KNN su vidutinės savitarpio informacijos (angl. \textit{average mutual information}) pagrįsta įvesties požymių atranka, svorinėmis funkcijomis (tiesine, atvirkštine ir atvirkštine kvadratine atstumo funkcija) ir fiksuotu kaimynų skaičiumi. Svoriai čia priskiriami kaimynams pagal atstumą, o ne atskiriems požymiams. Šis darbas svarbus ir kaip niuansuotas KNN bei neuroninių tinklų palyginimas, aptariamas tolesniame skyriuje.
+
+    Talavera-Llames ir kt. (2019) pristato daugiamatį ir daugiaišvestį svertinį artimiausių kaimynų algoritmą (MV-kWNN) didelių duomenų laiko eilučių prognozei, kuriame kintamieji atrenkami pagal koreliacijos slenkstį. [TIKRINTI: Talavera-Llames ir kt. (2019) autorystė -- spėta, patvirtinti per Scopus.] Šiame darbe sąvoka „daugiamatis" reiškia kelias atskiras laiko eilutes, o ne kintamųjų grupavimą, ir tai iliustruoja, kaip terminas vartojamas literatūroje.
+
+    %------------------------------------------------------------------
+    \subsection{Optimizavimas pagal prognozės paklaidą}
+    %------------------------------------------------------------------
+
+    Antroji kryptis svorius traktuoja kaip optimizuojamus parametrus, parenkamus minimizuojant prognozės paklaidą. Jafarizadeh ir kt. (2022) poringojo slėgio prognozei iš gręžimo ir geofizikos požymių lygina šešis modelius -- KNN, svertinį KNN (WKNN), atstumu svertinį KNN (DWKNN) ir tuos pačius modelius kartu su dalelių spiečiaus optimizavimu (angl. \textit{particle swarm optimization}, PSO). PSO parenka tiek optimalų kaimynų skaičių, tiek svorius. Geriausią tikslumą pasiekė DWKNN-PSO modelis, o modelių eiliškumas patvirtino, kad tiek svorių pridėjimas, tiek jų optimizavimas gerina prognozę. [TIKRINTI: svorių formulės straipsnyje su korektūros klaida -- necituoti pažodžiui.] Šis darbas yra pagrindinis pavyzdys, kad svorių ir kaimynų skaičiaus radimas gali būti formuluojamas kaip optimizavimo uždavinys, nors jame nagrinėjama statinė regresija, o ne laiko eilutė.
+
+    %------------------------------------------------------------------
+    \subsection{Adaptyvūs ir teoriškai grindžiami svoriai}
+    %------------------------------------------------------------------
+
+    Trečioji kryptis svorius ir kaimynų skaičių parenka ne visam rinkiniui vienodai, o adaptyviai kiekvienam prognozuojamam taškui. Anava ir Levy (2016) pasiūlytame $k^*$ artimiausių kaimynų metode optimalus kaimynų skaičius ir jų svoriai parenkami per poslinkio ir dispersijos (angl. \textit{bias-variance}) kompromisą. Autoriai įrodo ribos (angl. \textit{cutoff}) efektą: nenulinį svorį gauna tik tam tikras skaičius artimiausių kaimynų, o jų svoris mažėja didėjant atstumui, kol pasiekia nulį; šis skaičius kinta nuo taško prie taško. Metodas teoriškai pagrindžia, kodėl visam rinkiniui fiksuotas kaimynų skaičius nėra optimalus, ir konceptualiai artimas atstumo slenksčio idėjai, pagal kurią toliau nei tam tikra riba esantys kaimynai į prognozę neįtraukiami. Darbas nagrinėja bendrus duomenis, ne laiko eilutes.
+
+    %------------------------------------------------------------------
+    \subsection{Daugiakriterinis svorių optimizavimas}
+    %------------------------------------------------------------------
+
+    Ketvirtoji kryptis svorių ar požymių parinkimą formuluoja kaip daugiakriterinį (angl. \textit{multi-objective}) uždavinį, kuriame vienu metu optimizuojami keli, dažnai konkuruojantys, tikslai. Paul ir Das (2015) pasiūlo evoliucinį daugiakriterinį metodą, kuris vienu metu atrenka ir sveria požymius naudodamas dekompozicija grįstą algoritmą MOEA/D; du tikslai -- maksimizuoti tarpklasinį ir minimizuoti vidinklasinį atstumą. Autoriai pažymi, kad dauguma metodų sprendžia tik požymių atranką, o ne atranką kartu su svėrimu, nors pastaroji gali papildomai pagerinti klasifikatorių. Šis darbas konceptualiai artimiausias vienalaikiam svorių ir požymių optimizavimui, nors nagrinėja klasifikaciją, o tikslai grindžiami atstumais, ne prognozės paklaida.
+
+    Panašiai Moldovan ir Slowik (2021) prietaisų energijos suvartojimo prognozei taiko daugiakriterinį dvejetainį pilkojo vilko (angl. \textit{grey wolf}) optimizatorių požymių atrankai, naudodami KNN kaip vieną iš regresorių; du tikslai -- maksimizuoti tikslumą ir minimizuoti atrinktų požymių skaičių. Čia KNN veikia kaip savarankiškas regresorius, tačiau optimizuojama požymių atranka, o ne tolydūs svoriai.
+
+    Dong, Ma ir Fu (2021) elektros apkrovos intervaliniam prognozavimui sudaro hibridą iš genetinio algoritmo NSGA-II, KNN ir giliojo tikimybinio tinklo. NSGA-II daugiakriteriškai optimizuoja KNN klasterizavimo parametrus pagal tris tikslus: prognozės intervalo aprėptį, jo plotį ir klasterizavimo paklaidą. Šis darbas svarbus kaip tyrimo spragos rodiklis: jis patvirtina, kad daugiakriterinis optimizavimas KNN kontekste jau taikomas ir kad tikslumo bei aprėpties pora jau naudojama, tačiau optimizuojamas kaimynų ar klasterių skaičius, o ne atstumo funkcijų svoriai, o pats KNN tarnauja giliajam tinklui ir nėra savarankiškas interpretuojamas prognozatorius. % spragos formulavimas -- jungiamasis, be atskiro šaltinio
+
+    Apibendrinant, svorių radimo literatūroje aiškiai išsiskiria perėjimas nuo iš anksto nustatomų svorių prie optimizuojamų, o naujesni darbai svorių ar požymių parinkimą formuluoja kaip daugiakriterinį uždavinį. Vis dėlto daugiakriterinis optimizavimas dažniausiai taikomas požymių atrankai arba kaimynų skaičiui, o ne atstumo funkcijų grupių svoriams, ypač laiko eilučių regresijoje. % jungiamasis apibendrinimas
+
+
+    %==================================================================
+    \section{Kaimynų skaičius ir atsisakymo mechanizmas}
+    %==================================================================
+
+    Be svorių, KNN prognozės kokybę lemia kaimynų skaičiaus parinkimas. Klasikiniame metode šis skaičius yra fiksuotas ir vienodas visam rinkiniui, tačiau, kaip teoriškai pagrindžia Anava ir Levy (2016), vienoda fiksuota reikšmė nėra optimali, nes kiekvieno taško aplinka skiriasi tankiu ir triukšmu. Alternatyva fiksuotam kaimynų skaičiui yra adaptyvus parinkimas arba atstumo slenksčio naudojimas, kai į prognozę įtraukiami visi pakankamai panašūs kaimynai, neatsižvelgiant į jų skaičių.
+
+    Kaimynų skaičiaus ir lango parametrų parinkimas dažnai sprendžiamas kryžmine patikra. Tajmouati ir kt. (2024) laiko eilučių prognozei pasiūlo du svertinio artimiausių kaimynų metodus, kuriuose kaimynų skaičius ir požymiai parenkami modifikuota kryžmine patikra, o vienas iš variantų sumažina kaimynų paieškos rinkinį ir taip pagreitina skaičiavimus. [TIKRINTI: Tajmouati ir kt. (2024) -- recenzuotas \textit{Journal of Forecasting}, pirminė versija arXiv:2103.14200.] Panašiai Troncoso Lora ir kt. (2007) elektros kainos prognozei optimizuoja tiek lango ilgį, tiek kaimynų skaičių; šis darbas laikomas svertinio artimiausių kaimynų metodo taikymo energetikoje ištaka.
+
+    Su kaimynų atranka glaudžiai susijęs ir atsisakymo (angl. \textit{reject option}) mechanizmas -- galimybė modeliui nepateikti prognozės, kai duomenyse nėra pakankamo pagrindo. Denis, Hebiri ir Zaoui (2020) nagrinėja regresiją su atsisakymu ir pritaiko ją būtent KNN metodui: optimali atsisakymo taisyklė grindžiama sąlyginės dispersijos slenksčiavimu -- prognozė pateikiama tik tada, kai įverčio neapibrėžtumas neviršija pasirinktos ribos, o slenkstis parenkamas pagal norimą atmetimo dažnį. Autoriai pažymi, kad atsisakymas regresijoje literatūroje nagrinėjamas labai retai, nors eksperimentai rodo, kad atmetus dalį nepatikimų atvejų likusiųjų prognozės paklaida sumažėja. Šis darbas yra pagrindinis atsisakymo KNN regresijoje šaltinis, nors atsisakymas jame grindžiamas prognozės dispersija, o ne kaimynų panašumo pakankamumu. % skirtumo nuo galimo panašumu grįsto atsisakymo pažymėjimas -- jungiamasis
+
+
+    %==================================================================
+    \section{Neuroniniai tinklai ir gilieji modeliai}
+    %==================================================================
+
+    Neuroniniai tinklai yra pagrindinė alternatyva artimiausių kaimynų metodui laiko eilučių prognozėje ir kartu modeliai, su kuriais svertinis KNN dažniausiai lyginamas. Skirtingai nuo KNN, kuris prognozę sudaro tiesiogiai iš panašių istorinių pavyzdžių, neuroniniai tinklai mokosi parametrinės įvesties ir išvesties priklausomybės iš mokymo duomenų. Šiame skyriuje pirmiausia trumpai pristatomos dvi neuroninių tinklų klasės -- daugiasluoksnis perceptronas ir gilieji laiko eilučių modeliai, tarp jų laiko suliejimo transformeris, -- o paskui apžvelgiami darbai, tiesiogiai lyginantys KNN su neuroniniais tinklais.
+
+    %------------------------------------------------------------------
+    \subsection{Daugiasluoksnis perceptronas}
+    %------------------------------------------------------------------
+
+    Daugiasluoksnis perceptronas (angl. \textit{multilayer perceptron}, MLP) yra bazinė tiesioginio sklidimo neuroninio tinklo architektūra, sudaryta iš įvesties, vieno ar kelių paslėptų ir išvesties sluoksnių, kurioje netiesiškumą įveda aktyvavimo funkcijos. Laiko eilučių prognozėje MLP įvestimi paprastai naudojami praeities reikšmių langai bei papildomi požymiai, o tinklas mokomas minimizuoti prognozės paklaidą. Oro taršos srityje MLP taikytas, pavyzdžiui, \ce{KD_{2,5}} reikšmių korekcijai iš pigių jutiklių duomenų, kur tinkamai parinkta architektūra pasiekė aukštą determinacijos koeficientą (Casari, Po \& Zini, 2023). [TIKRINTI: Casari, Po \& Zini (2023), \textit{Sensors} -- patvirtinti tikslią citatą ir DOI.] MLP yra natūralus tarpinis modelis tarp paprasto KNN ir sudėtingų giliųjų architektūrų: jis geba modeliuoti netiesines priklausomybes, tačiau yra paprastesnis ir lengviau apmokomas nei gilieji sekos modeliai.
+
+    %------------------------------------------------------------------
+    \subsection{Gilieji laiko eilučių modeliai}
+    %------------------------------------------------------------------
+
+    Gilieji modeliai pastaraisiais metais tapo dominuojančiu prognozavimo įrankiu sudėtingoms, netiesinėms laiko eilutėms. Tarp jų plačiausiai taikomi ilgos trumpalaikės atminties (LSTM) tinklai bei dėmesio (angl. \textit{attention}) mechanizmu grįstos transformerių architektūros, gebančios modeliuoti ilgalaikes laiko priklausomybes. Laiko suliejimo transformeris (angl. \textit{Temporal Fusion Transformer}, TFT), kurį pasiūlė Lim, Arık, Loeff ir Pfister (2021), jungia rekurentinius sluoksnius lokaliai dinamikai su interpretuojamu savidėmesio (angl. \textit{self-attention}) sluoksniu ilgalaikėms priklausomybėms ir geba apdoroti įvairaus tipo įvestis -- statinius požymius, žinomas būsimas reikšmes ir istorines eilutes. Autoriai pažymi, kad daugelis giliųjų prognozavimo modelių yra sunkiai interpretuojamos „juodosios dėžės", todėl TFT papildytas komponentais, leidžiančiais įvertinti požymių svarbą; daugiahorizončio prognozavimo užduotyse jis pranoko ankstesnius gilaus mokymosi modelius. Svarbu pažymėti, kad interpretuojamumas, kuris paprastai laikomas artimiausių kaimynų metodo pranašumu prieš neuroninius tinklus, čia kaip tik yra TFT projektavimo tikslas, todėl modelis yra prasminga atskaita lyginant skaidrumą ir tikslumą.
+
+    %------------------------------------------------------------------
+    \subsection{KNN ir neuroninių tinklų palyginimas}
+    %------------------------------------------------------------------
+
+    Lyginant KNN su neuroniniais tinklais, literatūroje dažnai nustatoma, kad sudėtingesni neuroniniai modeliai pasiekia aukštesnį tikslumą, ypač ilgesniems prognozės horizontams. Zamani ir kt. (2008) vėjo bangų prognozėje nustatė, kad vienos valandos horizonte KNN pranoko dirbtinį neuroninį tinklą, tačiau trijų ir šešių valandų horizontuose pirmavo neuroninis tinklas; ekstremaliems pikams neuroninis tinklas taip pat buvo tikslesnis, nes KNN, vidurkindamas kaimynus, išlygina staigius svyravimus. Tai rodo, kad KNN ir neuroninių tinklų palyginimo rezultatas priklauso nuo prognozės horizonto.
+
+    Stipriausią neuroninių tinklų pranašumo įrodymą vidutiniam horizontui pateikia Windler, Busse ir Rieck (2019), lygindami svertinį artimiausių kaimynų metodą, TBATS ir gilųjį tiesioginio sklidimo tinklą elektros kainos prognozei iki 29 dienų į priekį. Gilusis tinklas statistiškai reikšmingai pranoko kitus metodus net tolimam horizontui. Vis dėlto autoriai pabrėžia svertinio artimiausių kaimynų metodo praktinį pranašumą -- jis paprastas, greitas ir nereikalauja ilgo mokymo, o jo tikslumas daugeliu atvejų laikomas pakankamu. Tai paremia požiūrį, kad KNN vertė slypi ne aukščiausiame tikslume, o praktiškume ir paprastume.
+
+    Yra ir priešingų atvejų, kai patobulintas KNN nugali neuroninį tinklą. Fan, Guo, Zheng ir Hong (2019) trumpalaikei galios apkrovos prognozei taiko svertinį KNN, kurio svoris yra atvirkščias Euklido atstumui, ir nustato, kad jis pranoksta tiek gryną KNN, tiek ARMA ir atgalinio sklidimo neuroninį tinklą; pastarojo paklaidos buvo didelės ir nepastovios dėl mažo mokymo rinkinio. Tai iliustruoja, kad KNN pranašumas ryškėja mažų imčių scenarijuose. Šio darbo autoriai svorių optimizavimą įvardija kaip būsimo darbo kryptį. Panašiai į Zamani ir kt. (2008) pastebėjimą, svertinis KNN čia geriau prognozavo slėnius nei pikus, vėl dėl vidurkinimo poveikio.
+
+    Nešališką ir platų palyginimą pateikia Parmezan, Souza ir Batista (2019), 95 duomenų rinkiniuose lygindami vienuolika statistinių ir mašininio mokymosi prognozatorių. Autoriai nustatė, kad SARIMA buvo vienintelis statistinis metodas, pranokstantis dirbtinį neuroninį tinklą, atramos vektorių mašiną ir KNN, tačiau be statistiškai reikšmingo skirtumo ir didesnio parametrų skaičiaus sąskaita. Tai stiprus įrodymas, kad KNN yra konkurencingas su neuroniniais tinklais laiko eilučių prognozėje. [TIKRINTI: dar yra du „NN laimi" pavyzdžiai (INN, 2014; klimato ansamblis, 2018/19) -- autorystė ir citatos spėtos, įtraukti tik patvirtinus.]
+
+    Apibendrinant, KNN ir neuroninių tinklų palyginimas literatūroje nėra vienareikšmis: neuroniniai tinklai dažnai tikslesni ilgesniems horizontams ir pikams, tačiau KNN išlieka konkurencingas, ypač trumpiems horizontams ir mažoms imtims, ir pasižymi paprastumu bei skaidrumu. % jungiamasis apibendrinimas
+
+
+    %==================================================================
+    \section{Taikymo sritys}
+    %==================================================================
+
+    Svertinis KNN ir jo modifikacijos taikomos įvairiose laiko eilučių prognozavimo srityse, tarp jų energetikoje, geofizikoje, meteorologijoje ir eismo prognozėje. Energetikos srityje, be jau aptartų darbų, Al-Qahtani ir Crone (2013) Jungtinės Karalystės elektros paklausos prognozei prie autoregresinių požymių prideda dvejetainį dienos tipo požymį (darbo ar ne darbo diena), įtraukiamą į kaimynų paiešką. Daugiamatis KNN su šiuo požymiu pasiekė mažesnę paklaidą nei vienmatis, o pridėjus dienos požymį sumažėjo optimalus lango ilgis. Šis darbas svarbus ir tuo, kad autoriai patys įvardija spragą: daugelio kalendorinių požymių automatinis svorių parinkimas daugiamatėje KNN laiko eilučių regresijoje dar nėra išplėtotas.
+
+    Eismo prognozėje taikomas daugiaperspektyvis (angl. \textit{multi-view}) KNN, kuriame atskiri vaizdai aprašo erdvinę, periodinę ir tendencijos informaciją, o jiems priskiriama svorinė matrica (MVL-STKNN). [TIKRINTI: MVL-STKNN (2018) autorystė ir citata -- spėtos, patvirtinti.] Tai artimiausias literatūroje pavyzdys grupėmis grįstai atstumo struktūrai, nors jis skirtas erdvėlaikiui, o ne kintamųjų grupėms. Meteorologijos srityje svertinis Euklido atstumas su fiksuotu kaimynų skaičiumi taikytas lavinų prognozei. [TIKRINTI: lavinų prognozės (NXD-VG) citata -- spėta, patvirtinti.]
+
+
+    %==================================================================
+    \section{Triukšmo apdorojimas}
+    %==================================================================
+
+    Laiko eilučių duomenyse esantis triukšmas gali būti apdorojamas ne tik duomenų paruošimo lygmenyje, bet ir signalo lygmenyje, atskiriant lėtą ir greitą dinamiką. Sudheer ir Suseelatha (2015) trumpalaikei elektros apkrovos prognozei sudaro hibridą iš Haar bangelių (angl. \textit{wavelet}) transformacijos, trigubo eksponentinio glodinimo ir svertinio artimiausių kaimynų metodo. Esminė idėja -- apkrovos seką išskaidyti į deterministinę komponentę su lėta dinamika, kurią modeliuoja eksponentinis glodinimas, ir fluktuacijų komponentę, kurią modeliuoja svertinis KNN. Triukšmas apdorojamas signalo lygmenyje: bangelių transformacijos detalių koeficientams taikomas adaptyvus slenkstis, o rekonstrukcija duoda deterministinę dalį. Šiame darbe svertinio KNN atstumas skaičiuojamas ne pavieniams taškams, o paros vektoriams, sudarytiems iš 24 valandinių reikšmių, o artimesniems kaimynams priskiriamas didesnis svoris. Pasiūlytas modelis pranoko visus tris palyginimui naudotus metodus visuose sezonuose. Šis darbas yra pagrindinis triukšmo apdorojimo signalo lygmenyje pavyzdys, sudarantis kontrastą duomenų paruošimo lygmens valymui.
+
+
+    %==================================================================
+    \section{Oro taršos prognozės būklė ir tyrimo spraga}
+    %==================================================================
+
+    Oro taršos ir ypač \ce{KD_{2,5}} prognozavimo srityje vyrauja gilieji neuroniniai modeliai. Naujausioje srities apžvalgoje Zhou ir kt. (2024) sistemina giliojo mokymosi architektūras \ce{KD_{2,5}} koncentracijos prognozei ir konstatuoja, kad dominuoja LSTM, konvoliuciniai bei dėmesiu grįsti (transformerių) modeliai. Analitis ir kt. (2020) didžiojo Londono \ce{KD_{2,5}} prognozei taiko ansamblį iš atsitiktinio miško, gradientinio stiprinimo ir KNN metodų, tarp kurių KNN pasirodė prasčiausiai. [TIKRINTI: Analitis ir kt. (2020) autorystė ir citata -- spėtos, patvirtinti.] Šis darbas svarbus kaip tos pačios srities ir miesto kontekstas ir kartu rodo, kad KNN \ce{KD_{2,5}} prognozėje naudotas, tačiau nepatobulintas ir su prastais rezultatais. Gilieji modeliai šioje srityje atstovaujami, pavyzdžiui, LSTM tinklais (Liu ir kt., 2022), kurie laikomi dabartinę būklę atspindinčiu baseline. [TIKRINTI: LSTM \ce{KD_{2,5}} (2022) autorystė ir citata -- spėtos, patvirtinti.]
+
+    Srities būklę kiekybiškai patvirtina ir bibliometrinė Scopus paieška. Bendros \ce{KD_{2,5}} prognozės paieškoje iš 50 cituojamiausių darbų neuroniniai tinklai minimi 38, o KNN -- tik viename. Atskiroje KNN ir \ce{KD_{2,5}} paieškoje nearest-neighbor metodai pavadinime pasirodo tik 2 iš 50 darbų, o patobulinto, svertinio ar optimizuoto KNN -- nė viename. Tai rodo, kad \ce{KD_{2,5}} prognozėje nearest-neighbor metodai pasitelkiami beveik vien kaip palyginimo bazė, o patobulinto svertinio KNN su svorių optimizavimu praktiškai nėra. [TIKRINTI: Scopus paieškos skaičiai (2026-06) -- autoriaus atlikta analizė, pateikti tikslias paieškos užklausas ir datas galutiniame tekste.]
+
+    Iš apžvelgtos literatūros išryškėja kelios neištirtos kryptys. Pirma, nors svorių optimizavimas KNN metode nagrinėtas, daugiakriterinis svorių parinkimas, kuriame vienu metu vertinama prognozės paklaida ir atsisakymo padengimas, lieka neištirtas -- esami daugiakriteriniai darbai optimizuoja kaimynų skaičių arba požymių atranką, o ne atstumo funkcijų grupių svorius. Antra, atsisakymo mechanizmas KNN regresijoje yra retas (Denis ir kt., 2020) ir netaikytas taršos prognozei, o padengimas kaip atskiras optimizavimo tikslas literatūroje nesutiktas. Trečia, bibliometriniai duomenys rodo, kad interpretuojamas, patobulintas KNN \ce{KD_{2,5}} prognozėje praktiškai nenaudojamas -- sritį valdo sunkiai interpretuojami gilieji modeliai. Šios kryptys sudaro tyrimo spragą, į kurią orientuojamasi tolesniame darbe. % spragos sintezė -- jungiamasis
+
+
+\end{document}
