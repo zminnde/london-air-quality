@@ -1,0 +1,215 @@
+% !TeX root = LiteraturosApzvalga_2.tex
+    \section{K artimiausių kaimynų metodas}
+    %==================================================================
+
+    Pirmame skyriuje parodyta, kad oro taršos prognozavimo literatūroje KNN dažniausiai taikomas bazinis, nepatobulintas.
+    Šiame skyriuje metodas pristatomas nuosekliai: pirmiausia veikimo principas ir teorinės ištakos, tada pagrindiniai metodą apibrėžiantys sprendimai -- atstumo funkcija, kaimynų skaičius ir prognozės sudarymas iš kaimynų -- atsisakymo mechanizmas ir galiausiai taikymo laiko eilutėms ypatumai.
+
+    %------------------------------------------------------------------
+
+    \subsection{Veikimo principas}
+    %------------------------------------------------------------------
+
+    Metodas grindžiamas prielaida, kad panašiose situacijose stebimos panašios baigtys.
+    Užuot mokęsis apibendrintos priklausomybės tarp įvesties ir išvesties, metodas prognozuojamą situaciją tiesiogiai lygina su istoriniais pavyzdžiais.
+    Veikimą galima aprašyti keturiais žingsniais:
+    \begin{enumerate}
+        \item prognozuojama situacija aprašoma požymių vektoriumi;
+        \item apskaičiuojamas atstumas nuo šio vektoriaus iki visų istorinių pavyzdžių;
+        \item pavyzdžiai išrikiuojami pagal atstumą ir atrenkami $k$ artimiausių -- kaimynai;
+        \item iš kaimynų reikšmių sudaroma prognozė.
+    \end{enumerate}
+    Klasifikavimo uždavinyje kaimynai balsuoja už klasę, o regresijos uždavinyje jų reikšmės vidurkinamos.
+    Metodo veikimas dvimatėje požymių erdvėje pavaizduotas \ref{fig:knn-kaimynai} pav.
+    Laiko eilučių prognozėje istoriniai pavyzdžiai yra praeities langai, o prognozė sudaroma iš to, kas po panašių langų įvyko istorijoje.
+
+    \input{paveikslas_knn_kaimynai}
+
+    Artimiausių kaimynų taisyklę klasifikavimo uždaviniui dar 1951 metais pasiūlė Fix ir Hodges \cite{fix1951}, o teorinį pagrindą jai suteikė Cover ir Hart \cite{cover1967}.
+    Jie įrodė, kad, imties dydžiui neribotai augant, artimiausio kaimyno taisyklės klaidos tikimybė $R$ neviršija dvigubos mažiausios teoriškai įmanomos, vadinamosios Bajeso, klaidos $R^*$, tai yra $R^* \le R \le 2R^*(1-R^*)$.
+    Vadinasi, joks kitas metodas, turėdamas tuos pačius duomenis, klaidos neįstengtų sumažinti daugiau nei perpus, todėl autoriai teigia, kad artimiausiame kaimyne slypi pusė visos begalinėje imtyje esančios klasifikavimo informacijos \cite{cover1967}.
+    Nors teorinis įrodymas gautas klasifikavimo uždaviniams, pati KNN idėja praktikoje plačiai taikoma ir regresijai bei laiko eilučių prognozavimui.
+
+    Skirtingai nuo daugumos mašininio mokymosi metodų, KNN neturi mokymo etapo.
+    \cite{wettschereck1997} tokius metodus vadina tingiuoju mokymusi (angl. \textit{lazy learning}): metodas tiesiog saugo visą mokymo aibę, o pronozės skaičiavimą atideda iki užklausos pateikimo momento.
+    Tai lemia pagrindinius metodo privalumus.
+    Metodas nedaro prielaidų apie duomenų pasiskirstymą, naujausi duomenys panaudojami iš karto, be permokymo, o kiekvieną prognozę galima paaiškinti parodant kaimynus, iš kurių ji sudaryta.
+    Tačiau dėl šios savybės kyla ir trūkumų.
+    Kiekvienai prognozei atstumas skaičiuojamas iki visų istorinių pavyzdžių, todėl skaičiavimo kaštai tenka prognozės momentui ir auga kartu su istorijos ilgiu \cite{halder2024}.
+    Didelės dimensijos duomenyse metodo efektyvumas mažėja, nes atstumai tarp taškų praranda skiriamąją galią \cite{halder2024}.
+    Galiausiai prognozė yra istorinių reikšmių vidurkis, todėl metodas negali prognozuoti už istorinių stebėjimų ribų išeinančių reikšmių ir be papildomo apdorojimo netinka eilutėms su ilgalaike tendencija \cite{martinez2019}.
+
+    KNN tobulinimo literatūra skyla į dvi stambias kryptis.
+    Pirmoji sprendžia paieškos efektyvumą: naujausioje tikslaus KNN metodų apžvalgoje \cite{halder2024} apžvelgiamas 31 kaimynų paieškos ir 12 jungimo metodų didelės apimties duomenims -- indeksavimo struktūros, atminties ir įvesties--išvesties optimizacijos, lygiagretūs ir paskirstyti skaičiavimai.
+    Ši kryptis gerina metodo greitį, bet ne prognozės tikslumą.
+    Antroji kryptis tobulina patį prognozavimo mechanizmą: atstumo funkciją, kaimynų skaičių, kaimynų ir požymių svorius.
+    Ši apžvalga skirta antrajai krypčiai.
+
+    %------------------------------------------------------------------
+
+    \subsection{Atstumo funkcijos}
+    %------------------------------------------------------------------
+
+    Atstumo funkcija apibrėžia, ką metodas laiko panašumu, todėl nuo jos tiesiogiai priklauso, kurie istoriniai pavyzdžiai bus atrinkti kaimynais.
+    Dažniausiai naudojamas Euklido atstumas
+
+    \begin{equation}
+        d(x, u) = \sqrt{\sum_{j=1}^{m} (x_j - u_j)^2},
+        \label{eq:euklidas}
+    \end{equation}
+
+    čia $x = (x_1, \dots, x_m)$ -- dabartinę situaciją aprašantis požymių vektorius, $u = (u_1, \dots, u_m)$ -- istorinis pavyzdys, $m$ -- požymių skaičius.
+
+    Prieš skaičiuojant atstumą požymiai normalizuojami, pavyzdžiui, į intervalą $[0, 1]$ arba $[-1, 1]$.
+    Be normalizavimo didelio mastelio požymiai, tarkime, azoto oksidų koncentracijos, nustelbtų mažo mastelio požymius, tokius kaip vėjo greitis, vien dėl matavimo vienetų.
+    Verta pastebėti, kad vienmatėje laiko eilutėje, kai visą požymių vektorių sudaro to paties kintamojo uždelstos reikšmės, visi požymiai ir taip yra to paties mastelio, todėl normalizavimas nebūtinas \cite{martinez2019}; daugiamačiu atveju jis būtinas.
+
+    Euklido formulėje visi požymiai atstumui daro vienodą įtaką.
+    Svertinis Euklido atstumas šios prielaidos atsisako -- kiekvienam požymiui priskiriamas svoris $w_j \geq 0$:
+
+    \begin{equation}
+        d_w(x, u) = \sqrt{\sum_{j=1}^{m} w_j (x_j - u_j)^2}.
+        \label{eq:svertinis-euklidas}
+    \end{equation}
+
+    Svoriai leidžia skirtingiems požymiams daryti skirtingą įtaką kaimynų atrankai: nereikšmingiems ar triukšmingiems požymiams gali būti priskiriami maži svoriai, o reikšmingiems -- dideli.
+    Nulinis svoris požymį iš atstumo pašalina, todėl požymių atranka yra atskiras svertinio atstumo atvejis.
+    Bendriausias šios idėjos variantas yra Mahalanobio atstumas $d_M(x, u) = \sqrt{(x - u)^\top M (x - u)}$, kuriame vietoje atskirų svorių naudojama pilna matrica $M$, įvertinanti ir požymių tarpusavio sąveikas; jos mokymasis iš duomenų nagrinėjamas atstumo metrikos mokymosi literatūroje \cite{weinberger2009}.
+    Pilna matrica yra lanksčiausia, tačiau turi $m^2$ parametrų, tad jų skaičius auga kvadratiškai nuo požymių skaičiaus, o atskiri matricos elementai nebeturi vieno požymio svarbos prasmės.
+    Prie šios krypties grįžtama trečiame skyriuje.
+
+    Laiko eilutėms sukurta ir specializuotų, vadinamųjų elastinių atstumo matų, pavyzdžiui, dinaminis laiko kraipymas (angl. \textit{dynamic time warping}, DTW), kurie leidžia lyginti laike pasislinkusias ar ištemptas sekas.
+    Išsamiausiame laiko eilučių atstumo matų palyginime \cite{paparrizos2020} 71 matas vertintas 128 duomenų rinkiniuose pagal vieno artimiausio kaimyno klasifikavimo tikslumą.
+    Palyginimas parodė, kad taškas su tašku lyginantys matai, tarp jų Euklido atstumas, yra sparčiausi, tačiau pagal tikslumą kai kurie iš jų, ypač Manheteno atstumo šeimos matai, Euklido atstumą lenkia, o dauguma elastinių matų statistiškai reikšmingai nepranoksta paprastesnių bazinių matų.
+    KNN laiko eilučių prognozės darbuose vis dėlto įsitvirtinęs Euklido atstumas: \cite{martinez2019} pažymi, kad visi jų apžvelgti KNN laiko eilučių prognozės darbai naudoja būtent jį, o jų pačių eksperimentuose Euklido ir Manheteno atstumų tikslumas reikšmingai nesiskyrė.
+
+    Čia svarbu atskirti dvi vietas, kuriose KNN metode gali atsirasti svoriai.
+    Sąvoka „svertinis KNN`` literatūroje reiškia du visai skirtingus dalykus: svorius požymiams atstumo funkcijos viduje, kaip (\ref{eq:svertinis-euklidas}) formulėje, ir svorius kaimynams prognozę sudarant, kurie aptariami kitame poskyryje.
+    Antrasis variantas literatūroje sutinkamas beveik visur ir dažnai vadinamas tiesiog svertiniu artimiausių kaimynų metodu, nors požymių svorių jame nėra.
+    Skaitant palyginimus svarbu tikrinti, kuris variantas turimas omenyje.
+
+    %------------------------------------------------------------------
+
+    \subsection{Kaimynų skaičius ir prognozės sudarymas}
+    %------------------------------------------------------------------
+
+    Kaimynų skaičius $k$ valdo kompromisą tarp triukšmo ir panašumo.
+    Imant daugiau kaimynų, triukšmas geriau išsividurkina, tačiau tolimesni kaimynai vis mažiau panašūs į dabartinę situaciją, todėl prognozė artėja link bendro vidurkio.
+    Praktikoje $k$ dažniausiai parenkamas iš duomenų.
+    \cite{martinez2019} išskiria tris strategijas: euristinę, kai $k$ prilyginamas kvadratinei šakniai iš mokymo pavyzdžių skaičiaus, $k$ optimizavimą pagal paklaidą atskiroje patikros aibėje ir kelių modelių su skirtingais $k$ prognozių vidurkinimą.
+    Jų eksperimentuose tiksliausias ir kartu greitesnis už optimizavimą buvo kelių modelių derinys.
+    \cite{tajmouati2024} laiko eilučių prognozei kaimynų skaičių ir lango ilgį parenka modifikuota kryžmine patikra; vienas iš dviejų jų siūlomų variantų papildomai sumažina paieškos aibę ir taip pagreitina skaičiavimus.
+    Elektros kainų prognozėje \cite{troncoso2007} pagal paklaidą optimizuoja tiek lango ilgį, tiek kaimynų skaičių.
+
+    Fiksuotas, visiems taškams vienodas $k$ apskritai nėra optimalus, ką teoriškai pagrindžia \cite{anava2016}: kiekvieno prognozuojamo taško kaimynystės geometrija skiriasi, todėl autoriai kiekvienam taškui atskirai minimizuoja prognozės paklaidos rėžį pagal kaimynams priskiriamus svorius.
+    Iš sprendinio plaukia, kad optimalus svoris mažėja tiesiškai didėjant atstumui, o nuo tam tikro atstumo tampa lygus nuliui -- prognozėje dalyvauja tik dalis kaimynų, ir jų skaičius kinta nuo taško prie taško.
+
+    Atrinkus kaimynus, prognozė sudaroma iš jų reikšmių.
+    Paprasčiausias būdas -- aritmetinis vidurkis, kai visi kaimynai lygiaverčiai:
+
+    \begin{equation}
+        \hat{y} = \frac{1}{k} \sum_{i=1}^{k} y_i,
+        \label{eq:kaimynu-vidurkis}
+    \end{equation}
+
+    čia $y_i$ -- $i$-ojo pagal atstumą kaimyno reikšmė: regresijoje -- prognozuojamo dydžio reikšmė, laiko eilutėje -- po kaimyno lango sekusi reikšmė.
+    Dažnai kaimynams priskiriami svoriai pagal atstumą: kuo kaimynas arčiau, tuo didesnė jo įtaka.
+    Tuomet prognozė yra svertinis kaimynų reikšmių vidurkis
+
+    \begin{equation}
+        \hat{y} = \frac{\sum_{i=1}^{k} \omega_i y_i}{\sum_{i=1}^{k} \omega_i},
+        \label{eq:svertinis-vidurkis}
+    \end{equation}
+
+    čia $\omega_i \geq 0$ -- $i$-ojo kaimyno svoris, o svorio funkcijos literatūroje siūlomos įvairios.
+    \cite{zamani2008} palygina tiesinę, atvirkštinę ir atvirkštinę kvadratinę svorio funkcijas, kuriose svoris skaičiuojamas tiesiogiai iš absoliutaus atstumo.
+    Toks svėrimas turi trūkumą: kai artimiausias kaimynas beveik sutampa su prognozuojamu tašku, atvirkštinis atstumas jam suteikia milžinišką svorį ir metodas praktiškai virsta vieno artimiausio kaimyno taisykle \cite{dudani976}.
+
+    Šio trūkumo išvengia \cite{dudani976} pasiūlytas svoris, normalizuotas pagal pačią kaimynystę.
+    Iš $k$ atrinktų kaimynų paimami artimiausio kaimyno atstumas $d_1$ ir tolimiausio kaimyno atstumas $d_k$, o $i$-ojo kaimyno svoris apskaičiuojamas pagal formulę:
+
+    \begin{equation}
+        \omega_i =
+        \begin{cases}
+            \dfrac{d_k - d_i}{d_k - d_1}, & d_k \neq d_1 \\[2ex]
+            1, & d_k = d_1
+        \end{cases}
+        \label{eq:wknn-svoris}
+    \end{equation}
+
+    Artimiausias kaimynas gauna svorį, lygų vienetui, tolimiausias -- nuliui, o kitų kaimynų svoriai pasiskirsto visame šiame intervale net tada, kai visų kaimynų atstumai panašūs.
+    Autorius parodė, kad mažoms ir vidutinėms mokymo imtims svertinė taisyklė tikslesnė už paprastą balsavimą, ir pastebėjo, kad su ja galima drąsiai rinktis didesnį $k$, nesibaiminant, jog paklaida reikšmingai viršys optimalų $k$ atitinkančią paklaidą \cite{dudani976}.
+
+    Dvigubai svertinis variantas \cite{gou2011} normalizuotą svorį papildomai daugina iš kaimyno eilės numerio atvirkštinės reikšmės:
+
+    \begin{equation}
+        \omega_i =
+        \begin{cases}
+            \dfrac{d_k - d_i}{d_k - d_1} \cdot \dfrac{1}{i}, & d_k \neq d_1 \\[2ex]
+            1, & d_k = d_1
+        \end{cases}
+        \label{eq:dwknn-svoris}
+    \end{equation}
+
+    Kraštinių kaimynų svoriai lieka tokie patys, tačiau vidutinio atstumo kaimynai nuslopinami, todėl pavieniai netipiški pavyzdžiai kaimynystėje daro mažesnę įtaką.
+    Autorių eksperimentuose dvylikoje realių duomenų rinkinių šis variantas pasiekė mažiausią vidutinę klaidą, o tikslumas išliko stabilus plačiame $k$ reikšmių intervale, kai bazinio KNN tikslumas didėjant $k$ sparčiai krito \cite{gou2011}.
+    Literatūroje naudojama ir kitokių dvigubo svėrimo variantų, pavyzdžiui, \cite{jafarizadeh2022} normalizuotą svorį daugina iš atstumais grįsto daugiklio $(d_k + d_1)/(d_k + d_i)$.
+
+    Vis dėlto kaimynų svėrimas prognozę gerina ne visada.
+    \cite{martinez2019} eksperimentuose su 111 laiko eilučių svertinis kaimynų vidurkis buvo statistiškai reikšmingai blogesnis už paprastą aritmetinį vidurkį, todėl galutinėje jų metodikoje kaimynai lygiaverčiai.
+    Taigi kaimynų svėrimo nauda priklauso nuo duomenų ir turi būti tikrinama, o ne laikoma savaime suprantama.
+
+    %------------------------------------------------------------------
+
+    \subsection{Atsisakymo mechanizmas}
+    %------------------------------------------------------------------
+
+    Su kaimynų atranka glaudžiai susijęs atsisakymo (angl. \textit{reject option}) mechanizmas -- galimybė modeliui nepateikti prognozės, kai duomenyse nėra pakankamo pagrindo.
+    Idėja natūraliai dera su KNN: jei istorijoje nėra į dabartinę situaciją pakankamai panašių pavyzdžių, prognozė iš nepanašių kaimynų būtų nepatikima, ir sąžiningiau tai pripažinti, nei pateikti abejotiną skaičių.
+    Modelio, kuris atsisako dalies prognozių, kokybė vertinama dviem rodikliais kartu: paklaida tais atvejais, kai prognozė pateikta, ir padengimu -- dalimi atvejų, kuriems prognozė apskritai pateikta.
+    Šie rodikliai konkuruoja, nes griežtesnis atsisakymas mažina paklaidą, bet kartu ir padengimą.
+
+    \cite{denis2020} nagrinėja regresiją su atsisakymu: optimali atsisakymo taisyklė grindžiama sąlyginės dispersijos slenksčiavimu -- prognozė pateikiama tik tada, kai jos neapibrėžtumas neviršija ribos, o slenkstis kalibruojamas taip, kad atsisakymų dalis atitiktų iš anksto pasirinktą biudžetą.
+    Taisyklę autoriai pritaiko būtent KNN įverčiams ir pažymi, kad atsisakymas regresijoje nagrinėjamas itin retai, nors atmetus dalį nepatikimų atvejų likusiųjų prognozės paklaida sumažėja.
+    Atsisakymas čia grindžiamas prognozės dispersija, o ne kaimynų panašumo pakankamumu.
+
+    Padengimo ir rizikos kompromisas kaip tiesioginis optimizavimo tikslas jau naudojamas giliuosiuose neuroniniuose tinkluose: \cite{geifman2019} pasiūlytas SelectiveNet mokosi prognozuoti ir atsisakyti vienu metu, minimizuodamas paklaidą su naudotojo nurodytu padengimo apribojimu.
+    KNN metode toks padengimo, kaip optimizavimo tikslo, naudojimas literatūroje neaptiktas -- atsisakymo taisyklės čia konstruojamos jau po modelio sudarymo, o ne optimizuojamos kartu su jo parametrais.
+
+    %------------------------------------------------------------------
+
+    \subsection{Taikymas laiko eilutėms}
+    %------------------------------------------------------------------
+
+    Taikant KNN laiko eilutėms, dar reikia nuspręsti, kaip iš eilutės formuoti pavyzdžius, kaip prognozuoti kelis žingsnius į priekį ir kaip įtraukti kalendorinę informaciją.
+    Sistemiškai šiuos klausimus nagrinėja \cite{martinez2019}, pasiūlydami automatinę KNN taikymo laiko eilutėms metodiką.
+    Laiko eilutė pati savaime nėra požymių vektorių rinkinys, todėl pavyzdžiai iš jos formuojami pirmame skyriuje apibrėžtais langais.
+    Slenkant langą per visą istoriją po vieną žingsnį, iš vienos eilutės gaunama daug mokymo pavyzdžių: pavyzdžio požymiai yra lango reikšmės, tai yra uždelstos prognozuojamo kintamojo reikšmės, o atsakymu laikoma iškart po lango sekusi reikšmė \cite{strategiestimeseries, martinez2019}.
+    Toks formavimas remiasi prielaida, kad eilutėje kartojasi šablonai, todėl į dabartinį langą panašių langų tęsiniai parodo tikėtiną tolesnę eigą \cite{martinez2019}.
+    Kurias uždelstas reikšmes į langą įtraukti, autoriai parenka nuosekliąja atranka pagal paklaidą patikros aibėje.
+
+    Prognozuoti keliems žingsniams į priekį galima trimis strategijomis \cite{strategiestimeseries}.
+    Rekursinė strategija prognozuoja po vieną žingsnį, o gautą prognozę naudoja kaip įvestį kitam žingsniui, todėl paklaida gali kauptis.
+    Tiesioginė strategija kiekvienam horizonto žingsniui kuria atskirą modelį.
+    MIMO strategija (angl. \textit{multiple-input multiple-output}) visą horizontą prognozuoja iš karto -- kaimynų atsakymai yra ne pavienės reikšmės, o ištisi ateities langai.
+    \cite{martinez2019} eksperimentuose MIMO buvo reikšmingai netiksliausia, tarp rekursinės ir tiesioginės reikšmingo skirtumo nerasta, todėl dėl paprastumo pasirinkta rekursinė.
+    Tuose pačiuose eksperimentuose nustatyta, kad su sezoniškumu KNN susidoroja be išankstinio duomenų apdorojimo, tačiau ilgalaikę tendenciją turinčias eilutes prieš prognozuojant būtina transformuoti, nes prognozė negali išeiti už istorinių reikšmių ribų.
+
+    Kalendorinę informaciją į kaimynų paiešką galima įtraukti kaip papildomą požymį.
+    Prognozuodami Jungtinės Karalystės elektros paklausą, \cite{alqahtani2013} prie uždelstų reikšmių prideda dvejetainį dienos tipo požymį -- darbo arba ne darbo diena -- ir įtraukia jį į kaimynų paiešką.
+    Daugiamatis KNN su šiuo požymiu paklaidą sumažino beveik ketvirtadaliu, palyginti su vienmačiu.
+    Išvadose autoriai pažymi, kad įtraukiant daugiau požymių iškiltų jų tarpusavio ryšio problema, kuriai spręsti reikėtų automatinio santykinių požymių svorių nustatymo, o daugiamatėje KNN laiko eilučių regresijoje tai dar turi būti išplėtota \cite{alqahtani2013}.
+    Ši pastaba svarbi trečiame skyriuje.
+
+    Kaimynų paieškos idėja laiko eilutėse plėtojama ir kitu pavadinimu.
+    Meteorologijoje ji vadinama analogų ansambliu \cite{dellemonache2013}: dabartinė skaitmeninio orų modelio prognozė lyginama su istorinėmis to paties modelio prognozėmis, surandamos panašiausios, o tikimybinė prognozė sudaroma iš tuo metu realiai stebėtų reikšmių.
+    Panašumas matuojamas per kelis prognostinius kintamuosius, kurių kiekvienam formulėje numatytas svoris, tačiau šiame darbe visi svoriai prilyginti vienetui ir, kaip nurodo patys autoriai, jų optimizuoti nebandyta \cite{dellemonache2013}.
+    Šią spragą vėliau užpildė \cite{junk2015}, kurių darbas nagrinėjamas trečiame skyriuje.
+
+    Galiausiai KNN laiko eilutėse jungiamas su signalo apdorojimo metodais.
+    \cite{sudheer2015} trumpalaikei elektros apkrovos prognozei eilutę bangelių transformacija išskaido į glodžiąją ir svyravimų dalis: glodžioji prognozuojama Holto ir Vinterso eksponentinio glodinimo metodu, o svyravimų dalis -- svertiniu artimiausių kaimynų metodu.
+    Tokie hibridai rodo, kad KNN vieta gali būti ir šalia kitų metodų, apdorojant tą signalo dalį, kurioje panašumo paieška veikia geriausiai.
+
+    Apibendrinant, KNN veikimą apibrėžia keli tarpusavyje susiję sprendimai: atstumo funkcija, kaimynų skaičius, kaimynų svoriai ir pavyzdžių formavimas.
+    Kaimynų svoriai literatūroje ištirti išsamiai, o požymių svoriai atstumo funkcijoje, nuo kurių tiesiogiai priklauso pati kaimynų atranka, laiko eilučių prognozėje nagrinėjami retai.
+    Kitas skyrius skirtas būtent jiems.

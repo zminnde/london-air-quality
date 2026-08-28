@@ -1,0 +1,153 @@
+% !TeX root = LiteraturosApzvalga_2.tex
+
+
+\section{Neuroniniai tinklai}
+%==================================================================
+
+Neuroninis tinklas mokymo metu duomenyse rastus dėsningumus paverčia į parametrus, vadinamus svoriais.
+Šiame skyriuje pristatomi darbe naudojami neuroniniai tinklai, apsiribojant bazinėmis architektūromis, su kuriomis planuojama lyginti patobulintą KNN.
+Pirmiausia apibūdinamas dirbtinis neuronas ir iš neuronų sudarytas daugiasluoksnis perceptronas, tuomet -- rekurentinis LSTM tinklas, dėmesio mechanizmu grįstas transformeris ir laiko suliejimo transformeris.
+
+%------------------------------------------------------------------
+
+\subsection{Daugiasluoksnis perceptronas}
+%------------------------------------------------------------------
+
+Visų šiame skyriuje aptariamų architektūrų pagrindinis elementas yra dirbtinis neuronas.
+Neuronas gauna įvesties reikšmes, kiekvieną jų padaugina iš jai priskirto svorio, sandaugas susumuoja, prideda poslinkį (angl. \textit{bias}) ir gautą sumą perleidžia per netiesinę aktyvacijos funkciją \cite{rumelhart1986}:
+
+\begin{equation}
+    y = F\left(\sum_{j=1}^{m} v_j x_j + b\right)
+    \label{eq:neuronas}
+\end{equation}
+
+čia $x_j$ -- $j$-oji įvesties reikšmė, $v_j$ -- $j$-asis neurono svoris, $b$ -- poslinkis, $m$ -- įvesčių skaičius, $F$ -- aktyvacijos funkcija, pavyzdžiui, sigmoidė $F(z) = 1/(1 + \ee^{-z})$ \cite{rumelhart1986}.
+Sigmoidės aktyvacijos funkcijos grafikas pavaizduotas ~\ref{fig:sigmoid} pav.
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.6\textwidth]{./images/sigmoid}
+    \caption{Sigmoidės aktyvacijos funkcijos grafikas.}
+    \label{fig:sigmoid}
+\end{figure}
+
+Aktyvacijos funkcijos netiesiškumas yra esminis -- be jo bet koks, net ir kelių sluoksnių, neuronų tinklas atitiktų tiesinę funkciją.
+Neuronai jungiami į sluoksnius, kad tinklas galėtų išmokti sudėtingesnes netiesines duomenų priklausomybes.
+Įvesties sluoksnis priima duomenis, išvesties sluoksnis pateikia prognozę, o tarp jų esantys paslėptieji sluoksniai leidžia tinklui automatiškai išmokti vidines duomenų reprezentacijas, kurių reikšmių nei įvestis, nei išvestis tiesiogiai nenurodo \cite{rumelhart1986}.
+Kiekvieno sluoksnio išvestys tampa kito sluoksnio įvestimis, tad informacija sklinda viena kryptimi.
+Toks tiesioginio ryšio neuroninis tinklas (angl. \textit{feedforward neural network}) vadinamas daugiasluoksniu perceptronu (angl. \textit{multilayer perceptron}, MLP), jo schema pavaizduota ~\ref{fig:mlp-schema} pav.
+
+\input{paveikslas_nt_mlp}
+
+Šio tinklo svoriai randami atgalinio sklidimo algoritmu (angl. \textit{backpropagation}), kurį pasiūlė Rumelhart ir kt. \cite{rumelhart1986}.
+Tinklo mokymo metu svoriai atnaujinami minimizuojant paklaidą, kuri šiame algoritme apibrėžiama kaip
+
+\begin{equation}
+    E = \frac{1}{2} \sum_{c}\sum_{j} \left(y_{j,c} - d_{j,c}\right)^2
+    \label{eq:nt-paklaida}
+\end{equation}
+
+čia $c$ -- mokymo pavyzdžio indeksas, $j$ -- išvesties neurono indeksas, $y_{j,c}$ -- faktinė tinklo išvestis, $d_{j,c}$ -- norima išvestis.
+
+Skaičiavimas vyksta dviem etapais: tiesioginio sklidimo metu įvestis perleidžiama per tinklą ir gaunama prognozė, o atgalinio sklidimo metu paklaidos išvestinės pagal grandinės taisyklę pernešamos nuo išvesties sluoksnio atgal link įvesties, apskaičiuojant kiekvieno svorio įtaką bendrai paklaidai.
+Tuomet kiekvienas svoris pastumiamas priešinga gradientui kryptimi:
+\begin{equation}
+    \Delta w = -\varepsilon \frac{\partial E}{\partial w}
+    \label{eq:svoriu-korekcija}
+\end{equation}
+čia $\varepsilon$ -- mokymosi greitis (angl. \textit{learning rate}) \cite{rumelhart1986}.
+
+Šio algoritmo dėka paslėptieji neuronai suformuoja tarpinius požymius, reikalingus netiesiniam uždaviniui išspręsti.
+Būtent gebėjimas automatiškai išskirti tokius požymius atskiria atgalinį sklidimą nuo ankstesnio vieno sluoksnio perceptrono mokymo algoritmo \cite{rumelhart1986}.
+Autoriai taip pat nurodo pagrindinį šio metodo trūkumą.
+Paklaidos paviršiuje gali susidaryti lokalūs minimumai, todėl gradiento nusileidimas negarantuoja globalaus minimumo pasiekimo.
+Visgi jie pažymi, kad praktikoje tinklas retai įstringa sprendiniuose, kurie būtų reikšmingai prastesni už optimalų \cite{rumelhart1986}.
+
+Teorinį tokio tinklo pajėgumą apibrėžia universaliojo aproksimavimo teorema: vieno paslėpto sluoksnio tinklas su sigmoidine aktyvacijos funkcija gali norimu tikslumu aproksimuoti bet kokią tolydžią funkciją vienetiniame hiperkube \cite{cybenko1989}.
+Teorema tik įrodo tokio tinklo egzistavimą, tačiau nepateikia būdo, kaip surasti reikiamus tinklo svorius ar parinkti optimalų neuronų skaičių.
+
+Neuroninio tinklo svoriai yra vidiniai modelio parametrai, kurių kiekis priklausomai nuo architektūros gali būti itin didelis.
+Pavienės šių svorių reikšmės tiesiogiai neatskleidžia aiškios semantinės reikšmės, o pati prognozė gaunama per ilgą netiesinių transformacijų grandinę.
+Todėl modelis dažnai įvardijamas kaip sunkiai interpretuojama „juodoji dėžė“ (angl. \textit{black box}).
+
+%Taikant MLP laiko eilučių analizei, įvestis formuojama iš praeities stebėjimų lango \cite{strategiestimeseries}, kurį sudaro vieno ar kelių rodiklių istoriniai matavimai.
+
+% Kelti į 5 skyrių, kur ir apžvelgsiu visus metodus.
+
+%Oro taršos duomenims MLP taikytas, pavyzdžiui, Turino pigių jutiklių \ce{KD_{2,5}} matavimų korekcijai pagal referentinę stotį: išbandžius 135 konfigūracijas, geriausias pasirodė septynių sluoksnių po 1500 neuronų tinklas, kurio įvestį sudarė 20 iš eilės einančių įrašų su meteorologiniais požymiais, o determinacijos koeficientas testavimo aibėje siekė 0,932 \cite{casari2023}.
+%Darbas kartu iliustruoja ir dvi būdingas problemas.
+%Pirma, tai korekcijos, o ne prognozavimo uždavinys -- tinklas taiso dabartinį matavimą, o ne numato ateitį.
+%Antra, duomenys prieš dalijimą į mokymo ir testavimo aibes buvo atsitiktinai sumaišyti, todėl gretimi, tarpusavyje labai panašūs laiko taškai galėjo patekti į abi aibes, ir patys autoriai pripažįsta, kad apibendrinimo galia gali būti pervertinta \cite{casari2023}.
+%Laiko eilutėms šis pavojus ypač aktualus, todėl šiame darbe modeliai vertintini skaidant duomenis chronologiškai.
+
+%------------------------------------------------------------------
+
+\subsection{Ilgos trumpalaikės atminties tinklai}
+%------------------------------------------------------------------
+
+MLP praeitį mato tik tiek, kiek jos telpa fiksuoto ilgio lange, ir kiekvieną langą apdoroja kaip nepriklausomą vektorių.
+Rekurentiniai neuroniniai tinklai (angl. \textit{recurrent neural networks}, RNN) seką apdoroja kitaip: po vieną žingsnį, o grįžtamieji ryšiai ankstesnio žingsnio būseną perduoda į kitą.
+Taip neseniai matyta informacija saugoma aktyvacijų pavidalu -- tai savotiška trumpalaikė atmintis, priešpriešinama lėtai kintančiuose svoriuose glūdinčiai ilgalaikei \cite{hochreiter1997}.
+Mokant tokį tinklą, atgalinis sklidimas vykdomas ir per laiką: klaidos signalai keliauja atgal per visus sekos žingsnius.
+Čia slypi pagrindinė problema: sklisdami atgal klaidos signalai, priklausomai nuo svorių dydžio, eksponentiškai arba auga, arba nyksta; pirmuoju atveju svoriai ima svyruoti, o antruoju -- tolimų laiko priklausomybių mokymasis trunka nepakeliamai ilgai arba apskritai nevyksta \cite{hochreiter1997}.
+
+Šiai, vadinamajai nykstančio gradiento, problemai spręsti pasiūlyta ilgos trumpalaikės atminties (angl. \textit{long short-term memory}, LSTM) architektūra \cite{hochreiter1997}.
+Jos pagrindas -- atminties ląstelė (angl. \textit{memory cell}): tiesinis vienetas su fiksuotu vienetiniu savuoju ryšiu, kuriuo klaidos signalas gali tekėti atgal per daug žingsnių nekeisdamas mastelio; autoriai šį elementą vadina pastoviąja klaidos karusele.
+Prieigą prie ląstelės valdo multiplikatyvūs vartai (angl. \textit{gates}) -- maži išmokstami sluoksniai.
+Įvesties vartai saugo ląstelėje sukauptą turinį nuo nereikšmingų įvesčių, o išvesties vartai neleidžia šiuo metu nereikšmingam ląstelės turiniui trikdyti likusio tinklo \cite{hochreiter1997}.
+Taip tinklas mokosi ne tik ką įsiminti, bet ir kada sukauptą informaciją panaudoti.
+Autorių eksperimentuose LSTM išmoko priklausomybes, nutolusias daugiau nei per tūkstantį laiko žingsnių, kai įprastos rekurentinės architektūros nesusidorojo jau su dešimties žingsnių atotrūkiu, o pirmąja numatoma metodo taikymo sritimi autoriai įvardijo būtent laiko eilučių prognozę \cite{hochreiter1997}.
+
+Ši vizija išsipildė: pirmame skyriuje minėta, kad LSTM ir jo hibridai šiuo metu dominuoja \ce{KD_{2,5}} prognozavimo literatūroje \cite{wu2025, zhou2024}, o lyginamajame eksperimente su penkiais oro taršos duomenų rinkiniais vienos paros horizontui LSTM buvo tiksliausias iš dešimties metodų \cite{das2021}.
+Todėl LSTM šiame darbe yra privaloma palyginimo bazė.
+Vis dėlto nuoseklus sekos apdorojimas turi kainą: kiekvienas žingsnis priklauso nuo ankstesniojo, todėl skaičiavimų negalima lygiagretinti išilgai sekos \cite{vaswani2017}.
+
+%------------------------------------------------------------------
+
+\subsection{Transformeris}
+%------------------------------------------------------------------
+
+Transformeris \cite{vaswani2017} rekurentiškumo atsisako visiškai: architektūra grindžiama vien dėmesio (angl. \textit{attention}) mechanizmu, o visa seka apdorojama vienu metu.
+Tai išsprendžia abi rekurentinių tinklų problemas: skaičiavimai lygiagretinami, o signalo kelias tarp bet kurių dviejų sekos pozicijų tampa pastovaus ilgio, todėl tolimos priklausomybės pasiekiamos tiesiogiai, o ne per ilgą tarpinių būsenų grandinę \cite{vaswani2017}.
+
+Dėmesio mechanizme kiekviena sekos pozicija aprašoma trimis išmokstamais vektoriais: užklausa (angl. \textit{query}), raktu (angl. \textit{key}) ir reikšme (angl. \textit{value}).
+Išvestis yra visų reikšmių svertinė suma, kurios svorius lemia užklausos ir raktų panašumas:
+
+\begin{equation}
+    \operatorname{Attention}(Q, K, V) = \operatorname{softmax}\left(\frac{Q K^\top}{\sqrt{d_k}}\right) V,
+    \label{eq:attention}
+\end{equation}
+
+čia $Q$, $K$ ir $V$ -- iš sekos elementų sudarytos užklausų, raktų ir reikšmių matricos, $d_k$ -- raktų dimensija, o softmax funkcija panašumus paverčia teigiamais svoriais, kurių suma lygi vienetui.
+Dalyba iš $\sqrt{d_k}$ neleidžia skaliarinėms sandaugoms užaugti tiek, kad softmax gradientai taptų nykstamai maži \cite{vaswani2017}.
+Praktikoje dėmesys skaičiuojamas keliomis lygiagrečiomis galvomis (angl. \textit{multi-head attention}), kurių kiekviena mokosi stebėti skirtingus sekos aspektus \cite{vaswani2017}.
+Verta pastebėti, kad (\ref{eq:attention}) formulė struktūriškai primena antrame skyriuje aprašytą svertinį kaimynų vidurkį (\ref{eq:svertinis-vidurkis}): abiem atvejais rezultatas yra reikšmių svertinis vidurkis, o svorius lemia panašumas.
+Skirtumas esminis -- KNN panašumą matuoja išoriškai apibrėžta atstumo funkcija tarp istorinių pavyzdžių, kurią galima užrašyti ir interpretuoti, o transformeris panašumo erdvę išmoksta kartu su visais kitais parametrais.
+
+Kadangi svertinė suma nepriklauso nuo narių tvarkos, pats dėmesio mechanizmas sekos eiliškumo nemato, todėl informacija apie pozicijas įterpiama dirbtinai -- poziciniu kodavimu \cite{vaswani2017}.
+Laiko eilutėms tai kelia principinį klausimą, aptartą dar pirmame skyriuje: eiliškumas laiko eilutėje yra pagrindinis informacijos šaltinis, o eksperimentai rodo, kad ilgo horizonto prognozėse paprastas tiesinis modelis pranoksta transformerių architektūras, kurių tikslumas beveik nepakinta net sumaišius įvesties tvarką \cite{zeng2022transformerseffectivetimeseries}.
+Taigi transformerio sėkmė kalbos uždaviniuose, kuriems jis ir buvo sukurtas \cite{vaswani2017}, savaime nereiškia pranašumo laiko eilutėse.
+
+%------------------------------------------------------------------
+
+\subsection{Laiko suliejimo transformeris}
+%------------------------------------------------------------------
+
+Laiko suliejimo transformeris (angl. \textit{Temporal Fusion Transformer}, TFT) \cite{lim2021} yra specialiai daugiahorizontei laiko eilučių prognozei sukurta architektūra, sujungianti abu ankstesnius principus.
+Praeities ir žinomų ateities įvesčių sekas pirmiausia apdoroja LSTM koduotuvas ir dekoderis, kurie atspindi lokalią dinamiką ir kartu atstoja pozicinį kodavimą, o virš jų esantis vienas daugiagalvis dėmesio sluoksnis sieja tolimus laiko momentus \cite{lim2021}.
+Architektūra skiria tris įvesčių tipus: statinius, laike nekintančius požymius, tik praeityje stebimas eilutes ir iš anksto žinomas ateities reikšmes, pavyzdžiui, kalendorinę informaciją \cite{lim2021}.
+Kiekviename žingsnyje kintamųjų atrankos tinklai (angl. \textit{variable selection networks}) įvertina, kurie požymiai prognozei svarbiausi, o vartų mechanizmai leidžia apeiti nereikalingus architektūros komponentus, pritaikant modelio sudėtingumą duomenims \cite{lim2021}.
+Prognozė pateikiama keliems horizonto žingsniams iš karto ir ne vienu skaičiumi, o kvantiliais, taigi kartu su neapibrėžtumo rėžiais.
+
+TFT išsiskiria tuo, kad interpretuojamumas čia yra projektavimo tikslas, o ne papildomas sluoksnis.
+Autoriai pažymi, kad dauguma giliųjų architektūrų yra juodosios dėžės, o įprasti post hoc aiškinimo metodai, tokie kaip LIME ir SHAP, laiko eilutėms tinka prastai, nes nepaiso priklausomybių tarp gretimų laiko žingsnių \cite{lim2021}.
+Vietoje to interpretacija įmontuota į pačią architektūrą: kintamųjų atrankos svoriai rodo požymių svarbą, o dėmesio svoriai atskleidžia, į kuriuos praeities momentus modelis žiūri -- iš jų matomi išmokti sezoniškumo raštai ir režimų pokyčiai \cite{lim2021}.
+Keturiuose viešuose duomenų rinkiniuose TFT pranoko tiek statistinius, tiek giliuosius palyginimo modelius, vidutiniškai 7--9~\% sumažindamas kvantilines paklaidas, palyginti su artimiausiu konkurentu \cite{lim2021}.
+
+Kritiškai vertinant, matyti ir šio interpretuojamumo kaina bei ribos.
+Dėl interpretuojamumo autoriai sąmoningai apsiriboja vienu dėmesio sluoksniu, taigi aukoja architektūros gylį \cite{lim2021}.
+Modelio mokymas užima valandas grafikos spartintuve, o hiperparametrai parenkami atsitiktine paieška iš dešimčių konfigūracijų \cite{lim2021} -- ryškus kontrastas KNN metodui, kuris mokymo etapo apskritai neturi.
+Galiausiai TFT interpretacija reiškiasi per išmoktų svorių suvestines, o ne per konkrečius parodomus istorinius pavyzdžius, iš kurių sudaryta prognozė, kaip KNN atveju; ši perskyra tarp savaime interpretuojamų ir paaiškinamų modelių plėtojama kitame skyriuje.
+
+Apibendrinant, keturios aptartos architektūros sudaro nuoseklią palyginimo skalę: MLP modeliuoja netiesines priklausomybes fiksuotame lange, LSTM prideda rekurentinę atmintį, transformeris -- išmokstamą dėmesį, o TFT visa tai sujungia į interpretuojamumo siekiančią laiko eilučių architektūrą.
+Apžvelgtoje literatūroje recenzuoto darbo, taikančio TFT \ce{KD_{2,5}} prognozei, aptikti nepavyko, todėl patobulinto KNN palyginimas su TFT šioje srityje būtų naujas.
+Kitas skyrius abu požiūrius lygina tiesiogiai -- pagal prognozės tikslumą ir interpretuojamumą.
