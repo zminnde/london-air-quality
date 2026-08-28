@@ -84,22 +84,37 @@ Todėl modelis dažnai įvardijamas kaip sunkiai interpretuojama „juodoji dė�
 \subsection{Ilgos trumpalaikės atminties tinklai}
 %------------------------------------------------------------------
 
-MLP praeitį mato tik tiek, kiek jos telpa fiksuoto ilgio lange, ir kiekvieną langą apdoroja kaip nepriklausomą vektorių.
-Rekurentiniai neuroniniai tinklai (angl. \textit{recurrent neural networks}, RNN) seką apdoroja kitaip: po vieną žingsnį, o grįžtamieji ryšiai ankstesnio žingsnio būseną perduoda į kitą.
-Taip neseniai matyta informacija saugoma aktyvacijų pavidalu -- tai savotiška trumpalaikė atmintis, priešpriešinama lėtai kintančiuose svoriuose glūdinčiai ilgalaikei \cite{hochreiter1997}.
-Mokant tokį tinklą, atgalinis sklidimas vykdomas ir per laiką: klaidos signalai keliauja atgal per visus sekos žingsnius.
-Čia slypi pagrindinė problema: sklisdami atgal klaidos signalai, priklausomai nuo svorių dydžio, eksponentiškai arba auga, arba nyksta; pirmuoju atveju svoriai ima svyruoti, o antruoju -- tolimų laiko priklausomybių mokymasis trunka nepakeliamai ilgai arba apskritai nevyksta \cite{hochreiter1997}.
+Daugiasluoksnis perceptronas sekos duomenis apdoroja kaip statinį, nepriklausomą įvesties vektorių ir neatsižvelgia į vidinę elementų tvarką ar tarpusavio struktūrą.
+Rekurentiniai neuroniniai tinklai (angl. \textit{recurrent neural networks}, RNN) seką apdoroja po vieną elementą, o grįžtamasis ryšys ankstesnio žingsnio būseną perduoda į kitą.
+Taip neseniai matyta informacija saugoma aktyvacijų pavidalu.
+Tai vaidinama trumpalaike atmintimi, skirtingai nuo lėtai kintančiuose svoriuose esančios ilgalaikės atminties\cite{hochreiter1997}.
+Mokant tokį tinklą, atgalinis sklidimas vykdomas per visus sekos elementus.
+Čia slypi pagrindinė problema: sklisdami atgal klaidos signalai, priklausomai nuo svorių dydžio, eksponentiškai arba auga (sprogsta), arba nyksta.
+Klaidos signalo augimo atveju svoriai ima svyruoti, o nykimo atveju tolimų laiko priklausomybių mokymasis trunka nepakeliamai ilgai arba apskritai nevyksta \cite{hochreiter1997}.
 
-Šiai, vadinamajai nykstančio gradiento, problemai spręsti pasiūlyta ilgos trumpalaikės atminties (angl. \textit{long short-term memory}, LSTM) architektūra \cite{hochreiter1997}.
-Jos pagrindas -- atminties ląstelė (angl. \textit{memory cell}): tiesinis vienetas su fiksuotu vienetiniu savuoju ryšiu, kuriuo klaidos signalas gali tekėti atgal per daug žingsnių nekeisdamas mastelio; autoriai šį elementą vadina pastoviąja klaidos karusele.
-Prieigą prie ląstelės valdo multiplikatyvūs vartai (angl. \textit{gates}) -- maži išmokstami sluoksniai.
-Įvesties vartai saugo ląstelėje sukauptą turinį nuo nereikšmingų įvesčių, o išvesties vartai neleidžia šiuo metu nereikšmingam ląstelės turiniui trikdyti likusio tinklo \cite{hochreiter1997}.
+Nykstančios klaidos problemai spręsti pasiūlyta ilgos trumpalaikės atminties (angl. \textit{long short-term memory}, LSTM) architektūra \cite{hochreiter1997}.
+Jos pagrindas yra atminties ląstelė (angl. \textit{memory cell}).
+Ji yra tiesinis vienetas su fiksuotu vienetiniu savuoju ryšiu, vadinamas nuolatinės klaidos karusele (angl. \textit{constant error carousel}, CEC).
+Kol į ląstelę nepatenka nauja įvestis ar klaidos signalas, klaidos srautas joje išlieka pastovus, nei auga, nei nyksta \cite{gers2000}.
+Įvesties vartai (angl. \textit{input gate}) saugo ląstelėje sukauptą turinį nuo nereikšmingų įvesčių, o išvesties vartai (angl. \textit{output gate})  neleidžia šiuo metu nereikšmingam ląstelės turiniui trikdyti likusio tinklo \cite{hochreiter1997}.
 Taip tinklas mokosi ne tik ką įsiminti, bet ir kada sukauptą informaciją panaudoti.
-Autorių eksperimentuose LSTM išmoko priklausomybes, nutolusias daugiau nei per tūkstantį laiko žingsnių, kai įprastos rekurentinės architektūros nesusidorojo jau su dešimties žingsnių atotrūkiu, o pirmąja numatoma metodo taikymo sritimi autoriai įvardijo būtent laiko eilučių prognozę \cite{hochreiter1997}.
+Autorių eksperimentuose LSTM išmoko priklausomybes, nutolusias daugiau nei per tūkstantį laiko žingsnių, kai įprastos rekurentinės architektūros nesusidorojo jau su dešimties žingsnių atotrūkiu, o tarp būsimų metodo taikymo sričių autoriai nurodė ir laiko eilučių prognozę \cite{hochreiter1997}.
 
-Ši vizija išsipildė: pirmame skyriuje minėta, kad LSTM ir jo hibridai šiuo metu dominuoja \ce{KD_{2,5}} prognozavimo literatūroje \cite{wu2025, zhou2024}, o lyginamajame eksperimente su penkiais oro taršos duomenų rinkiniais vienos paros horizontui LSTM buvo tiksliausias iš dešimties metodų \cite{das2021}.
-Todėl LSTM šiame darbe yra privaloma palyginimo bazė.
-Vis dėlto nuoseklus sekos apdorojimas turi kainą: kiekvienas žingsnis priklauso nuo ankstesniojo, todėl skaičiavimų negalima lygiagretinti išilgai sekos \cite{vaswani2017}.
+Pirminėje architektūroje ląstelės būsena tik kaupiama: kiekviename žingsnyje prie ankstesnės reikšmės pridedama nauja informacija, bet nėra mechanizmo, kuris būseną atnaujintų ar nunulintų.
+Autorių eksperimentuose tai netrukdė, nes prieš kiekvieną naują seką būsena būdavo priverstinai nunulinama.
+Ištisiniame į atskiras sekas nesuskaidytame duomenų sraute tokio nunulinimo nėra, todėl būsenos reikšmė vis auga.
+Kadangi ląstelės išvestis skaičiuojama per funkciją, kuri reikšmes suspaudžia į fiksuotą intervalą, labai išaugusi būsena sukelia jos prisotinimą, kai išvestis pasiekia savo ribą ir nustoja keistis.
+Tada ląstelė nustoja veikti kaip atmintis: jos išvestis nebepriklauso nuo įsimintos informacijos, o klaidos signalas nebepatenka į vidų ir mokymasis sustoja\cite{gers2000}.
+Sprendimas -- treti, užmaršties vartai (angl. \textit{forget gate}), kurie kiekviename žingsnyje nusprendžia, kokią sukauptos būsenos dalį palikti: nuo visos, iki nulinės, kai būsena visiškai išvaloma.
+Taip tinklas pats išmoksta, kada sena informacija nebereikalinga ir ją galima ištrinti -- iškart arba palaipsniui \cite{gers2000}.
+
+LSTM architektūra su užmaršties, įvesties ir išvesties vartais pavaizduota ~\ref{fig:lstm-lastele} pav.
+
+\input{paveikslas_lstm_lastele_2}
+
+%Ši vizija išsipildė: pirmame skyriuje minėta, kad LSTM ir jo hibridai šiuo metu dominuoja \ce{KD_{2,5}} prognozavimo literatūroje \cite{wu2025, zhou2024}, o lyginamajame eksperimente su penkiais oro taršos duomenų rinkiniais vienos paros horizontui LSTM buvo tiksliausias iš dešimties metodų \cite{das2021}.
+%Todėl LSTM šiame darbe yra privaloma palyginimo bazė.
+%Vis dėlto nuoseklus sekos apdorojimas turi kainą: kiekvienas žingsnis priklauso nuo ankstesniojo, todėl skaičiavimų negalima lygiagretinti išilgai sekos \cite{vaswani2017}.
 
 %------------------------------------------------------------------
 
