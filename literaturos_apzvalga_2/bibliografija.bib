@@ -1,0 +1,865 @@
+% ==========================================================================
+% NAUDOJAMI SALTINIAI SU PDF FAILAIS (file laukas rodo i dokumentai/straipsniai)
+% ==========================================================================
+
+% ..... Sritis ir laiko eilutes
+
+@inproceedings{zeng2022transformerseffectivetimeseries,
+    author = {Zeng, Ailing and Chen, Muxi and Zhang, Lei and Xu, Qiang},
+    title = {Are transformers effective for time forecasting?},
+    year = {2023},
+    isbn = {978-1-57735-880-0},
+    publisher = {AAAI Press},
+    url = {https://doi.org/10.1609/aaai.v37i9.26317},
+    doi = {10.1609/aaai.v37i9.26317},
+    abstract = {Recently, there has been a surge of Transformer-based solutions for the long-term time forecasting (LTSF) task. Despite the growing performance over the past few years, we question the validity of this line of research in this work. Specifically, Transformers is arguably the most successful solution to extract the semantic correlations among the elements in a long sequence. However, in time modeling, we are to extract the temporal relations in an ordered set of continuous points. While employing positional encoding and using tokens to embed sub-series in Transformers facilitate preserving some ordering information, the nature of the permutation-invariant self-attention mechanism inevitably results in temporal information loss.To validate our claim, we introduce a set of embarrassingly simple one-layer linear models named LTSF-Linear for comparison. Experimental results on nine real-life datasets show that LTSF-Linear surprisingly outperforms existing sophisticated Transformer-based LTSF models in all cases, and often by a large margin. Moreover, we conduct comprehensive empirical studies to explore the impacts of various design elements of LTSF models on their temporal relation extraction capability. We hope this surprising finding opens up new research directions for the LTSF task. We also advocate revisiting the validity of Transformer-based solutions for other time analysis tasks (e.g., anomaly detection) in the future.},
+    booktitle = {Proceedings of the Thirty-Seventh AAAI Conference on Artificial Intelligence and Thirty-Fifth Conference on Innovative Applications of Artificial Intelligence and Thirteenth Symposium on Educational Advances in Artificial Intelligence},
+    articleno = {1248},
+    numpages = {8},
+    series = {AAAI'23/IAAI'23/EAAI'23},
+    file = {./dokumentai/straipsniai/Are Transformers Effective for Time Series Forecasting.pdf}
+}
+
+@incollection{strategiestimeseries,
+    author = {Bontempi, Gianluca and Ben Taieb, Souhaib and Le Borgne, Yann-A{\"e}l},
+    title = {Machine Learning Strategies for Time Series Forecasting},
+    booktitle = {Business Intelligence: Second European Summer School, eBISS 2012},
+    series = {Lecture Notes in Business Information Processing},
+    volume = {138},
+    pages = {62--77},
+    publisher = {Springer},
+    year = {2013},
+    isbn = {978-3-642-36317-7},
+    doi = {10.1007/978-3-642-36318-4_3},
+    file = {./dokumentai/straipsniai/time/Machine Learning Strategies Time Series Forecasting.pdf},
+}
+
+@Article{wu2025,
+    AUTHOR = {Wu, Chunlai and Wang, Ruiyang and Lu, Siyu and Tian, Jiawei and Yin, Lirong and Wang, Lei and Zheng, Wenfeng},
+    TITLE = {Time-Series Data-Driven PM2.5 Forecasting: From Theoretical Framework to Empirical Analysis},
+    JOURNAL = {Atmosphere},
+    VOLUME = {16},
+    YEAR = {2025},
+    NUMBER = {3},
+    ARTICLE-NUMBER = {292},
+    URL = {https://www.mdpi.com/2073-4433/16/3/292},
+    ISSN = {2073-4433},
+    ABSTRACT = {PM2.5 in air pollution poses a significant threat to public health and the ecological environment. There is an urgent need to develop accurate PM2.5 prediction models to support decision-making and reduce risks. This review comprehensively explores the progress of PM2.5 concentration prediction, covering bibliometric trends, time data characteristics, deep learning applications, and future development directions. This article obtained data on 2327 journal articles published from 2014 to 2024 from the WOS database. Bibliometric analysis shows that research output is growing rapidly, with China and the United States playing a leading role, and recent research is increasingly focusing on data-driven methods such as deep learning. Key data sources include ground monitoring, meteorological observations, remote sensing, and socioeconomic activity data. Deep learning models (including CNN, RNN, LSTM, and Transformer) perform well in capturing complex temporal dependencies. With its self-attention mechanism and parallel processing capabilities, Transformer is particularly outstanding in addressing the challenges of long sequence modeling. Despite these advances, challenges such as data integration, model interpretability, and computational cost remain. Emerging technologies such as meta-learning, graph neural networks, and multi-scale modeling offer promising solutions while integrating prediction models into real-world applications such as smart city systems can enhance practical impact. This review provides an informative guide for researchers and novices, providing an understanding of cutting-edge methods, practical applications, and systematic learning paths. It aims to promote the development of robust and efficient prediction models to contribute to global air pollution management and public health protection efforts.},
+    DOI = {10.3390/atmos16030292},
+    file = {./dokumentai/straipsniai/Time-Series Data-Driven PM2.5 Forecasting.pdf},
+}
+
+@article{zhou2024,
+    author = {Zhou, S. and Wang, W. and Zhu, L. and Qiao, Q. and Kang, Y.},
+    title = {Deep-learning architecture for PM2.5 concentration prediction: A review},
+    journal = {Environmental Science and Ecotechnology},
+    volume = {21},
+    pages = {100400},
+    year = {2024},
+    doi = {10.1016/j.ese.2024.100400},
+    file = {./dokumentai/straipsniai/Deep-learning architecture for PM2.5 concentration.pdf},
+}
+
+@article{das2021,
+    abstract = {Forecasting time has acquired immense research importance and has vast applications in the area of air pollution monitoring. This work attempts to investigate the abilities of various existing techniques when applied for short term, high granular time forecasting of PM2.5. More specifically, a comparative study has been provided, taking into account both popularly used models and lesser-used models in this area. The study has been carried out considering ten well defined models that are ARIMA (auto-regressive integrated moving average), SARIMA (seasonal ARIMA), SES (single exponential smoothing), DES (double exponential smoothing), TES (triple exponential smoothing), ANN (artificial neural network), DT (decision tree), kNN (k-nearest neighbor), LSTM (long short-term memory) and MCFO (markov chain first order). A framework has been built that categories the models, implements them under identical execution environment and forecasts succeeding values. Implementation has been carried out over five data sets of real-world air pollution time, that are collected from five differently located government setup monitoring stations over a period of 1 year (July 2018-June 2019). Rigorous statistical analysis has been performed that yields an insight to the nature and variability of these time data. Forecasting has been carried out on short term basis, focusing on high granularity whereas, three different lengths of forecast horizon (1 day, 1 week, and 1 month) have been tested. Eventually, the models have been compared in terms of their associated performance measuring units namely, RMSE (root mean of squared error), MAE (mean absolute error) and MAPE (mean absolute percentage error). The comparative results verified with multiple datasets show that all the models posses less error for a shorter forecast horizon, where LSTM providing the best performance. Superiority of machine learning and deep learning models are found in case of longer length of forecast horizon with kNN achieving best accuracy whereas, significant performance degradation of ARIMA is found for longer forecast horizon. Moreover, TES, DT, kNN, LSTM, MCFO are found to be well adopted in relation with shape and variability of the data. Note that the performance on various length of high granular forecast horizon have been studied over multiple datasets that give an added value to this work.},
+    author = {Das, Rituparna and Middya, Asif Iqbal and Roy, Sarbani},
+    date-added = {2026-08-27 13:06:53 +0300},
+    date-modified = {2026-08-27 13:06:53 +0300},
+    doi = {10.1007/s10462-021-09991-1},
+    id = {Das2022},
+    journal = {Artificial Intelligence Review},
+    number = {2},
+    pages = {1253--1287},
+    title = {High granular and short term time forecasting of PM2.5 air pollutant - a comparative review},
+    url = {https://doi.org/10.1007/s10462-021-09991-1},
+    volume = {55},
+    year = {2022},
+    bdsk-url-1 = {https://doi.org/10.1007/s10462-021-09991-1},
+    file = {./dokumentai/straipsniai/High granular and short term time series forecasting of PM25air pollutant a comparative review.pdf},
+}
+
+% PATVIRTINTA 2026-07-04. DEMESIO: speta autoryste "Analitis" buvo KLAIDINGA -
+% tikrieji autoriai Danesh Yazdi ir kt. Tekste keisti "(Analitis ir kt., 2020)"
+% i "(Danesh Yazdi ir kt., 2020)". Pastaba: tai erdvinis ekspozicijos modeliavimas
+% (AOD/zemenauda, 1x1 km tinklelis, 2005-2013), NE prognoze i ateiti.
+
+@Article{daneshyazdi2020,
+    AUTHOR = {Danesh Yazdi, Mahdieh and Kuang, Zheng and Dimakopoulou, Konstantina and Barratt, Benjamin and Suel, Esra and Amini, Heresh and Lyapustin, Alexei and Katsouyanni, Klea and Schwartz, Joel},
+    TITLE = {Predicting Fine Particulate Matter (PM2.5) in the Greater London Area: An Ensemble Approach using Machine Learning Methods},
+    JOURNAL = {Remote Sensing},
+    VOLUME = {12},
+    YEAR = {2020},
+    NUMBER = {6},
+    ARTICLE-NUMBER = {914},
+    URL = {https://www.mdpi.com/2072-4292/12/6/914},
+    ISSN = {2072-4292},
+    ABSTRACT = {Estimating air pollution exposure has long been a challenge for environmental health researchers. Technological advances and novel machine learning methods have allowed us to increase the geographic range and accuracy of exposure models, making them a valuable tool in conducting health studies and identifying hotspots of pollution. Here, we have created a prediction model for daily PM2.5 levels in the Greater London area from 1st January 2005 to 31st December 2013 using an ensemble machine learning approach incorporating satellite aerosol optical depth (AOD), land use, and meteorological data. The predictions were made on a 1 km × 1 km scale over 3960 grid cells. The ensemble included predictions from three different machine learners: a random forest (RF), a gradient boosting machine (GBM), and a k-nearest neighbor (KNN) approach. Our ensemble model performed very well, with a ten-fold cross-validated R2 of 0.828. Of the three machine learners, the random forest outperformed the GBM and KNN. Our model was particularly adept at predicting day-to-day changes in PM2.5 levels with an out-of-sample temporal R2 of 0.882. However, its ability to predict spatial variability was weaker, with a R2 of 0.396. We believe this to be due to the smaller spatial variation in pollutant levels in this area.},
+    DOI = {10.3390/rs12060914},
+    file = {./dokumentai/straipsniai/Predicting Fine Particulate Matter.pdf},
+}
+
+@article{pandya2024,
+    abstract = {Air quality in metropolitan areas has deteriorated due to growing urbanisation and industrialisation, leading to severe health and significant economic consequences. This paper discusses the particulate matter PM2.5 and PM10 forecasting performances of three Machine Learning algorithms: SVM, Random Forest, and k-NN. In our comparisons, we attempt to account for the often overlooked influence of the training dataset on model performance, which significantly influences the accuracy of insights derived from a model. The scope of this study helps determine the numerous international research works to help better analyse the algorithms employed and their execution to generate insights into particulate matter concentrations, which assists in shaping future climate change policies. Our analyses show that SVMs can work with dimensional data, and Random Forests can provide multi-faceted, non-linear regression and classification with higher R2 values than SVM for some datasets. K-NN is frequently applied for preprocessing (data imputation). Furthermore, it has been observed that hybrid models outperform the approaches leveraging independent algorithms.},
+    author = {Pandya, Aum and Nanavaty, Rudraksh and Pipariya, Kishan and Shah, Manan},
+    date-added = {2026-08-27 13:31:56 +0300},
+    date-modified = {2026-08-27 13:31:56 +0300},
+    doi = {10.1007/s11831-023-09994-x},
+    id = {Pandya2024},
+    journal = {Archives of Computational Methods in Engineering},
+    number = {2},
+    pages = {595--614},
+    title = {A Comparative and Systematic Study of Machine Learning (ML) Approaches for Particulate Matter (PM) Prediction},
+    url = {https://doi.org/10.1007/s11831-023-09994-x},
+    volume = {31},
+    year = {2024},
+    bdsk-url-1 = {https://doi.org/10.1007/s11831-023-09994-x},
+    file = {./dokumentai/straipsniai/A Comparative and Systematic Study of Machine Learning (ML) Approaches for PM.pdf}
+}
+
+@INPROCEEDINGS{lin2017,
+    author = {Lin, Kunhui and Jing, Liting and Wang, Meihong and Qiu, Ming and Ji, Ze'an},
+    booktitle = {2017 12th International Conference on Computer Science and Education (ICCSE)},
+    title = {A novel long-term air quality forecasting algorithm based on kNN and NARX},
+    year = {2017},
+    volume = {},
+    number = {},
+    pages = {343-348},
+    keywords = {Atmospheric modeling;Air pollution;Time series analysis;Predictive models;Weather forecasting;air quality;time analysis;kNN;NARX},
+    doi = {10.1109/ICCSE.2017.8085514},
+    file = {./dokumentai/straipsniai/A_novel_long-term_air_quality_forecasting_algorithm_based_on_kNN_and_NARX.pdf},
+}
+
+@article{djalova2015,
+    title = {PM2.5 analog forecast and Kalman filter post-processing for the Community Multiscale Air Quality (CMAQ) model},
+    journal = {Atmospheric Environment},
+    volume = {108},
+    pages = {76-87},
+    year = {2015},
+    issn = {1352-2310},
+    doi = {https://doi.org/10.1016/j.atmosenv.2015.02.021},
+    url = {https://www.sciencedirect.com/science/article/pii/S1352231015001405},
+    author = {Irina Djalalova and Luca {Delle Monache} and James Wilczak},
+    keywords = {Analog forecast, CMAQ, Kalman-filtering, PM},
+    file = {./dokumentai/straipsniai/PM25 analog forecast and Kalman filter postprocessing for the Community Multiscale Air Qualitymodel.pdf},
+}
+
+@article{junk2015,
+    author = {Junk, Constantin and Delle Monache, Luca and Alessandrini, Stefano and Cervone, Guido and von Bremen, Lueder},
+    title = {Predictor-weighting strategies for probabilistic wind power forecasting with an analog ensemble},
+    journal = {Meteorologische Zeitschrift},
+    volume = {24},
+    number = {4},
+    pages = {361--379},
+    year = {2015},
+    doi = {10.1127/metz/2015/0659},
+    file = {./dokumentai/straipsniai/Junk_etal_2015_Predictor-weighting_strategies.pdf}
+}
+
+% ..... KNN
+
+@ARTICLE{cover1967,
+    author = {Cover, T. and Hart, P.},
+    journal = {IEEE Transactions on Information Theory},
+    title = {Nearest neighbor pattern classification},
+    year = {1967},
+    volume = {13},
+    number = {1},
+    pages = {21-27},
+    keywords = {Bayes methods;Posterior probability;Convergence;Auditory displays;Random variables;Loss measurement;Extraterrestrial measurements;Density measurement;Accuracy;Visualization},
+    doi = {10.1109/TIT.1967.1053964},
+    file = {./dokumentai/straipsniai/knn/Nearest_neighbor_pattern_classification.pdf }
+}
+
+@ARTICLE{dudani976,
+    author = {Dudani, Sahibsingh A.},
+    journal = {IEEE Transactions on Systems, Man, and Cybernetics},
+    title = {The Distance-Weighted k-Nearest-Neighbor Rule},
+    year = {1976},
+    volume = {SMC-6},
+    number = {4},
+    pages = {325-327},
+    keywords = {Nearest neighbor searches;Error correction;Upper bound;H infinity control},
+    doi = {10.1109/TSMC.1976.5408784},
+    file = {./dokumentai/straipsniai/knn/The_Distance-Weighted_k-Nearest-Neighbor_Rule.pdf} }
+
+@article{gou2011,
+    author = {Gou, Jianping and Xiong, Taisong and Kuang, Yin},
+    title = {A Novel Weighted Voting for K-Nearest Neighbor Rule},
+    journal = {Journal of Computers},
+    volume = {6},
+    number = {5},
+    pages = {833--840},
+    year = {2011},
+    doi = {10.4304/jcp.6.5.833-840},
+    file = {./dokumentai/straipsniai/knn/A_Novel_Weighted_Voting_for_K-Nearest_Neighbor_Rul.pdf},
+}
+
+@article{martinez2019,
+    abstract = {In this paper a methodology for applying k-nearest neighbor regression on a time forecasting context is developed. The goal is to devise an automatic tool, i.e., a tool that can work without human intervention; furthermore, the methodology should be effective and efficient, so that it can be applied to accurately forecast a great number of time. In order to be incorporated into our methodology, several modeling and preprocessing techniques are analyzed and assessed using the N3 competition data set. One interesting feature of the proposed methodology is that it resolves the selection of important modeling parameters, such as k or the input variables, combining several models with different parameters. In spite of the simplicity of k-NN regression, our methodology seems to be quite effective.},
+    author = {Mart{\'\i}nez, Francisco and Fr{\'\i}as, Mar{\'\i}a Pilar and P{\'e}rez, Mar{\'\i}a Dolores and Rivera, Antonio Jes{\'u}s},
+    date-added = {2026-08-27 22:18:46 +0300},
+    date-modified = {2026-08-27 22:18:46 +0300},
+    doi = {10.1007/s10462-017-9593-z},
+    id = {Mart{\'\i}nez2019},
+    journal = {Artificial Intelligence Review},
+    number = {3},
+    pages = {2019--2037},
+    title = {A methodology for applying k-nearest neighbor to time forecasting},
+    url = {https://doi.org/10.1007/s10462-017-9593-z},
+    volume = {52},
+    year = {2019},
+    bdsk-url-1 = {https://doi.org/10.1007/s10462-017-9593-z},
+    file = {./dokumentai/straipsniai/knn/s10462-017-9593-z.pdf} }
+
+@inproceedings{paparrizos2020,
+    author = {Paparrizos, John and Liu, Chunwei and Elmore, Aaron J. and Franklin, Michael J.},
+    title = {Debunking Four Long-Standing Misconceptions of Time-Series Distance Measures},
+    year = {2020},
+    isbn = {9781450367356},
+    publisher = {Association for Computing Machinery},
+    address = {New York, NY, USA},
+    url = {https://doi.org/10.1145/3318464.3389760},
+    doi = {10.1145/3318464.3389760},
+    abstract = {Distance measures are core building blocks in time-series analysis and the subject of active research for decades. Unfortunately, the most detailed experimental study in this area is outdated (over a decade old) and, naturally, does not reflect recent progress. Importantly, this study (i) omitted multiple distance measures, including a classic measure in the time-series literature; (ii) considered only a single time-series normalization method; and (iii) reported only raw classification error rates without statistically validating the findings, resulting in or fueling four misconceptions in the time-series literature. Motivated by the aforementioned drawbacks and our curiosity to shed some light on these misconceptions, we comprehensively evaluate 71 time-series distance measures. Specifically, our study includes (i) 8 normalization methods; (ii) 52 lock-step measures; (iii) 4 sliding measures; (iv) 7 elastic measures; (v) 4 kernel functions; and (vi) 4 embedding measures. We extensively evaluate these measures across 128 time-series datasets using rigorous statistical analysis. Our findings debunk four long-standing misconceptions that significantly alter the landscape of what is known about existing distance measures. With the new foundations in place, we discuss open challenges and promising directions.},
+    booktitle = {Proceedings of the 2020 ACM SIGMOD International Conference on Management of Data},
+    pages = {1887–1905},
+    numpages = {19},
+    keywords = {distance measures, elastic measures, embedding measures, kernel functions, lock-step measures, nearest-neighbor classifier, sliding measures, statistical analysis, time},
+    location = {Portland, OR, USA},
+    series = {SIGMOD '20},
+    file = {./dokumentai/straipsniai/knn/debunking.pdf},
+}
+
+@article{weinberger2009,
+    author = {Kilian Q. Weinberger and Lawrence K. Saul},
+    title = {Distance Metric Learning for Large Margin Nearest Neighbor Classification},
+    journal = {Journal of Machine Learning Research},
+    year = {2009},
+    volume = {10},
+    number = {9},
+    pages = {207--244},
+    url = {http://jmlr.org/papers/v10/weinberger09a.html},
+    file = {./dokumentai/straipsniai/knn/weinberger09a.pdf},
+}
+
+
+@article{dellemonache2013,
+    author = "Luca Delle Monache and F. Anthony Eckel and Daran L. Rife and Badrinath Nagarajan and Keith Searight",
+    title = "Probabilistic Weather Prediction with an Analog Ensemble",
+    journal = "Monthly Weather Review",
+    year = "2013",
+    publisher = "American Meteorological Society",
+    address = "Boston MA, USA",
+    volume = "141",
+    number = "10",
+    doi = "10.1175/MWR-D-12-00281.1",
+    pages = "3498 - 3516",
+    url = "https://journals.ametsoc.org/view/journals/mwre/141/10/mwr-d-12-00281.1.xml",
+    file = {./dokumentai/straipsniai/knn/mwre-mwr-d-12-00281.1.pdf},
+}
+
+% ..... Neuroniniai tinklai
+
+% PATVIRTINTA 2026-08-28 (is PDF: Nature 323, 533-536, 1986-10-09)
+
+@article{rumelhart1986,
+    title = {Learning representations by back-propagating errors},
+    author = {Rumelhart, David E. and Hinton, Geoffrey E. and Williams, Ronald J.},
+    journal = {Nature},
+    volume = {323},
+    number = {6088},
+    pages = {533--536},
+    year = {1986},
+    doi = {10.1038/323533a0},
+    file = {./dokumentai/straipsniai/nt/Learning_representations_by_back_propaga.pdf},
+}
+
+% PATVIRTINTA 2026-08-28 (is PDF: Math. Control Signals Systems 2, 303-314)
+
+@article{cybenko1989,
+    abstract = {In this paper we demonstrate that finite linear combinations of compositions of a fixed, univariate function and a set of affine functionals can uniformly approximate any continuous function ofn real variables with support in the unit hypercube; only mild conditions are imposed on the univariate function. Our results settle an open question about representability in the class of single hidden layer neural networks. In particular, we show that arbitrary decision regions can be arbitrarily well approximated by continuous feedforward neural networks with only a single internal, hidden layer and any continuous sigmoidal nonlinearity. The paper discusses approximation properties of other possible types of nonlinearities that might be implemented by artificial neural networks.},
+    author = {Cybenko, G. },
+    date-added = {2026-08-28 12:13:53 +0300},
+    date-modified = {2026-08-28 12:13:53 +0300},
+    doi = {10.1007/BF02551274},
+    id = {Cybenko1989},
+    issn = {1435-568X},
+    journal = {Mathematics of Control, Signals and Systems},
+    number = {4},
+    pages = {303--314},
+    title = {Approximation by superpositions of a sigmoidal function},
+    url = {https://doi.org/10.1007/BF02551274},
+    volume = {2},
+    year = {1989},
+    bdsk-url-1 = {https://doi.org/10.1007/BF02551274},
+    file = {./dokumentai/straipsniai/nt/cybenko.pdf} }
+
+@ARTICLE{longtermlstm,
+    author = {Bengio, Y. and Simard, P. and Frasconi, P.},
+    journal = {IEEE Transactions on Neural Networks},
+    title = {Learning long-term dependencies with gradient descent is difficult},
+    year = {1994},
+    volume = {5},
+    number = {2},
+    pages = {157-166},
+    keywords = {Recurrent neural networks;Production;Delay effects;Intelligent networks;Neural networks;Discrete transforms;Computer networks;Cost function;Neurofeedback;Displays},
+    doi = {10.1109/72.279181},
+    file = {./dokumentai/straipsniai/nt/Learning_long-term_dependencies_with_gradient_descent_is_difficult.pdf}, }
+
+% PATVIRTINTA 2026-08-28 (is PDF: Neural Computation 9(8), 1735-1780)
+
+@ARTICLE{hochreiter1997,
+    author = {Hochreiter, Sepp and Schmidhuber, Jürgen},
+    journal = {Neural Computation},
+    title = {Long Short-Term Memory},
+    year = {1997},
+    volume = {9},
+    number = {8},
+    pages = {1735-1780},
+    keywords = {},
+    doi = {10.1162/neco.1997.9.8.1735},
+    file = {./dokumentai/straipsniai/nt/lstm.pdf} }
+
+@article{gers2000,
+    author = {Gers, Felix and Schmidhuber, Jürgen and Cummins, Fred},
+    year = {2000},
+    month = {10},
+    pages = {2451-2471},
+    title = {Learning to Forget: Continual Prediction with LSTM},
+    volume = {12},
+    journal = {Neural Computation},
+    doi = {10.1162/089976600300015015},
+    file = {./dokumentai/straipsniai/nt/Learning_to_Forget_Continual_Prediction_with_LSTM.pdf},
+}
+
+% PATVIRTINTA 2026-08-28 (is PDF: NIPS 2017, Long Beach)
+
+@inproceedings{vaswani2017,
+    author = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N. and Kaiser, {\L}ukasz and Polosukhin, Illia},
+    title = {Attention is all you need},
+    year = {2017},
+    isbn = {9781510860964},
+    publisher = {Curran Associates Inc.},
+    address = {Red Hook, NY, USA},
+    abstract = {The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles, by over 2 BLEU. On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.0 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature.},
+    booktitle = {Proceedings of the 31st International Conference on Neural Information Processing Systems},
+    pages = {6000–6010},
+    numpages = {11},
+    location = {Long Beach, California, USA},
+    series = {NIPS'17},
+    file = {./dokumentai/straipsniai/nt/NIPS-2017-attention-is-all-you-need-Paper.pdf},
+}
+
+% PATVIRTINTA 2026-08-28 (is PDF: IJF 37, 1748-1764; nr. 4 is zurnalo svetaines)
+
+@article{lim2021,
+    title = {Temporal Fusion Transformers for interpretable multi-horizon time series forecasting},
+    journal = {International Journal of Forecasting},
+    volume = {37},
+    number = {4},
+    pages = {1748-1764},
+    year = {2021},
+    issn = {0169-2070},
+    doi = {https://doi.org/10.1016/j.ijforecast.2021.03.012},
+    url = {https://www.sciencedirect.com/science/article/pii/S0169207021000637},
+    author = {Bryan Lim and Sercan Ö. Arık and Nicolas Loeff and Tomas Pfister},
+    keywords = {Deep learning, Interpretability, Time series, Multi-horizon forecasting, Attention mechanisms, Explainable AI},
+    abstract = {Multi-horizon forecasting often contains a complex mix of inputs – including static (i.e. time-invariant) covariates, known future inputs, and other exogenous time series that are only observed in the past – without any prior information on how they interact with the target. Several deep learning methods have been proposed, but they are typically ‘black-box’ models that do not shed light on how they use the full range of inputs present in practical scenarios. In this paper, we introduce the Temporal Fusion Transformer (TFT) – a novel attention-based architecture that combines high-performance multi-horizon forecasting with interpretable insights into temporal dynamics. To learn temporal relationships at different scales, TFT uses recurrent layers for local processing and interpretable self-attention layers for long-term dependencies. TFT utilizes specialized components to select relevant features and a series of gating layers to suppress unnecessary components, enabling high performance in a wide range of scenarios. On a variety of real-world datasets, we demonstrate significant performance improvements over existing benchmarks, and highlight three practical interpretability use cases of TFT.},
+    file = {./dokumentai/straipsniai/nt/tft.pdf},
+}
+
+% PATVIRTINTA 2026-08-28 (is PDF: Sensors 23(23), 9446). DEMESIO: tai KOREKCIJOS
+% (kalibravimo pagal referentine stoti), o ne prognozes i ateiti uzdavinys.
+
+@Article{casari2023,
+    AUTHOR = {Casari, Martina and Po, Laura and Zini, Leonardo},
+    TITLE = {AirMLP: A Multilayer Perceptron Neural Network for Temporal Correction of PM2.5 Values in Turin},
+    JOURNAL = {Sensors},
+    VOLUME = {23},
+    YEAR = {2023},
+    NUMBER = {23},
+    ARTICLE-NUMBER = {9446},
+    URL = {https://www.mdpi.com/1424-8220/23/23/9446},
+    PubMedID = {38067817},
+    ISSN = {1424-8220},
+    ABSTRACT = {In recent times, pollution has emerged as a significant global concern, with European regulations stipulating limits on PM 2.5 particle levels. Addressing this challenge necessitates innovative approaches. Smart low-cost sensors suffer from imprecision, and can not replace legal stations in terms of accuracy, however, their potential to amplify the capillarity of air quality evaluation on the territory is not under discussion. In this paper, we propose an AI system to correct PM 2.5 levels in low-cost sensor data. Our research focuses on data from Turin, Italy, emphasizing the impact of humidity on low-cost sensor accuracy. In this study, different Neural Network architectures that vary the number of neurons per layer, consecutive records and batch sizes were used and compared to gain a deeper understanding of the network’s performance under various conditions. The AirMLP7-1500 model, with an impressive R-squared score of 0.932, stands out for its ability to correct PM 2.5 measurements. While our approach is tailored to the city of Turin, it offers a systematic methodology for the definition of those models and holds the promise to significantly improve the accuracy of air quality data collected from low-cost sensors, increasing the awareness of citizens and municipalities about this critical environmental information.},
+    DOI = {10.3390/s23239446},
+    file = {./dokumentai/straipsniai/nt/airMLP.pdf},
+}
+
+
+% ==========================================================================
+% NAUDOJAMI SALTINIAI BE PDF FAILU (cituojami tekste)
+% ==========================================================================
+
+% ..... Ivadas ir sritis
+
+@article{zhang2019,
+    author = {Zhang, Z. and Klemm, O. and Hundt, M. and Li, J.},
+    title = {A systematic review on global pollution status of particulate matter associated potential toxic elements and health perspectives in urban environment},
+    journal = {Environmental Geochemistry and Health},
+    volume = {41},
+    number = {3},
+    pages = {1131--1162},
+    year = {2019},
+    doi = {10.1007/s10653-018-0203-6}
+}
+
+@book{iarc2016,
+    author = {{International Agency for Research on Cancer}},
+    title = {Outdoor Air Pollution},
+    volume = {109},
+    series = {IARC Monographs on the Evaluation of Carcinogenic Risks to Humans},
+    publisher = {International Agency for Research on Cancer},
+    address = {Lyon, France},
+    year = {2016},
+    isbn = {978-92-832-0175-5}
+}
+
+@book{walton2015,
+    title = "Understanding the Health Impacts of Air Pollution in London",
+    abstract = "A new report, published by the Mayor of London, is the world{\textquoteright}s first to quantify the health effects of nitrogen dioxide, finding that up to 9,500 people die early each year in London due to long-term exposure to air pollution. This is more than twice as many as previously thought. Report author, Dr Heather Walton, Environmental Research Group, said: The evidence on the health effects of nitrogen dioxide has strengthened in recent years, including evidence linking long-term exposure to nitrogen dioxide with mortality. It is now thought that there is an additional effect beyond that previously quantified for the effects of long-term exposure to PM2.5. This report quantifies the possible maximum size of this additional effect in London in 2010, expressed as loss of life years and equivalent deaths, acknowledging uncertainties such as the contribution from traffic pollutants other than NO2.{\textquoteright} ",
+    author = "Walton, \{Heather Anne\} and David Dajnak and Beevers, \{Sean David\} and Williams, \{Martin Lloyd\} and Paul Watkiss and Alistair Hunt",
+    year = "2015",
+    month = jul,
+    day = "14",
+    language = "English",
+    publisher = "Transport for London and the Greater London Authority",
+}
+
+@article{harrison2012,
+    author = {Harrison, R. M. and Dall'Osto, M. and Beddows, D. C. S. and Thorpe, A. J. and others},
+    title = {Atmospheric chemistry and physics in the atmosphere of a developed megacity (London): an overview of the REPARTEE experiment and its conclusions},
+    journal = {Atmospheric Chemistry and Physics},
+    volume = {12},
+    number = {6},
+    pages = {3065--3114},
+    year = {2012},
+    doi = {10.5194/acp-12-3065-2012}
+}
+
+@article{KAMARA2021118479,
+    title = {Analysis of the air pollution climate of a central urban roadside supersite: London, Marylebone Road},
+    journal = {Atmospheric Environment},
+    volume = {258},
+    pages = {118479},
+    year = {2021},
+    issn = {1352-2310},
+    doi = {https://doi.org/10.1016/j.atmosenv.2021.118479},
+    url = {https://www.sciencedirect.com/science/article/pii/S1352231021003009},
+    author = {Adams A. Kamara and Roy M. Harrison},
+    keywords = {Air quality, Trends, Particulate matter, Gaseous pollutants, Roadside site, Traffic pollution}
+}
+
+@article{belachsen2022,
+    author = {Belachsen, Idit and Broday, David},
+    year = {2022},
+    month = {11},
+    pages = {1934},
+    title = {Imputation of Missing PM2.5 Observations in a Network of Air Quality Monitoring Stations by a New kNN Method},
+    volume = {13},
+    journal = {Atmosphere},
+    doi = {10.3390/atmos13111934}
+}
+
+% ..... Laiko eilutes bendrai
+
+@book{hyndman,
+    title = "Forecasting: Principles and Practice",
+    author = "Rob Hyndman and G. Athanasopoulos",
+    year = "2021",
+    language = "English",
+    publisher = "OTexts",
+    address = "Australia",
+    edition = "3rd",
+}
+
+@book{cryer1986time,
+    title = {Time Series Analysis},
+    author = {Cryer, J.D.},
+    isbn = {9780871509635},
+    lccn = {85013165},
+    series = {Duxbury series in statistics and decision sciences},
+    url = {https://books.google.lt/books?id=2lQZAQAAIAAJ},
+    year = {1986},
+    publisher = {Duxbury Press}
+}
+
+@article{kim2025comprehensivesurveydeeplearning,
+    abstract = {Time series forecasting is a critical task that provides key information for decision-making across various fields, such as economic planning, supply chain management, and medical diagnosis. After the use of traditional statistical methodologies and machine learning in the past, various fundamental deep learning architectures such as MLPs, CNNs, RNNs, and GNNs have been developed and applied to solve time series forecasting problems. However, the structural limitations caused by the inductive biases of each deep learning architecture constrained their performance. Transformer models, which excel at handling long-term dependencies, have become significant architectural components for time series forecasting. However, recent research has shown that alternatives such as simple linear layers can outperform Transformers. These findings have opened up new possibilities for using diverse architectures, ranging from fundamental deep learning models to emerging architectures and hybrid approaches. In this context of exploration into various models, the architectural modeling of time series forecasting has now entered a renaissance. This survey not only provides a historical context for time series forecasting but also offers comprehensive and timely analysis of the movement toward architectural diversification. By comparing and re-examining various deep learning models, we uncover new perspectives and present the latest trends in time series forecasting, including the emergence of hybrid models, diffusion models, Mamba models, and foundation models. By focusing on the inherent characteristics of time series data, we also address open challenges that have gained attention in time series forecasting, such as channel dependency, distribution shift, causality, and feature extraction. This survey explores vital elements that can enhance forecasting performance through diverse approaches. These contributions help lower entry barriers for newcomers by providing a systematic understanding of the diverse research areas in time series forecasting (TSF), while offering seasoned researchers broader perspectives and new opportunities through in-depth exploration of TSF challenges.},
+    author = {Kim, Jongseon and Kim, Hyungjoon and Kim, HyunGi and Lee, Dongjun and Yoon, Sungroh},
+    date = {2025/04/23},
+    doi = {10.1007/s10462-025-11223-9},
+    id = {Kim2025},
+    isbn = {1573-7462},
+    journal = {Artificial Intelligence Review},
+    number = {7},
+    pages = {216},
+    title = {A comprehensive survey of deep learning for time series forecasting: architectural diversity and open challenges},
+    url = {https://doi.org/10.1007/s10462-025-11223-9},
+    volume = {58},
+    year = {2025},
+    bdsk-url-1 = {https://doi.org/10.1007/s10462-025-11223-9} }
+
+
+% ..... KNN metodas, kaimynu skaicius, atsisakymas
+
+@article{fix1951,
+    author = {Fix, Evelyn and Hodges, Joseph L.},
+    title = {Discriminatory Analysis. Nonparametric Discrimination: Consistency Properties},
+    journal = {International Statistical Review},
+    volume = {57},
+    number = {3},
+    pages = {238--247},
+    year = {1989},
+    url = {http://www.jstor.org/stable/1403797},
+    note = {1951 m. tech. ataskaitos (USAF School of Aviation Medicine, Project 21-49-004, Report 4) perspaudas}
+}
+
+@article{wettschereck1997,
+    author = {Wettschereck, Dietrich and Aha, David W. and Mohri, Takao},
+    title = {A Review and Empirical Evaluation of Feature Weighting Methods for a Class of Lazy Learning Algorithms},
+    journal = {Artificial Intelligence Review},
+    volume = {11},
+    number = {1--5},
+    pages = {273--314},
+    year = {1997},
+    doi = {10.1023/A:1006593614256}
+}
+
+@article{halder2024,
+    abstract = {The k-Nearest Neighbors (kNN) method, established in 1951, has since evolved into a pivotal tool in data mining, recommendation systems, and Internet of Things (IoT), among other areas. This paper presents a comprehensive review and performance analysis of modifications made to enhance the exact kNN techniques, particularly focusing on kNN Search and kNN Join for high-dimensional data. We delve deep into 31 kNN search methods and 12 kNN join methods, providing a methodological overview and analytical insight into each, emphasizing their strengths, limitations, and applicability. An important feature of our study is the provision of the source code for each of the kNN methods discussed, fostering ease of experimentation and comparative analysis for readers. Motivated by the rising significance of kNN in high-dimensional spaces and a recognized gap in comprehensive surveys on exact kNN techniques, our work seeks to bridge this gap. Additionally, we outline existing challenges and present potential directions for future research in the domain of kNN techniques, offering a holistic guide that amalgamates, compares, and dissects existing methodologies in a coherent manner.},
+    author = {Halder, Rajib Kumar and Uddin, Mohammed Nasir and Uddin, Md. Ashraf and Aryal, Sunil and Khraisat, Ansam},
+    date-added = {2026-08-28 00:27:53 +0300},
+    date-modified = {2026-08-28 00:27:53 +0300},
+    doi = {10.1186/s40537-024-00973-y},
+    id = {Halder2024},
+    issn = {2196-1115},
+    journal = {Journal of Big Data},
+    number = {1},
+    pages = {113},
+    title = {Enhancing K-nearest neighbor algorithm: a comprehensive review and performance analysis of modifications},
+    url = {https://doi.org/10.1186/s40537-024-00973-y},
+    volume = {11},
+    year = {2024},
+    bdsk-url-1 = {https://doi.org/10.1186/s40537-024-00973-y} }
+
+@inproceedings{anava2016,
+    author = {Anava, Oren and Levy, Kfir Y.},
+    title = {k*-Nearest Neighbors: From Global to Local},
+    booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+    volume = {29},
+    year = {2016}
+}
+
+% PATVIRTINTA 2026-07-04 (is PDF: J. Forecasting, DOI 10.1002/for.3093; pavarde Dakkon, ne Dakkoun)
+
+@article{tajmouati2024,
+    author = {Tajmouati, Samya and El Wahbi, Bouazza and Bedoui, Adel and Abarda, Abdallah and Dakkon, Mohamed},
+    title = {Applying k-nearest neighbors to time forecasting: two new approaches},
+    journal = {Journal of Forecasting},
+    year = {2024},
+    doi = {10.1002/for.3093},
+    note = {Pirmine versija: arXiv:2103.14200, 2021}
+}
+
+@article{troncoso2007,
+    author = {Troncoso Lora, A. and Riquelme, J. C. and Santos, J. M. R. and Ramos, J. L. M. and G{\'o}mez-Exp{\'o}sito, A.},
+    title = {Electricity market price forecasting based on weighted nearest neighbors techniques},
+    journal = {IEEE Transactions on Power Systems},
+    volume = {22},
+    number = {3},
+    pages = {1294--1301},
+    year = {2007},
+    doi = {10.1109/TPWRS.2007.901670}
+}
+
+% PATVIRTINTA 2026-07-04: publikuota NeurIPS 2020 (proceedings autoriu tvarka: Zaoui, Denis, Hebiri)
+
+@inproceedings{denis2020,
+    author = {Zaoui, Ahmed and Denis, Christophe and Hebiri, Mohamed},
+    title = {Regression with reject option and application to kNN},
+    booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+    volume = {33},
+    year = {2020},
+    note = {Taip pat: arXiv:2006.16597}
+}
+
+% Padengimo-rizikos kompromisas kaip OPTIMIZAVIMO TIKSLAS giliuose NN (3 skyriui):
+% artimiausias "padengimas kaip tikslas" pavyzdys, bet NE KNN -> patvirtina spraga.
+
+@inproceedings{geifman2019,
+    author = {Geifman, Yonatan and El-Yaniv, Ran},
+    title = {SelectiveNet: A deep neural network with an integrated reject option},
+    booktitle = {Proceedings of the 36th International Conference on Machine Learning (ICML)},
+    year = {2019},
+    note = {arXiv:1901.09192}
+}
+
+% LMNN adaptacija REGRESIJAI (2 skyriui) - metrikos mokymasis regresijoje yra,
+% bet pilna matrica, ne grupiu svoriai, ne laiko eilutes.
+
+@article{assi2014,
+    author = {Assi, Kondo C. and Labelle, Hubert and Cheriet, Farida},
+    title = {Modified large margin nearest neighbor metric learning for regression},
+    journal = {IEEE Signal Processing Letters},
+    volume = {21},
+    number = {3},
+    pages = {292--296},
+    year = {2014}
+}
+
+% ..... Pozymiu svoriai
+
+% PATVIRTINTA 2026-07-04 (is PDF: ESWA 80, 340-355, DOI sutampa)
+
+@article{chen2017,
+    author = {Chen, Yingjun and Hao, Yongtao},
+    title = {A feature weighted support vector machine and K-nearest neighbor algorithm for stock market indices prediction},
+    journal = {Expert Systems with Applications},
+    volume = {80},
+    pages = {340--355},
+    year = {2017},
+    doi = {10.1016/j.eswa.2017.02.044}
+}
+
+@article{zamani2008,
+    author = {Zamani, A. and Solomatine, D. and Azimian, A. and Heemink, A.},
+    title = {Learning from data for wind--wave forecasting},
+    journal = {Ocean Engineering},
+    volume = {35},
+    number = {8--9},
+    pages = {953--962},
+    year = {2008},
+    doi = {10.1016/j.oceaneng.2008.03.007}
+}
+
+% PATVIRTINTA 2026-07-04 (web: Neurocomputing 353, 56-73; DOI is ACM DL)
+
+@article{talaverallames2019,
+    author = {Talavera-Llames, R. and P{\'e}rez-Chac{\'o}n, R. and Troncoso, A. and Mart{\'i}nez-{\'A}lvarez, F.},
+    title = {MV-kWNN: A novel multivariate and multi-output weighted nearest neighbours algorithm for big data time forecasting},
+    journal = {Neurocomputing},
+    volume = {353},
+    pages = {56--73},
+    year = {2019},
+    doi = {10.1016/j.neucom.2018.07.092}
+}
+
+@article{jafarizadeh2022,
+    author = {Jafarizadeh, F. and Rajabi, M. and Tabasi, S. and others},
+    title = {Data driven models to predict pore pressure using drilling and petrophysical data},
+    journal = {Energy Reports},
+    volume = {8},
+    pages = {6551--6562},
+    year = {2022},
+    doi = {10.1016/j.egyr.2022.04.073}
+}
+
+@article{paul2015,
+    author = {Paul, Sujoy and Das, Swagatam},
+    title = {Simultaneous feature selection and weighting -- an evolutionary multi-objective optimization approach},
+    journal = {Pattern Recognition Letters},
+    volume = {65},
+    pages = {51--59},
+    year = {2015},
+    doi = {10.1016/j.patrec.2015.07.007}
+}
+
+@article{moldovan2021,
+    author = {Moldovan, Dorin and Slowik, Adam},
+    title = {Energy consumption prediction of appliances using machine learning and multi-objective binary grey wolf optimization for feature selection},
+    journal = {Applied Soft Computing},
+    volume = {111},
+    pages = {107745},
+    year = {2021},
+    doi = {10.1016/j.asoc.2021.107745}
+}
+
+@article{dong2021,
+    author = {Dong, Yunxuan and Ma, Xuejiao and Fu, Tonglin},
+    title = {Electrical load forecasting: A deep learning approach based on K-nearest neighbors},
+    journal = {Applied Soft Computing},
+    volume = {99},
+    pages = {106900},
+    year = {2021},
+    doi = {10.1016/j.asoc.2020.106900}
+}
+
+% ..... Palyginimai ir taikymai kitose srityse
+
+@article{windler2019,
+    title = {One month-ahead electricity price forecasting in the context of production planning},
+    journal = {Journal of Cleaner Production},
+    volume = {238},
+    pages = {117910},
+    year = {2019},
+    issn = {0959-6526},
+    doi = {https://doi.org/10.1016/j.jclepro.2019.117910},
+    url = {https://www.sciencedirect.com/science/article/pii/S0959652619327805},
+    author = {Torben Windler and Jan Busse and Julia Rieck},
+    keywords = {Artificial neural networks, Forecasting electricity prices, EPEX Spot market, Energy cost-oriented production planning},
+    abstract = {One month-ahead electricity prices open up a great potential for manufacturing companies that aim at reducing energy costs. On the machine level, an energy cost-oriented scheduling can be realized through determining the least electricity cost-intensive launch times for job processing during a day. To obtain reliable price information at production planning stage in advance, well-performing forecast models are required. In this paper, we apply a Weighted Nearest Neighbor (WNN) approach, a TBATS approach, and a Deep Feedforward Neural Network (DFNN) approach to forecast EPEX Spot day-ahead electricity prices of the European Energy Exchange in Germany/Austria, while accounting for a forecast horizon of up to one month. Model performances are compared by means of established error measures as well as by adjusted error measures to better interpret results from a production planner's point of view. For evaluation purposes, 1357 different forecasts were computed for each of the methods, allowing valid conclusions as to their performance. The results show that all approaches lead to acceptable accuracies. However, the DFNN outperforms WNN and TBATS, providing well-fitting forecasts even 29 days ahead.}
+}
+
+@article{fan2019,
+    author = {Fan, Guo-Feng and Guo, Yan-Hui and Zheng, Jia-Mei and Hong, Wei-Chiang},
+    title = {Application of the weighted k-nearest neighbor algorithm for short-term load forecasting},
+    journal = {Energies},
+    volume = {12},
+    number = {5},
+    pages = {916},
+    year = {2019},
+    doi = {10.3390/en12050916}
+}
+
+@article{parmezan2019,
+    author = {Parmezan, Antonio R. S. and Souza, Vinicius M. A. and Batista, Gustavo E. A. P. A.},
+    title = {Evaluation of statistical and machine learning models for time prediction: Identifying the state-of-the-art and the best conditions for the use of each model},
+    journal = {Information Sciences},
+    volume = {484},
+    pages = {302--337},
+    year = {2019},
+    doi = {10.1016/j.ins.2019.01.076}
+}
+
+% PATVIRTINTA 2026-07-04 (web: IJCNN 2014, Pekinas; INN = iterative neural network)
+
+@INPROCEEDINGS{rana2014,
+    author = {Rana, Mashud and Koprinska, Irena and Troncoso, Alicia},
+    booktitle = {2014 International Joint Conference on Neural Networks (IJCNN)},
+    title = {Forecasting hourly electricity load profile using neural networks},
+    year = {2014},
+    volume = {},
+    number = {},
+    pages = {824-831},
+    keywords = {Electricity;Forecasting;Artificial neural networks;Predictive models;Iterative methods;Load modeling;Australia;electricity load prediction;iterative neural network;mutual information},
+    doi = {10.1109/IJCNN.2014.6889489} }
+
+
+% PATVIRTINTA 2026-07-04 (web: J. Hydrology 568, 160-173). TIKRINTI: DOI
+
+@article{crawford2019,
+    author = {Crawford, J. and Venkataraman, K. and Booth, J.},
+    title = {Developing climate model ensembles: A comparative case study},
+    journal = {Journal of Hydrology},
+    volume = {568},
+    pages = {160--173},
+    year = {2019}
+}
+
+@inproceedings{alqahtani2013,
+    author = {Al-Qahtani, Fahad H. and Crone, Sven F.},
+    title = {Multivariate k-nearest neighbour regression for time data --- a novel algorithm for forecasting UK electricity demand},
+    booktitle = {International Joint Conference on Neural Networks (IJCNN)},
+    year = {2013},
+    publisher = {IEEE}
+}
+
+% PATVIRTINTA 2026-07-04 (web: MDPI IJGI 7(6), 218)
+
+@article{cheng2018,
+    author = {Cheng, S. and Lu, F. and Peng, P. and Wu, S.},
+    title = {A spatiotemporal multi-view-based learning method for short-term traffic forecasting},
+    journal = {ISPRS International Journal of Geo-Information},
+    volume = {7},
+    number = {6},
+    pages = {218},
+    year = {2018},
+    doi = {10.3390/ijgi7060218}
+}
+
+@article{sudheer2015,
+    author = {Sudheer, G. and Suseelatha, A.},
+    title = {Short term load forecasting using wavelet transform combined with Holt-Winters and weighted nearest neighbor models},
+    journal = {International Journal of Electrical Power \& Energy Systems},
+    volume = {64},
+    pages = {340--346},
+    year = {2015},
+    doi = {10.1016/j.ijepes.2014.07.043}
+}
+
+
+% ..... Daugiakriterinio optimizavimo algoritmai, interpretuojamumas, ES reglamentas
+% PRIDETA 2026-08-29 konvertuojant tekstines citatas i \cite.
+% Metaduomenys is bendru ziniu, ne is PDF - PATIKRINTI pries galutine versija.
+
+@article{deb2002,
+    author = {Deb, Kalyanmoy and Pratap, Amrit and Agarwal, Sameer and Meyarivan, T.},
+    title = {A fast and elitist multiobjective genetic algorithm: NSGA-II},
+    journal = {IEEE Transactions on Evolutionary Computation},
+    volume = {6},
+    number = {2},
+    pages = {182--197},
+    year = {2002},
+    doi = {10.1109/4235.996017}
+}
+
+@article{zhangli2007,
+    author = {Zhang, Qingfu and Li, Hui},
+    title = {MOEA/D: A Multiobjective Evolutionary Algorithm Based on Decomposition},
+    journal = {IEEE Transactions on Evolutionary Computation},
+    volume = {11},
+    number = {6},
+    pages = {712--731},
+    year = {2007},
+    doi = {10.1109/TEVC.2007.892759}
+}
+
+@article{rudin2019,
+    author = {Rudin, Cynthia},
+    title = {Stop explaining black box machine learning models for high stakes decisions and use interpretable models instead},
+    journal = {Nature Machine Intelligence},
+    volume = {1},
+    number = {5},
+    pages = {206--215},
+    year = {2019},
+    doi = {10.1038/s42256-019-0048-x}
+}
+
+@misc{reglamentas2024,
+    author = {{Europos Parlamentas ir Taryba}},
+    title = {Reglamentas (ES) 2024/1689, kuriuo nustatomos suderintos dirbtinio intelekto taisyklės (Dirbtinio intelekto aktas)},
+    year = {2024},
+    howpublished = {Europos Sąjungos oficialusis leidinys, L serija, 2024/1689},
+    url = {https://eur-lex.europa.eu/eli/reg/2024/1689/oj}
+}
+
+
+% ==========================================================================
+% NENAUDOJAMI IRASAI (niekur necituojami; uzkomentuoti, kad nespausdintu
+% \nocite{*}; prireikus atkomentuoti)
+% ==========================================================================
+
+% % PATVIRTINTA 2026-07-04 (web: NXD-VG, 10 kaimynu, svertinis Euklido atstumas)
+% @article{brabec2001,
+%     author = {Brabec, Bernhard and Meister, Roland},
+%     title = {A nearest-neighbor model for regional avalanche forecasting},
+%     journal = {Annals of Glaciology},
+%     volume = {32},
+%     year = {2001}
+%     % TIKRINTI: puslapiai (zurnalas/tomas/metai patvirtinti per Cambridge Core)
+% }
+
+% % PATVIRTINTA 2026-07-04 (is PDF). DEMESIO: speta autoryste "Liu" buvo KLAIDINGA -
+% % tikrieji autoriai Kristiani ir kt. Tekste keisti "(Liu ir kt., 2022)" i "(Kristiani ir kt., 2022)".
+% @article{kristiani2022,
+%     author = {Kristiani, Endah and Lin, Hao and Lin, Jwu-Rong and Chuang, Yen-Hsun and Huang, Chin-Yin and Yang, Chao-Tung},
+%     title = {Short-Term Prediction of PM2.5 Using LSTM Deep Learning Methods},
+%     journal = {Sustainability},
+%     volume = {14},
+%     number = {4},
+%     pages = {2068},
+%     year = {2022},
+%     doi = {10.3390/su14042068}
+% }
+
+% % Kaimynu paieskos idejos atgimimas DL kontekste (4 skyriui, pasirinktinai):
+% % kNN paieska virs giliojo modelio reprezentaciju. ATSARGIAI: early access.
+% @article{zhang2024knnmts,
+%     author = {Zhang, Huiliang and others},
+%     title = {Nearest neighbor multivariate time forecasting},
+%     journal = {IEEE Transactions on Neural Networks and Learning Systems},
+%     year = {2024},
+%     note = {Early access; arXiv:2505.11625. TIKRINTI: pilna autoryste ir galutine citata}
+% }
