@@ -1,0 +1,51 @@
+Tvarkau magistrinio literatūros apžvalgą literaturos_apzvalga_2/LiteraturosApzvalga_2.tex
+  (LuaLaTeX, kompiliuojama per make iš literaturos_apzvalga_2 katalogo; 2 skyrius yra
+  skyrius_knn.tex, 4 skyrius — skyrius_nt.tex, įstatyti per \input). Užduoties kontekstas
+  aprašytas dokumentai/uzduotis.md. Rašau pats, tekstas mano stiliumi — redaguok
+  minimaliai, nekeisk struktūros ir neperrašinėk pastraipų, kurios nesusijusios su
+  žemiau nurodytais punktais.
+
+  Problema: KNN tikslumo palyginimai ir interpretuojamumo sąvokos kartojasi keliose
+  vietose. Sutvarkyk taip:
+
+  1. AIŠKŪS SKYRIŲ VAIDMENYS (1.3 vs 5.1):
+     - 1.3 poskyris „Mašininio mokymosi metodai oro taršos prognozėje" atsako tik
+       į klausimą „kas srityje naudojama". Palik jame das2021, daneshyazdi2020,
+       pandya2024 faktus, BET ištrink/perkelk apibendrinančias išvadas apie tai,
+       kuriems horizontams NT ar KNN tikslesni (jos priklauso 5.1). Poskyrio
+       pabaigoje pridėk vieną sakinį su nuoroda, kad sistemingas KNN ir neuroninių
+       tinklų tikslumo palyginimas pateikiamas 5 skyriuje (naudok \ref).
+     - 5.1 „Tikslumo palyginimai literatūroje" tampa VIENINTELE vieta tikslumo
+       verdiktams. Jo apibendrinime galima viena nuoroda įsiremti į 1.3 faktus
+       (pvz., „pirmame skyriuje aptartas das2021 eksperimentas rodo tą patį"),
+       bet be perpasakojimo.
+
+  2. TEZĖS „KNN naudojamas tik bazinis / be požymių svorių" DEDUPLIKACIJA:
+     ji dabar kartojasi ~5 vietose (1.3 pabaiga, 2 sk. įžanga, 3 sk. įžanga,
+     5.1 pabaiga, 6 sk.). Palik ją pilna forma tik dviejose: 1.3 (kaip radinį)
+     ir 6 skyriuje (kaip spragą). Kitose vietose sušvelnink iki šalutinio
+     sakinio ar nuorodos į ankstesnį skyrių — neištrink visiškai, jei sakinys
+     atlieka jungiamąją funkciją tarp skyrių.
+
+  3. LIME/SHAP DUBLIS (4 sk. vs 5.2):
+     LIME ir SHAP dabar pristatomi du kartus — skyrius_nt.tex TFT poskyryje
+     (per lim2021) ir 5.2 „Interpretuojamumas ir paaiškinamumas". Apibrėžimus
+     palik 5.2. TFT poskyryje palik tik lim2021 teiginį, kad post hoc aiškinimo
+     metodai laiko eilutėms tinka prastai, nes nepaiso priklausomybių tarp laiko
+     žingsnių, su nuoroda, kad perskyra plėtojama kitame skyriuje (tokia nuoroda
+     ten jau yra — nesudubliuok jos).
+
+  4. KRYŽMINĖS NUORODOS pasikartojantiems šaltiniams: zamani2008 naudojamas
+     2, 3 ir 5 skyriuose skirtingais aspektais, analogų linija (djalova2015,
+     dellemonache2013, junk2015) — 1, 2 ir 3 skyriuose. Ten, kur šaltinis
+     minimas pakartotinai, patikrink, ar yra frazė tipo „jau aptartas X skyriuje
+     kitu aspektu" — jei nėra, pridėk, kad matytųsi, jog tai sąmoninga.
+
+  SVARBU:
+  - Necituok nieko naujo ir nekurk naujų teiginių — tik perkėlimas, trumpinimas
+    ir nuorodos. Visos \cite citatos turi likti su tais pačiais raktais.
+  - Nekeisk 3 skyriaus („Požymių svorių radimo būdai") turinio, išskyrus
+    2 punkte nurodytą įžangos sušvelninimą — jį rašiau pats.
+  - Gale sukompiliuok su make ir patikrink log: neturi būti undefined
+    references/citations klaidų. Prieš didesnius perkėlimus parodyk man planą,
+    ką tiksliai kelsi/trumpinsi.

@@ -3,7 +3,7 @@
 %%%%%
 %%%%
 \documentclass[]{VUMIFTemplateClass}
-
+\usepackage{enumitem}
 \usepackage{indentfirst}
 \usepackage{amsmath, amsthm, amssymb, amsfonts}
 \usepackage{mathtools}
@@ -110,7 +110,13 @@
 
     Ateities laikotarpis, kuriam prognozuojama, vadinamas prognozės horizontu \cite{hyndman}.
     Kuo ilgesnis prognozės horizontas, tuo didesnis ateities neapibrėžtumas, todėl ilgesnio horizonto prognozės paprastai yra mažiau tikslios.
-    Prognozės įvestimi paprastai naudojama ne visa turima istorija, o langas (angl. \textit{lookback window}) -- fiksuoto ilgio paskutinių iš eilės einančių reikšmių atkarpa, aprašanti dabartinę situaciją \cite{strategiestimeseries, kim2025comprehensivesurveydeeplearning}.
+    Prognozuojama gali būti viena reikšmė $h$ žingsnių į priekį arba visos horizonto reikšmės $y_{t+1}, \dots, y_{t+H}$, kur $H$ -- horizonto ilgis.
+    Tokia prognozė vadinama daugiažingsne (angl. \textit{multi-step}) \cite{strategiestimeseries}.
+    Daugiažingsnė prognozė gali būti sudaroma rekursyviai, kai kiekviena gauta prognozė grąžinama kaip įvestis kito žingsnio prognozei.
+    Taip pat tiesiogiai, vadinama daugiahorizonte prognoze (angl. \textit{multi-horizon forecasting}) \cite{lim2021}, kai modelis vienu metu išveda vieną prognozuojamų reikšmių vektorių.
+
+    Vienos prognozės įvestimi paprastai naudojama ne visa turima istorija, o langas (angl. \textit{lookback window}) -- fiksuoto ilgio paskutinių iš eilės einančių reikšmių atkarpa, aprašanti dabartinę situaciją \cite{kim2025comprehensivesurveydeeplearning}.
+    Slenkant langu per visą turimą laiko eilutę sudaroma mokymo aibė, kurios kiekvienas įrašas sudaro modelio įvesties požymius ir po jo einanti būsima reikšmė \cite{strategiestimeseries}.
     Lango ilgis yra modelio parametras: per trumpas langas nesutalpina svarbių dėsningumų, o per ilgas įneša nebeaktualių duomenų ir didina modelio sudėtingumą.
 
     \ce{KD_{2,5}} prognozė dvylikos valandų horizontui, naudojant penkių valandų langą, pavaizduota \ref{fig:prognozes-uzdavinys} pav.
@@ -481,7 +487,6 @@
 
 
     \input{skyrius_nt}
-
 
 
     %==================================================================

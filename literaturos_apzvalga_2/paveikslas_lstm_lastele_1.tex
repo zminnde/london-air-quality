@@ -1,0 +1,109 @@
+% ==========================================================================
+% Paveikslas: LSTM atminties lastelės schema (siuolaikine, 3 vartu versija)
+% Preambuleje reikia: \usepackage{tikz}  (ir \usepackage{float} del [H])
+% Idejimas i teksta:  \input{paveikslas_lstm_lastele}
+%
+% PASTABA. Cia pavaizduota ta LSTM versija, kuri realizuota Keras/PyTorch:
+% su uzmarsties vartais f_t (Gers, Schmidhuber, Cummins, 2000).
+% Originalioje 1997 m. architekturoje uzmarsties vartu nera. Jei tekste
+% aprasoma tik 1997 m. versija, is schemos reikia pasalinti:
+%   1) eilute su  \node[vartai] (f) ...
+%   2) eilute     \draw[valdymas] (f) -- (mf);
+%   3) eilute su  \node[oper] (mf) ... (o vietoj jos: \draw[srautas] (0.15,4.2) -- (plus);)
+%   4) zyme $f_t$ ir uzrasa "uzmarsties vartai"
+%   5) is \foreach saraso {2.0,3.9,5.3,7.6} isbraukti 2.0
+% ==========================================================================
+
+\begin{figure}[H]
+    \centering
+    \definecolor{ivestis}{RGB}{189,215,238}
+    \definecolor{pasleptas}{RGB}{237,237,237}
+    \definecolor{isvestis}{RGB}{198,224,180}
+    \definecolor{vartaispalva}{RGB}{255,230,153}
+    \begin{tikzpicture}[x=1cm, y=1cm,
+        vartai/.style={circle, draw, fill=vartaispalva, minimum size=8mm,
+                       inner sep=0pt, font=\scriptsize},
+        kandidatas/.style={circle, draw, fill=ivestis, minimum size=8mm,
+                       inner sep=0pt, font=\scriptsize},
+        oper/.style={circle, draw, fill=white, minimum size=5mm,
+                       inner sep=0pt, font=\scriptsize},
+        srautas/.style={->, line width=0.5pt},
+        valdymas/.style={->, gray!60, line width=0.4pt},
+        zyme/.style={font=\scriptsize, inner sep=1.5pt},
+        paaisk/.style={font=\tiny, text=gray!75, inner sep=1.5pt}]
+
+        % lasteles kontūras
+        \draw[rounded corners=3pt, draw=gray!70, fill=pasleptas!60]
+            (0.6,-0.25) rectangle (9.0,4.9);
+
+        % --- lasteles busenos "greitkelis" (nuolatine klaidos karusele) ---
+        \node[oper] (mf) at (2.0,4.2) {$\times$};
+        \node[oper] (plus) at (4.6,4.2) {$+$};
+        \draw[srautas] (0.15,4.2) -- (mf);
+        \draw[srautas] (mf) -- (plus);
+        \draw[srautas] (plus) -- (9.55,4.2);
+        \node[zyme, anchor=east] at (0.15,4.2) {$c_{t-1}$};
+        \node[paaisk, anchor=east] at (0.15,4.55) {ankstesnė būsena};
+        \node[zyme, anchor=west] at (9.55,4.2) {$c_{t}$};
+        \node[zyme, anchor=south] at (4.6,4.5) {ląstelės būsena};
+
+        % --- vartai ir kandidatine busena ---
+        \node[vartai]     (f) at (2.0,1.8) {$\sigma$};
+        \node[vartai]     (i) at (3.9,1.8) {$\sigma$};
+        \node[kandidatas] (g) at (5.3,1.8) {$\tanh$};
+        \node[vartai]     (o) at (7.6,1.8) {$\sigma$};
+
+        % kandidatines busenos ir ivesties vartu sandauga
+        \node[oper] (mi) at (4.6,3.0) {$\times$};
+        \draw[valdymas] (i) -- (mi);
+        \draw[valdymas] (g) -- (mi);
+        \draw[srautas]  (mi) -- (plus);
+
+        % uzmarsties vartai valdo lasteles busena
+        \draw[valdymas] (f) -- (mf);
+
+        % --- isvesties kelias ---
+        \node[oper, minimum size=7mm] (th) at (6.6,3.0) {$\tanh$};
+        \node[oper] (mo) at (7.6,3.0) {$\times$};
+        \draw[srautas] (6.6,4.2) -- (th);
+        \draw[srautas] (th) -- (mo);
+        \draw[valdymas] (o) -- (mo);
+        \draw[srautas] (mo) -- (9.55,3.0);
+        \node[zyme, anchor=west] at (9.55,3.0) {$h_{t}$};
+
+        % --- ivestis: h_{t-1} ir x_t ---
+        \draw[line width=0.5pt] (0.15,0.95) -- (1.2,0.95);
+        \draw[line width=0.5pt] (0.15,0.25) -- (1.2,0.25);
+        \node[zyme, anchor=east] at (0.15,0.95) {$h_{t-1}$};
+        \node[paaisk, anchor=east] at (0.15,1.3) {ankstesnė išvestis};
+        \node[zyme, anchor=east] at (0.15,0.25) {$x_{t}$};
+        \node[paaisk, anchor=east] at (0.15,-0.1) {sekos elementas};
+        \draw[line width=0.5pt] (1.2,0.95) -- (1.2,0.25);
+        \draw[line width=0.5pt] (1.2,0.6) -- (7.6,0.6);
+        \fill (1.2,0.6) circle (1.2pt);
+        \foreach \x in {2.0,3.9,5.3,7.6}
+            \draw[srautas] (\x,0.6) -- (\x,1.4);
+
+        % --- vartu zymejimai ---
+        \node[zyme, anchor=west] at (2.15,2.9) {$f_{t}$};
+        \node[zyme, anchor=east] at (3.75,2.7) {$i_{t}$};
+        \node[zyme, anchor=west] at (5.45,2.7) {$\tilde{c}_{t}$};
+        \node[zyme, anchor=west] at (7.75,2.5) {$o_{t}$};
+
+        % --- uzrasai po paveikslu ---
+        \node[zyme, anchor=north] at (2.0,-0.6) {užmaršties vartai};
+        \node[zyme, anchor=north] at (4.6,-0.6) {įvesties vartai};
+        \node[zyme, anchor=north] at (7.6,-0.6) {išvesties vartai};
+
+    \end{tikzpicture}
+    \caption{LSTM atminties ląstelė. Indeksas $t$ žymi elemento vietą sekoje, o ne
+             konkretų laiko momentą: tuo pačiu principu apdorojami žodžiai tekste,
+             garso signalo kadrai ar bet kokia kita seka. Viršutinė linija --
+             ląstelės būsena $c_t$, kuria informacija (ir atgalinio sklidimo klaidos
+             signalas) keliauja per sekos žingsnius beveik nekeisdama mastelio.
+             Multiplikatyvūs vartai sprendžia, kiek sukauptos būsenos išsaugoti
+             ($f_t$), kiek naujos informacijos į ją įrašyti ($i_t$) ir kiek jos
+             perduoti likusiam tinklui ($o_t$). Išvestis $h_t$ keliauja ir į kitą
+             sluoksnį, ir į kitą sekos žingsnį.}
+    \label{fig:lstm-lastele}
+\end{figure}
