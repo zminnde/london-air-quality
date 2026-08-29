@@ -69,16 +69,6 @@ Neuroninio tinklo svoriai yra vidiniai modelio parametrai, kurių kiekis priklau
 Pavienės šių svorių reikšmės tiesiogiai neatskleidžia aiškios semantinės reikšmės, o pati prognozė gaunama per ilgą netiesinių transformacijų grandinę.
 Todėl modelis dažnai įvardijamas kaip sunkiai interpretuojama „juodoji dėžė“ (angl. \textit{black box}).
 
-%Taikant MLP laiko eilučių analizei, įvestis formuojama iš praeities stebėjimų lango \cite{strategiestimeseries}, kurį sudaro vieno ar kelių rodiklių istoriniai matavimai.
-
-% Kelti į 5 skyrių, kur ir apžvelgsiu visus metodus.
-
-%Oro taršos duomenims MLP taikytas, pavyzdžiui, Turino pigių jutiklių \ce{KD_{2,5}} matavimų korekcijai pagal referentinę stotį: išbandžius 135 konfigūracijas, geriausias pasirodė septynių sluoksnių po 1500 neuronų tinklas, kurio įvestį sudarė 20 iš eilės einančių įrašų su meteorologiniais požymiais, o determinacijos koeficientas testavimo aibėje siekė 0,932 \cite{casari2023}.
-%Darbas kartu iliustruoja ir dvi būdingas problemas.
-%Pirma, tai korekcijos, o ne prognozavimo uždavinys -- tinklas taiso dabartinį matavimą, o ne numato ateitį.
-%Antra, duomenys prieš dalijimą į mokymo ir testavimo aibes buvo atsitiktinai sumaišyti, todėl gretimi, tarpusavyje labai panašūs laiko taškai galėjo patekti į abi aibes, ir patys autoriai pripažįsta, kad apibendrinimo galia gali būti pervertinta \cite{casari2023}.
-%Laiko eilutėms šis pavojus ypač aktualus, todėl šiame darbe modeliai vertintini skaidant duomenis chronologiškai.
-
 %------------------------------------------------------------------
 
 \subsection{Ilgos trumpalaikės atminties tinklai}
@@ -111,9 +101,7 @@ LSTM architektūra su užmaršties, įvesties ir išvesties vartais pavaizduota~
 
 \input{paveikslas_lstm_lastele_2}
 
-%Ši vizija išsipildė: pirmame skyriuje minėta, kad LSTM ir jo hibridai šiuo metu dominuoja \ce{KD_{2,5}} prognozavimo literatūroje \cite{wu2025, zhou2024}, o lyginamajame eksperimente su penkiais oro taršos duomenų rinkiniais vienos paros horizontui LSTM buvo tiksliausias iš dešimties metodų \cite{das2021}.
-%Todėl LSTM šiame darbe yra privaloma palyginimo bazė.
-%Vis dėlto nuoseklus sekos apdorojimas turi kainą: kiekvienas žingsnis priklauso nuo ankstesniojo, todėl skaičiavimų negalima lygiagretinti išilgai sekos \cite{vaswani2017}.
+Nuoseklus sekos apdorojimas turi kainą: kiekvienas žingsnis priklauso nuo ankstesniojo, todėl skaičiavimų negalima lygiagretinti išilgai sekos \cite{vaswani2017}.
 
 %------------------------------------------------------------------
 
@@ -138,9 +126,6 @@ Dalyba iš $\sqrt{d_k}$ neleidžia šioms sandaugoms užaugti tiek, kad $\operat
 
 Praktikoje dėmesys skaičiuojamas keliomis lygiagrečiomis galvomis, vadinamu daugiagalviu dėmesiu (angl. \textit{multi-head attention}), kurių kiekviena mokosi stebėti skirtingus sekos aspektus.
 Kadangi svertinė suma nepriklauso nuo narių tvarkos, pats dėmesio mechanizmas sekos eiliškumo nemato, todėl informacija apie pozicijas įterpiama papildomai -- poziciniu kodavimu (angl. \textit{positional encoding}).
-
-%Laiko eilutėms tai kelia principinį klausimą, aptartą dar pirmame skyriuje: eiliškumas laiko eilutėje yra pagrindinis informacijos šaltinis, o eksperimentai rodo, kad ilgo horizonto prognozėse paprastas tiesinis modelis pranoksta transformerių architektūras, kurių tikslumas beveik nepakinta net sumaišius įvesties tvarką \cite{zeng2022transformerseffectivetimeseries}.
-%Taigi transformerio sėkmė kalbos uždaviniuose, kuriems jis ir buvo sukurtas \cite{vaswani2017}, savaime nereiškia pranašumo laiko eilutėse.
 
 %------------------------------------------------------------------
 
@@ -193,5 +178,3 @@ Priešingai KNN modeliui, kur prognozė sudaroma per konkrečius parodomus istor
 
 Aptartos neuroninių tinklų architektūros sudaro palyginimo modelius.
 MLP modeliuoja netiesines priklausomybes fiksuotame lange, LSTM prideda rekurentinę atmintį, transformeris prideda išmokstamą dėmesį, o TFT visa tai sujungia į sudėtingą interpretuojamumo siekiančią laiko eilučių architektūrą.
-%Apžvelgtoje literatūroje recenzuoto darbo, taikančio TFT \ce{KD_{2,5}} prognozei, aptikti nepavyko, todėl patobulinto KNN palyginimas su TFT šioje srityje būtų naujas.
-%Kitas skyrius abu požiūrius lygina tiesiogiai -- pagal prognozės tikslumą ir interpretuojamumą.
