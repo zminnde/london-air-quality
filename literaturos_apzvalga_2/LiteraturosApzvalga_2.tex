@@ -36,7 +36,7 @@
 \studijuprograma{Informatikos}
 \darbotipas{Literatūros apžvalga}
 \darbopavadinimas{Kietųjų dalelių koncentracijos prognozavimas laiko eilutėse}
-\darbopavadinimasantras{Literatūros apžvalga}
+\darbopavadinimasantras{Forecasting particulate matter concentration in time series}
 \autorius{Mindaugas Žiemys}
 
 \vadovas{Linas Litvinas, Asist., Dr.}
@@ -66,18 +66,22 @@
 
     Tarptautinė vėžio tyrimų agentūra nustatė, kad smulkiosios \ce{KD_{2,5}} dalelės yra kancerogeniškos žmonėms \cite{iarc2016}.
     Per plaučius jos gali patekti į kraujotaką, širdį ir kitus organus bei sukelti širdies ir kraujagyslių ligas, smegenų pažeidimus, vėžį.
-    \ce{KD_{2,5}} jutikliai yra brangūs, dažnai genda, susiduriama su priežiūros ir remonto problemomis, todėl patikima kelių valandų prognozė turi ir praktinę vertę.
+    \ce{KD_{2,5}} jutikliai yra brangūs, dažnai genda, susiduriama su priežiūros ir remonto problemomis, todėl patikimas kelių valandų prognozavimas turi ir praktinę vertę.
 
     Remiantis šaltiniu \cite{walton2015} apskaičiuota, kad 2010 metų lygio oro tarša žmogaus gyvenimą Londone sutrumpintų apie 9--16 mėnesių.
+    Naujesniais skaičiavimais, net įgyvendinus visas suplanuotas Londono mero oro kokybės užtikrininmo strategijas, 2013 m. Londone gimę vaikai vidutiniškai mirs 2--5 mėnesiais anksčiau, jei visą gyvenimą kvėpuos prognozuojama iki 2050 m. oro tarša \cite{DEK21}.
+
     Londono Merilebono kelias yra judri gatvė, pro kurią per dieną vidutiniškai pravažiuoja apie 50\,000-80\,000 motorinių transporto priemonių \cite{DfT26}.
     Tai viena labiausiai užterštų gatvių Londone, kurioje vyksta intensyvus pėsčiųjų ir dviratininkų eismas.
     Gatvė unikali tuo, kad joje susidaro gatvės kanjono (angl. \textit{street canyon}) efektas: pastatų išdėstymas, gatvės pločio ir pastatų aukščio santykis lemia teršalų sulaikymą gatvėje ir neleidžia jiems greitai išsisklaidyti.
+
     Taršos matavimų eksperimentų metu \cite{harrison2012} nustatyta, kad 71{,}9\% visų išmatuotų kietųjų dalelių kyla tiesiogiai iš eismo šioje gatvėje.
     Taip pat ištirta, kad oro tarša yra netiesinė ir stipriai priklauso nuo sudėtingų aerodinaminių sąlygų, tokių kaip vėjo kryptis ir greitis.
+    Kadangi ne išmetamųjų dujų kilmės dalelės sudaro didžiąją dalį eismo sukeltos taršos, o perėjimo prie elektrinio transporto poveikis lieka neaiškus \cite{hicks2021}, \ce{KD_{2,5}} stebėjimas ir prognozavimas šioje gatvėje išliks aktualus ir ateityje.
 
     \ce{KD_{2,5}} koncentracijai prognozuoti taikomi įvairūs metodai -- nuo klasikinių statistinių modelių iki giliojo mokymosi neuroninių tinklų, kurie šiuo metu srityje dominuoja \cite{wu2025}.
     Gilieji modeliai pasiekia aukštą tikslumą, tačiau veikia kaip sunkiai interpretuojamos juodosios dėžės, o jų mokymas reikalauja didelių skaičiavimo sąnaudų \cite{wu2025}.
-    Alternatyva -- paprastesni, interpretuojami metodai, tarp kurių yra K artimiausių kaimynų (KNN) metodas, prognozę sudarantis tiesiogiai iš panašių istorinių situacijų.
+    Alternatyva -- paprastesni, interpretuojami metodai, tarp kurių yra K artimiausių kaimynų (KNN) metodas, prognozę sudarantis tiesiogiai iš panašių istorinių įrašų.
     Oro taršos prognozavimo darbuose KNN dažniausiai taikomas bazinis, nepatobulintas, todėl šiame darbe jį siekiama tobulinti: požymiams atstumo funkcijoje priskirti svorius, kurių reikšmės randamos optimizavimo būdu, minimizuojant prognozės paklaidą.
 
     \textbf{Darbo tikslas:} identifikuoti tyrimų spragą ir sukurti naują KNN metodą su svertiniu Euklido atstumu, palyginti jį su naivia prognoze, daugiasluoksniu perceptronu ir laiko suliejimo transformeriu.
@@ -101,7 +105,7 @@
     Šiame skyriuje pristatomas oro taršos prognozavimas laiko eilutėse ir su juo susijusi teorija.
     Pirmiausia apibrėžiamos pagrindinės laiko eilučių sąvokos ir prognozei naudojami metodai.
     Toliau analizuojama oro taršos laiko eilučių specifika ir jų skirtumai nuo kitų tipų laiko eilučių.
-    Skyriaus pabaigoje pateikiama literatūroje taikomų oro taršos prognozavimo metodų apžvalga.
+    Skyriaus pabaigoje pateikiami literatūroje taikomi oro taršos prognozavimo metodai.
     %------------------------------------------------------------------
 
     \subsection{Laiko eilučių prognozavimas}
@@ -152,8 +156,9 @@
 
     Dešimties metų duomenų analizė Londono Merilebono kelio stotyje \cite{KAMARA2021118479} parodė, kad oro taršos koncentracija svyruoja keliais persidengiančiais ciklais.
     Paros ciklą sudaro du pikai: rytinis (8–10 val.) ir vakarinis (po 18 val.).
-    Savaitinį ciklą nusako didesnė tarša darbo dienomis nei savaitgaliais.
-    Taip pat pastebimas ir sezoninis ciklas, kuris priklauso nuo temperatūros: didžiausia koncentracija stebima šaltaisiais metų periodais, mažiausia – tarp birželio ir rugpjūčio mėnesių.
+    Savaitinį ciklą atspindi didesnė tarša darbo dienomis nei savaitgaliais.
+    Taip pat pastebimas ir sezoninis ciklas, kuris priklauso nuo temperatūros.
+    Didžiausia koncentracija stebima šaltaisiais metų periodais, mažiausia -- nuo birželio iki rugpjūčio mėnesio.
 
     Paros pikus papildomai sustiprina vyraujantis silpnas vėjas ir žemas maišymosi sluoksnis, kurie riboja teršalų sklaidą.
     Taip pat padidėjusios \ce{KD_{2,5}} koncentracijos fiksuojamos ne vien tik esant silpnam vėjui, bet ir esant stipriam rytų krypties vėjui, kai teršalai atnešami iš rytų regiono.
@@ -178,7 +183,7 @@
     Realių oro taršos matavimo stočių duomenyse yra spragų.
     Jos atsiranda dėl prietaisų gedimų, kalibravimo ir priežiūros darbų, ryšio sutrikimų ir kitų techninių kliūčių \cite{belachsen2022}.
     Net reguliariai prižiūrimoje Londono Merilebono kelio stotyje valandinių matavimų surinkta daugiau nei 80~\% \cite{KAMARA2021118479}.
-    Izraelio oro kokybės stebėsenos tinkle 2012--2019~m. 23 stotys iš 59 turėjo daugiau nei 50~ \%spragų, o likusiose 36 stotyse vidutiniškai trūko 20,4~\% \ce{KD_{2,5}} stebėjimų \cite{belachsen2022}.
+    Izraelio oro kokybės stebėsenos tinkle 2012--2019~m. 23 stotys iš 59 turėjo daugiau nei 50~\% spragų, o likusiose 36 stotyse vidutiniškai trūko 20,4~\% \ce{KD_{2,5}} stebėjimų \cite{belachsen2022}.
     Taikomi prognozavimo metodai turi arba gebėti dirbti su spragomis, arba duomenys turi būti atitinkamai paruošiami.
 
     %------------------------------------------------------------------
