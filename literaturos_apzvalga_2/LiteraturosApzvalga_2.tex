@@ -219,32 +219,22 @@
     \section{Požymių svorių radimo būdai}
     %==================================================================
 
-    Antrame skyriuje parodyta, kad svoriai KNN metode gali atsirasti dviejose vietose: atstumo funkcijos viduje, prie požymių, ir po jos, prie kaimynų.
-    Kaimynų svoriai yra standartinė metodo dalis, o požymių svoriai atstumo funkcijoje -- pagrindinis šio skyriaus objektas.
+    Literatūroje nagrinėjami KNN metodo svoriai gali būti taikomi dviejose vietose: požymių svoriai atstumo funkcijoje atrenkant artimiausius kaimynus ir kaimynų svoriai, nurodantys jau surastų kaimynų daromą įtaką.
+    Kaimynų svėrimas yra literatūroje plačiai naudojama praktika, o požymių svoriai atstumo funkcijoje aptinkami rečiau.
+    Šiame darbe pagrindinis dėmesys skiriamas atstumo funkcijos tobulinimui ir požymių svorių optimizavimui.
 
-    Dauguma literatūroje aptinkamų mokslinių publikacijų lygina bazinį, nepatobulintą KNN su pažangiais algoritmais, todėl gaunami prastesni jo rezultatai sumenkina šio algoritmo potencialą.
-    Vienas iš pagrindinių KNN algoritmo tobulinimo būdų yra atstumo funkcijos parametrizavimas, požymiams pritaikant svorius.
-    Toks būdas leidžia skirtingiems požymiams daryti skirtingą įtaką panašių istorinių kaimynų atrankoje, o nuo atrinktų kaimynų tiesiogiai priklauso ir prognozės tikslumas.
-    Literatūroje yra aprašyta įvairių KNN atstumo funkcijos požymių svorių parinkimo būdų, kuriuos klasifikuoja ir lygina \cite{wettschereck1997}.
-    Straipsnis pasiūlo penkių dimensijų KNN algoritmo požymių svėrimo klasifikaciją, skirtą skirtingiems požymių svėrimo metodams atskirti ir formalizuoti:
-    \begin{enumerate}
-        \item \textbf{Šališkumas} -- svoriai parenkami pagal modelio prognozavimo kokybės grįžtamąjį ryšį arba nustatomi iš anksto.
-        \item \textbf{Svorių erdvė} -- tolydūs svoriai arba požymių atranka (dvejetainiai svoriai, požymis paliekamas arba išmetamas).
-        \item \textbf{Reprezentacija}  -- duotosios požymių reikšmės arba iš jų sudarytos naujos.
-        \item \textbf{Bendrumas} -- globalūs svoriai visiems duomenims arba lokalūs, kurie skiriasi atskirose srityse.
-        \item \textbf{Dalykinės žinios} -- ar svoriams nustatyti pasitelkiamos srities žinios.
-    \end{enumerate}
+    Mokslinėje literatūroje bazinis KNN algoritmas dažnai lyginamas su pažangesniais mašininio mokymosi modeliais, o dėl prastesnių rezultatų jo potencialas kartais nuvertinamas.
+    Vienas iš būdų pagerinti KNN prognozavimo tikslumą yra atstumo funkcijos parametrizavimas, suteikiant požymiams svorius.
+    Tai leidžia svarbesniems požymiams daryti didesnę įtaką atrenkant panašiausius kaimynus, nuo kurių priklauso modelio tikslumas.
 
-    Daugiausia dėmesio autoriai skiria pirmajai dimensijai.
+    Literatūroje \cite{wettschereck1997} išskiriamos įvairios požymių svėrimo metodų savybės, pavyzdžiui svorių tolydumas, bendrumas, tačiau pagrindinė savybė, kurią autoriai nagrinėja, yra svorių apskaičiavimo strategija.
+    Svorių apskaičiavimo strategijos skirstomos į dvi kryptis: kai svoriai nustatomi iš anksto, arba atsižvelgiant į modelio grįžtamąjį ryšį.
+
     Iš anksto nustatomi svoriai apskaičiuojami iš pačių duomenų statistinių savybių, pavyzdžiui tarpusavio informacijos, informacijos prieaugio ar koreliacijos su prognozuojamu dydžiu.
-    Šie svoriai nustatomi vieną kartą, nepatikrinant, ar pagerėjo modelio prognozės rezultatai.
-    Grįžtamojo ryšio metodai, priešingai, svorius randa nuosekliai: su kiekvienu svorių rinkiniu įvertinama modelio prognozavimo kokybė.
-    Autorių eksperimentai rodo, kad grįžtamojo ryšio metodai pranoksta metodus, kai svoriai nustatomi iš anksto, ypač kai požymiai tarpusavyje sąveikauja.
-    Darbas nagrinėja klasifikaciją, o ne regresiją ar laiko eilutes, tačiau jo terminologija sudaro pagrindą tolesniam nagrinėjimui.
-    Toliau apžvelgiamų metodų tarpusavio skirtumai daugiausia reiškiasi pirmąja dimensija;
-    pagal likusias jie panašūs -- daugumoje svoriai tolydūs, taikomi pateiktiems požymiams
-    ir nustatomi be dalykinių žinių. Todėl toliau svorių radimo būdai aptariami pagal tai,
-    kaip svoriai gaunami.
+    Šie svoriai nustatomi vieną kartą, nevertinant galutinio modelio tikslumo.
+
+    Grįžtamojo ryšio metoduose, pasitelkiant optimizavimo algoritmus, ieškoma tokio svorių rinkinio, kuris užtikrintų mažiausią prognozės paklaidą.
+    Darbas nagrinėja klasifikaciją, bet patys svėrimo principai yra universalūs ir yra adaptuojami regresijai ir prognozavimui laiko eilutėse.
 
     %------------------------------------------------------------------
 
@@ -259,19 +249,18 @@
     Tuomet atliekama kainos prognozė svertiniu KNN metodu.
     Naudojant informacijos prieaugį, iš naujo randami KNN svoriai, tačiau dabar sąlyginė entropija skaičiuojama pagal pačią kainą, kuri yra paverčiama dvejetaine klase pagal tai, ar kaina viršija numatytą slenkstį.
     Autoriai parodė, kad siūlomas modelis pranoko palyginimui naudotą SVM-KNN hibridą be svorių daugumoje tirtų prognozės laikotarpių, nors ne visose metrikose vienodai.
-    Nors tyrimas priklauso finansų sričiai, o KNN jame yra tik vienas iš dviejų modelių, jis gerai iliustruoja iš anksto nustatomų svorių principą: reikšmės apskaičiuojamos iš duomenų statistinių savybių ir nepriklauso nuo to, ar nuo jų pagerėja prognozė.
+    Nors tyrimas priklauso finansų sričiai, o KNN jame yra tik vienas iš dviejų modelių, jis gerai iliustruoja iš anksto nustatomų svorių principą, kai reikšmės apskaičiuojamos iš duomenų statistinių savybių ir nepriklauso nuo to, ar nuo jų pagerėja prognozė.
 
     Kelių valandų į priekį vėjo bangų aukščio prognozei Kaspijos jūroje \cite{zamani2008} naudoja svertinį KNN metodą.
     Prognozė vykdoma ne visoms valandoms į priekį iš karto, o rekursyviai.
     Atstumas tarp dabartinių ir istorinių duomenų skaičiuojamas įprasta Euklido formule, kurioje visi požymiai lygiaverčiai.
-    Svoriai atsiranda tik kitame žingsnyje -- pagal gautą atstumą kiekvienam kaimynui priskiriamas svoris, kuriuo kaimyno reikšmė įtraukiama į prognozės vidurkį.
-
-    Požymių svarba šiame darbe nustatoma kitu būdu -- savitarpio informacija.
+    Svoriai atsiranda tik kitame žingsnyje.
+    Pagal gautą atstumą kiekvienam kaimynui priskiriamas svoris, kuriuo kaimyno reikšmė įtraukiama į prognozės vidurkį.
+    Požymių svarba šiame darbe nustatoma tarpusavio informacija.
     Šis matas nusako, kiek sužinojus vieną kintamąjį, sumažėja neapibrėžtumas dėl kito.
     Skirtingai nei koreliacija, šis matas aptinka ir netiesinius ryšius.
     Kintamieji, kurių savitarpio informacija su prognozuojamu dydžiu buvo maža, į modelius neįtraukiami.
     Toks požymių svarbos vertinimas atliekamas vieną kartą, prieš modeliavimą ir vėliau nekoreguojamas.
-
     Kaimynų skaičių ir svorio funkciją autoriai parinko lygindami rezultatus testinėje aibėje.
     Autoriai taip pat pažymi, kad KNN modelius būtų galima optimizuoti pagal jų parametrus ir svertines funkcijas, lyginant rezultatus kryžmine patikra, tačiau jie to nepadarė, nes turėjo per mažai duomenų.
     Toks parinkimas remiasi jau ne duomenų statistinėmis savybėmis, o grįžtamuoju ryšiu iš veikiančio modelio.
@@ -281,17 +270,17 @@
     Daugiamatiškumas čia reiškia, kad į kaimynų paiešką vienu metu įtraukiamos kelios atskiros laiko eilutės, o prognozė sudaroma kelių valandų laikotarpiui iš karto.
     Dabartinė situacija aprašoma matrica, kurios eilutės yra atskiros laiko eilutės, o stulpeliai praeities reikšmės ir istorijoje ieškoma panašiausių tokios pat formos matricų.
     Atstumas skaičiuojamas per visas eilutes vienodai, o svoriai priskiriami tik kaimynams, atvirkščiai proporcingai atstumo kvadratui.
-
     Atskirai autoriai sprendžia, kuriuos papildomus kintamuosius apskritai verta įtraukti.
     Tam naudojama koreliacija su prognozuojamo kintamojo būsimomis reikšmėmis.
     Eilutė įtraukiama tik tada, kai koreliacija viršija tam tikrą slenkstį.
     Sintetiniais duomenimis parodyta, kad jei papildoma eilutė su ateities reikšmėmis koreliuoja stipriau nei pats prognozuojamas kintamasis, paklaida sumažėja ryškiai, o priešingu atveju padidėja tik nežymiai.
-    Skirtingai nei savitarpio informacija, koreliacija aptinka tik tiesinius ryšius.
+    Skirtingai nei tarpusavio informacija, koreliacija aptinka tik tiesinius ryšius.
     Kaip ir ankstesniuose darbuose, kintamųjų svarba nustatoma vieną kartą, prieš modeliavimą, ir išreiškiama tik sprendimu įtraukti arba neįtraukti.
 
-    Apibendrinant, iš anksto nustatomų svorių kryptis dalijasi bendru bruožu: požymio svarba vertinama atskirai nuo modelio, todėl lieka nepatikrinta, ar parinkti svoriai iš tikrųjų gerina prognozę.
-    Be to, kiekvienas požymis vertinamas atskirai nuo kitų, todėl nepastebimi požymiai, kurie naudingi tik kartu.
-    Šias problemas sprendžia kita kryptis.
+    Apibendrinant, šios krypties metodai požymių svorius apskaičiuoja atskirai nuo modelio veikimo.
+    Nors galutinis prognozės pagerėjimas ir patikrinamas, patys svoriai nėra ieškomi taip, kad prognozės paklaida būtų kuo mažesnė.
+    Be to, vertinant kiekvieną požymį atskirai, neatsižvelgiama į jų tarpusavio sąveikas.
+    Šiuos trūkumus sprendžia toliau apžvelgiami optimizavimo metodai.
 
     %------------------------------------------------------------------
 
@@ -299,23 +288,22 @@
     %------------------------------------------------------------------
 
     Šioje kryptyje svoriai yra optimizuojami parametrai, kurie parenkami siekiant minimizuoti modelio prognozės paklaidą.
-    Skirtumas nuo ankstesnės krypties tas, kad svorių reikšmės vertinamos ne pagal duomenų statistines savybes, o pagal tai, kaip su jomis veikia pats modelis.
-    Ši perskyra literatūroje sena, o \cite{wettschereck1997} ją įvardija kaip pagrindinę požymių svėrimo metodų skirstymo ašį.
-    Pirmieji tokie darbai svorių ieškojo genetiniais algoritmais dar praėjusio amžiaus paskutiniame dešimtmetyje.
+    Skirtumas nuo iš anksto nustatomų svorių tas, kad svorių reikšmės vertinamos ne pagal duomenų statistines savybes, o pagal tai, kaip su jomis veikia pats modelis.
+    Toks metodų skirstymas yra aprašomas literatūroje ir dažnai naudojamas kaip pagrindinis požymių svėrimo metodų klasifikavimo kriterijus \cite{wettschereck1997}.
 
     Pagrindinė problema, kurią ši kryptis sprendžia, yra ta, kad statistiniai matai kiekvieną požymį vertina atskirai.
-    Todėl jie nepastebi požymių, kurie naudingi tik kartu su kitais, ir optimizuoja ne tą dydį, kuris iš tikrųjų rūpi.
+    Jie nepastebi požymių, kurie naudingi tik kartu su kitais, ir optimizuoja ne tą dydį, kuris iš tikrųjų aktualus.
     Grįžtamuoju ryšiu grindžiami metodai vertina visą svorių rinkinį iš karto, tad tokias sąveikas aptinka.
     \cite{wettschereck1997} eksperimentai rodo tendenciją, kad šie metodai pranoksta iš anksto nustatomus svorius, ypač kai požymiai tarpusavyje sąveikauja.
 
     Kaina už tai yra skaičiavimo apimtis.
     Kiekvienas svorių rinkinys turi būti patikrintas paleidžiant modelį ir įvertinant paklaidą, o svorių erdvė yra tolydi ir daugiamatė.
-    Todėl praktikoje naudojami evoliuciniai ir spiečiaus algoritmai, kuriems nereikia išvestinių.
-    Antra problema ta, kad svorius derinant pagal tuos pačius duomenis, kuriais vertinamas rezultatas, jie prisitaiko prie triukšmo, todėl reikalinga atskira patikros aibė.
-    Trečia, optimalus sprendinys negarantuojamas, nes tikslo funkcijos paviršius gali būti plokščias arba turėti kelis lokalius minimumus.
+    Todėl praktikoje naudojami evoliuciniai ir spiečiaus algoritmai, kuriems nereikia skaičiuoti tikslo funkcijos išvestinių.
+    Kita problema ta, kad svorius derinant pagal tuos pačius duomenis, kuriais vertinamas rezultatas, jie prisitaiko prie triukšmo, todėl reikalinga atskira patikros aibė.
+    Taip pat optimalus sprendinys negarantuojamas, nes tikslo funkcijos paviršius gali būti plokščias arba turėti kelis lokalius minimumus.
 
     \cite{jafarizadeh2022} prognozuoja naftos ir dujų gręžinių porų slėgį naudojant gręžimo ir geofizikos požymius.
-    Autoriai lygina šešis modelius -- KNN, svertinį KNN su (\ref{eq:wknn-svoris}) formulės kaimynų svoriais, dvigubai svertinį KNN, kuriame normalizuotas svoris dauginamas iš daugiklio $(d_k + d_1)/(d_k + d_i)$, ir tuos pačius modelius, optimizuotus naudojant dalelių spiečiaus optimizavimą (PSO).
+    Autoriai lygina šešis modelius: KNN, svertinį KNN su (\ref{eq:wknn-svoris}) formulės kaimynų svoriais, dvigubai svertinį KNN, kuriame normalizuotas svoris dauginamas iš daugiklio $(d_k + d_1)/(d_k + d_i)$, ir tuos pačius modelius, optimizuotus naudojant dalelių spiečiaus optimizavimą (PSO).
     Autoriai nurodo, jog dalelių spiečiaus optimizavimas naudotas kaimynų skaičiui $k$ ir požymių svoriams parinkti.
     Geriausiai pasirodė dvigubai svertinis modelis su PSO.
     Rezultatai parodė, kad prognozę gerino abi kryptys atskirai, o geriausią rezultatą davė jų kombinacija -- bazinio KNN paklaida sumažėjo daugiau nei perpus.
@@ -325,8 +313,10 @@
     Be to, straipsnyje pateikiama atstumo funkcija yra įprastas Euklido atstumas be svorių, svertinė atstumo funkcija neužrašoma ir optimizuotų svorių reikšmės nepublikuojamos.
     Taigi šiame darbe, kuriame įvardijami požymiams priskiriami svoriai, pati svertinė atstumo funkcija lieka neaprašyta.
 
-    Laiko eilučių prognozėje svorių optimizavimo pavyzdžių mažiau, o vienas jų plėtojamas visai kitoje literatūros šakoje.
-    Meteorologijoje kaimynų paieškos idėja vadinama analogų ansambliu: panašiausios praeities situacijos randamos pagal svertinį atstumą, o prognozė sudaroma iš to, kas po jų realiai įvyko.
+    Laiko eilučių prognozėje svorių optimizavimo pavyzdžių mažiau.
+    Vienas jų plėtojamas kitoje literatūros šakoje.
+    Meteorologijoje kaimynų paieškos idėja vadinama analogų ansambliu.
+    Šiame modelyje panašiausios praeities situacijos randamos pagal svertinį atstumą, o prognozė sudaroma iš to, kas po jų realiai įvyko.
 
     \cite{junk2015} taiko šį metodą vėjo jėgainių galios prognozei penkiuose parkuose Europoje ir JAV.
     Skirtumas nuo kitų aptartų darbų tas, kad panašumas ieškomas ne tarp praeities matavimų, o tarp praeities skaitmeninio orų modelio prognozių, o ansamblio nariais tampa tuo metu stebėtos galios reikšmės.
@@ -343,7 +333,7 @@
     Laiko langas naudojamas todėl, kad būtų lyginamos ne pavienės reikšmės, o kelių valandų tendencijos.
 
     Iki šio darbo analogų ansamblyje visiems prediktoriams buvo priskiriami vienodi svoriai.
-    Autoriai svorius optimizuoja minimizuodami tikimybinės prognozės kokybės matą (CRPS).
+    Autoriai svorius optimizuoja minimizuodami tikimybinės prognozės kokybės matą.
     Svoriai ieškomi perrenkant visas leistinas kombinacijas: kiekvienas svoris gali įgyti reikšmes nuo 0 iki 100 procentų dešimties procentų žingsniu, o jų suma turi būti lygi šimtui.
     Su keturiolika prediktorių tai duoda daugiau nei milijoną kombinacijų, ir kiekviena iš jų patikrinama atskirai.
 
@@ -353,11 +343,12 @@
 
     Toks perrinkimas reikalauja daugiau nei milijono modelio paleidimų, o svoriai apriboti dešimties procentų žingsniu, tad tarp tinklelio taškų esantys sprendiniai nepasiekiami.
     Autoriai nurodo, kad skaitiniai optimizavimo algoritmai būtų efektyvesni, tačiau jų bandymai su gradientiniu BFGS algoritmu parodė, kad tikslo funkcijos paviršius yra plokščias ir turi kelis lokalius minimumus, o rastas sprendinys nesutapo su perrinkimu nustatytu minimumu.
-    Taip pat pažymėtina, kad svoriai čia priskiriami pavieniams prediktoriams, o kaimynai į ansamblį įtraukiami lygiaverčiai, be svorių.
+    Taip pat svoriai šiame darbe priskiriami pavieniams prediktoriams, o kaimynai į ansamblį įtraukiami lygiaverčiai, be svorių.
 
-    Abu aptarti darbai rodo, kad svorių traktavimas kaip optimizuojamų parametrų prognozę gerina, tačiau nė viename jų šis principas nėra išplėtotas iki galo.
-    Viename svoriai optimizuojami, bet uždavinys statinis, o svertinė atstumo funkcija neaprašyta; kitame atstumo funkcija užrašyta aiškiai ir uždavinys yra laiko eilučių, tačiau svoriai randami perrinkimu diskrečiame tinklelyje pagal vieną kriterijų.
-    Abiem atvejais svoris tenka pavieniam požymiui ar prediktoriui, o ne jų grupei.
+    Abu aptarti darbai rodo, kad svorių traktavimas kaip optimizuojamų parametrų prognozę gerina, tačiau tačiau jų taikymo metodikos turi tam tikrų ribojumų.
+    \cite{jafarizadeh2022} svoriai optimizuojami, bet uždavinys statinis, o svertinė atstumo funkcija neaprašyta.
+    \cite{junk2015} atstumo funkcija užrašyta aiškiai ir uždavinys yra laiko eilučių, tačiau svoriai randami perrinkimu diskrečiame tinklelyje pagal vieną kriterijų.
+%    Abiem atvejais svoris tenka pavieniam požymiui ar prediktoriui, o ne jų grupei.
     Svorių optimizavimo poreikį pripažįsta ir kitų darbų autoriai.
     Prognozuodami Jungtinės Karalystės elektros paklausą daugiamačiu KNN, \cite{alqahtani2013} nurodo, kad esant keliems požymiams jų tarpusavio ryšys reikalautų automatinio santykinių svorių nustatymo, o daugiamatėje KNN laiko eilučių regresijoje tai dar turi būti išplėtota.
 

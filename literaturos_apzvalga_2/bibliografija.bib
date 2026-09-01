@@ -195,13 +195,13 @@
 }
 
 @article{junk2015,
-    author = {Junk, Constantin and Delle Monache, Luca and Alessandrini, Stefano and Cervone, Guido and von Bremen, Lueder},
-    title = {Predictor-weighting strategies for probabilistic wind power forecasting with an analog ensemble},
-    journal = {Meteorologische Zeitschrift},
-    volume = {24},
-    number = {4},
-    pages = {361--379},
+    author = {Junk, Constantin and Delle Monache, Luca and Alessandrini, Stefano and Cervone, Guido and Bremen, Lueder},
     year = {2015},
+    month = {07},
+    pages = {361-379},
+    title = {Predictor-weighting strategies for probabilistic wind power forecasting with an analog ensemble},
+    volume = {24},
+    journal = {Meteorologische Zeitschrift},
     doi = {10.1127/metz/2015/0659},
     file = {./dokumentai/straipsniai/Junk_etal_2015_Predictor-weighting_strategies.pdf}
 }
@@ -576,15 +576,23 @@
 }
 
 @article{wettschereck1997,
+    abstract = {Many lazy learning algorithms are derivatives of the k-nearest neighbor (k-NN) classifier, which uses a distance function to generate predictions from stored instances. Several studies have shown that k-NN's performance is highly sensitive to the definition of its distance function. Many k-NN variants have been proposed to reduce this sensitivity by parameterizing the distance function with feature weights. However, these variants have not been categorized nor empirically compared. This paper reviews a class of weight-setting methods for lazy learning algorithms. We introduce a framework for distinguishing these methods and empirically compare them. We observed four trends from our experiments and conducted further studies to highlight them. Our results suggest that methods which use performance feedback to assign weight settings demonstrated three advantages over other methods: they require less pre-processing, perform better in the presence of interacting features, and generally require less training data to learn good settings. We also found that continuous weighting methods tend to outperform feature selection algorithms for tasks where some features are useful but less important than others.},
     author = {Wettschereck, Dietrich and Aha, David W. and Mohri, Takao},
-    title = {A Review and Empirical Evaluation of Feature Weighting Methods for a Class of Lazy Learning Algorithms},
+    date = {1997/02/01},
+    date-added = {2026-09-01 20:41:32 +0300},
+    date-modified = {2026-09-01 20:41:32 +0300},
+    doi = {10.1023/A:1006593614256},
+    id = {Wettschereck1997},
+    isbn = {1573-7462},
     journal = {Artificial Intelligence Review},
-    volume = {11},
-    number = {1--5},
+    number = {1},
     pages = {273--314},
+    title = {A Review and Empirical Evaluation of Feature Weighting Methods for a Class of Lazy Learning Algorithms},
+    url = {https://doi.org/10.1023/A:1006593614256},
+    volume = {11},
     year = {1997},
-    doi = {10.1023/A:1006593614256}
-}
+    bdsk-url-1 = {https://doi.org/10.1023/A:1006593614256} }
+
 
 @article{halder2024,
     abstract = {The k-Nearest Neighbors (kNN) method, established in 1951, has since evolved into a pivotal tool in data mining, recommendation systems, and Internet of Things (IoT), among other areas. This paper presents a comprehensive review and performance analysis of modifications made to enhance the exact kNN techniques, particularly focusing on kNN Search and kNN Join for high-dimensional data. We delve deep into 31 kNN search methods and 12 kNN join methods, providing a methodological overview and analytical insight into each, emphasizing their strengths, limitations, and applicability. An important feature of our study is the provision of the source code for each of the kNN methods discussed, fostering ease of experimentation and comparative analysis for readers. Motivated by the rising significance of kNN in high-dimensional spaces and a recognized gap in comprehensive surveys on exact kNN techniques, our work seeks to bridge this gap. Additionally, we outline existing challenges and present potential directions for future research in the domain of kNN techniques, offering a holistic guide that amalgamates, compares, and dissects existing methodologies in a coherent manner.},
@@ -651,14 +659,14 @@
 % Padengimo-rizikos kompromisas kaip OPTIMIZAVIMO TIKSLAS giliuose NN (3 skyriui):
 % artimiausias "padengimas kaip tikslas" pavyzdys, bet NE KNN -> patvirtina spraga.
 
-    @misc{geifman2019,
-      title={SelectiveNet: A Deep Neural Network with an Integrated Reject Option},
-      author={Yonatan Geifman and Ran El-Yaniv},
-      year={2019},
-      eprint={1901.09192},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG},
-      url={https://arxiv.org/abs/1901.09192},
+@misc{geifman2019,
+    title = {SelectiveNet: A Deep Neural Network with an Integrated Reject Option},
+    author = {Yonatan Geifman and Ran El-Yaniv},
+    year = {2019},
+    eprint = {1901.09192},
+    archivePrefix = {arXiv},
+    primaryClass = {cs.LG},
+    url = {https://arxiv.org/abs/1901.09192},
 }
 
 % LMNN adaptacija REGRESIJAI (2 skyriui) - metrikos mokymasis regresijoje yra,
@@ -679,13 +687,16 @@
 % PATVIRTINTA 2026-07-04 (is PDF: ESWA 80, 340-355, DOI sutampa)
 
 @article{chen2017,
-    author = {Chen, Yingjun and Hao, Yongtao},
     title = {A feature weighted support vector machine and K-nearest neighbor algorithm for stock market indices prediction},
     journal = {Expert Systems with Applications},
     volume = {80},
-    pages = {340--355},
+    pages = {340-355},
     year = {2017},
-    doi = {10.1016/j.eswa.2017.02.044}
+    issn = {0957-4174},
+    doi = {https://doi.org/10.1016/j.eswa.2017.02.044},
+    url = {https://www.sciencedirect.com/science/article/pii/S0957417417301367},
+    author = {Yingjun Chen and Yongtao Hao},
+    keywords = {Feature weighted SVM (FWSVM), Information gain, Feature weighted K-nearest neighbor (FWKNN), Stock market indices},
 }
 
 @article{zamani2008,
@@ -705,25 +716,33 @@
 
 % PATVIRTINTA 2026-07-04 (web: Neurocomputing 353, 56-73; DOI is ACM DL)
 
+
 @article{talaverallames2019,
-    author = {Talavera-Llames, R. and P{\'e}rez-Chac{\'o}n, R. and Troncoso, A. and Mart{\'i}nez-{\'A}lvarez, F.},
-    title = {MV-kWNN: A novel multivariate and multi-output weighted nearest neighbours algorithm for big data time forecasting},
+    title = {MV-kWNN: A novel multivariate and multi-output weighted nearest neighbours algorithm for big data time series forecasting},
     journal = {Neurocomputing},
     volume = {353},
-    pages = {56--73},
+    pages = {56-73},
     year = {2019},
-    doi = {10.1016/j.neucom.2018.07.092}
+    note = {Recent Advancements in Hybrid Artificial Intelligence Systems},
+    issn = {0925-2312},
+    doi = {https://doi.org/10.1016/j.neucom.2018.07.092},
+    url = {https://www.sciencedirect.com/science/article/pii/S0925231219303236},
+    author = {R. Talavera-Llames and R. Pérez-Chacón and A. Troncoso and F. Martínez-Álvarez},
+    keywords = {Big data, Multivariate time series, Forecasting},
+    abstract = {This paper introduces a novel algorithm for big data time series forecasting. Its main novelty lies in its ability to deal with multivariate data, i.e. to consider multiple time series simultaneously, in order to make multi-output predictions. Real-world processes are typically characterised by several interrelated variables, and the future occurrence of certain time series cannot be explained without understanding the influence that other time series might have on the target time series. One key issue in the context of the multivariate analysis is to determine a priori whether exogenous variables must be included in the model or not. To deal with this, a correlation analysis is used to find a minimum correlation threshold that an exogenous time series must exhibit, in order to be beneficial. Furthermore, the proposed approach has been specifically designed to be used in the context of big data, thus making it possible to efficiently process very large time series. To evaluate the performance of the proposed approach we use data from Spanish electricity prices. Results have been compared to other multivariate approaches showing remarkable improvements both in terms of accuracy and execution time.}
 }
 
 @article{jafarizadeh2022,
-    author = {Jafarizadeh, Farshad and Rajabi, Meysam and Tabasi, Somayeh and Seyedkamali, Reza and Davoodi, Shadfar and Ghorbani, Hamzeh and Alvar, Mehdi and Radwan, Ahmed E. and Makó, Csaba},
-    year = {2022},
-    month = {11},
-    pages = {6551-6562},
     title = {Data driven models to predict pore pressure using drilling and petrophysical data},
-    volume = {8},
     journal = {Energy Reports},
-    doi = {10.1016/j.egyr.2022.04.073}
+    volume = {8},
+    pages = {6551-6562},
+    year = {2022},
+    issn = {2352-4847},
+    doi = {https://doi.org/10.1016/j.egyr.2022.04.073},
+    url = {https://www.sciencedirect.com/science/article/pii/S2352484722008381},
+    author = {Farshad Jafarizadeh and Meysam Rajabi and Somayeh Tabasi and Reza Seyedkamali and Shadfar Davoodi and Hamzeh Ghorbani and Mehdi Ahmadi Alvar and Ahmed E. Radwan and Mako Csaba},
+    keywords = {K-nearest neighbor distance weighted (DWKNN), Pore pressure prediction, Hybrid machine learning, Feature selection, Root mean squared error},
 }
 
 @article{huang2017,
@@ -832,13 +851,17 @@
     year = {2019}
 }
 
-@inproceedings{alqahtani2013,
+@INPROCEEDINGS{alqahtani2013,
     author = {Al-Qahtani, Fahad H. and Crone, Sven F.},
-    title = {Multivariate k-nearest neighbour regression for time data --- a novel algorithm for forecasting UK electricity demand},
-    booktitle = {International Joint Conference on Neural Networks (IJCNN)},
+    booktitle = {The 2013 International Joint Conference on Neural Networks (IJCNN)},
+    title = {Multivariate k-nearest neighbour regression for time series data — A novel algorithm for forecasting UK electricity demand},
     year = {2013},
-    publisher = {IEEE}
-}
+    volume = {},
+    number = {},
+    pages = {1-8},
+    keywords = {Time series analysis;Forecasting;Electricity;Vectors;Load modeling;Predictive models;Classification algorithms},
+    doi = {10.1109/IJCNN.2013.6706742} }
+
 
 % PATVIRTINTA 2026-07-04 (web: MDPI IJGI 7(6), 218)
 
