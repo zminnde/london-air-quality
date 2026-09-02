@@ -29,11 +29,12 @@ Laiko eilučių prognozėje istoriniai pavyzdžiai yra praeities langai, o progn
 
 Artimiausių kaimynų taisyklę klasifikavimo uždaviniui dar 1951 metais pasiūlė Fix ir Hodges \cite{fix1951}, o teorinį pagrindą jai suteikė Cover ir Hart \cite{cover1967}.
 Jie įrodė, kad imties dydžiui neribotai augant, vieno artimiausio kaimyno taisyklės klaidos tikimybė $R$ neviršija dvigubos mažiausios teoriškai įmanomos Bajeso klaidos $R^*$, tai yra $R^* \le R \le 2R^*(1-R^*)$.
-Vadinasi, joks kitas metodas, turėdamas tuos pačius duomenis, klaidos neįstengtų sumažinti daugiau nei perpus, todėl autoriai teigia, kad vieno artimiausio kaimyno metode slypi pusė visos begalinėje imtyje esančios klasifikavimo informacijos \cite{cover1967}.
+Vadinasi, joks kitas metodas, turėdamas tuos pačius duomenis, klaidos neįstengtų sumažinti daugiau nei perpus.
+Todėl autoriai teigia, kad vieno artimiausio kaimyno metode slypi pusė visos begalinėje imtyje esančios klasifikavimo informacijos \cite{cover1967}.
 Nors teorinis įrodymas gautas klasifikavimo uždaviniams, pati KNN idėja praktikoje plačiai taikoma ir regresijai bei laiko eilučių prognozavimui.
 
 Skirtingai nuo daugumos mašininio mokymosi metodų, KNN neturi mokymo etapo.
-\cite{wettschereck1997} tokius metodus vadina tingiuoju mokymusi (angl. \textit{lazy learning}): metodas tiesiog saugo visą mokymo aibę, o pronozės skaičiavimą atideda iki užklausos pateikimo momento.
+\cite{wettschereck1997} tokius metodus vadina tingiuoju mokymusi (angl. \textit{lazy learning}). Metodas tiesiog saugo visą mokymo aibę, o pronozės skaičiavimą atideda iki užklausos pateikimo momento.
 KNN yra neparametrinis metodas, reiškiantis, kad jis nedaro išankstinių prielaidų apie duomenų pasiskirstymą.
 Taip pat, kadangi algoritmas neturi permokymo etapo, nauji duomenys panaudojami iš karto, o kiekvieną prognozė yra interpretuojama, nes ją galima paaiškinti parodant kaimynus, iš kurių ji sudaryta.
 Tačiau šis metodas turi ir trūkumų.
@@ -78,7 +79,7 @@ Svoriai leidžia skirtingiems požymiams daryti skirtingą įtaką kaimynų atra
 Nereikšmingiems ar triukšmingiems požymiams gali būti priskiriami maži svoriai, o reikšmingiems dideli.
 Nulinis svoris požymį iš atstumo pašalina, todėl požymių atranka yra atskiras svertinio atstumo atvejis.
 
-Vis dėlto atskiri svoriai kiekvieną požymį vertina atskirai, nors meteorologiniai požymiai dažnai veikia kartu -- pavyzdžiui, vėjo greičio įtaka taršos sklaidai
+Vis dėlto atskiri svoriai kiekvieną požymį vertina atskirai, nors meteorologiniai požymiai dažnai veikia kartu, pavyzdžiui vėjo greičio įtaka taršos sklaidai
 priklauso nuo vėjo krypties.
 Bendresnis svertinio atstumo variantas yra Mahalanobio atstumas:
 
@@ -97,13 +98,12 @@ Pilna matrica turi daugiausiai galios, tačiau turi $m^2$ parametrų, tad svori�
 
 Laiko eilutėms sukurta ir specializuotų, elastinių atstumo matų, pavyzdžiui, dinaminis laiko kraipymas (angl. \textit{dynamic time warping}, DTW), kurie leidžia lyginti laike pasislinkusias ar ištemptas sekas.
 Laiko eilučių atstumo matų palyginime \cite{paparrizos2020} 71 matas vertintas 128 duomenų rinkiniuose pagal vieno artimiausio kaimyno klasifikavimo tikslumą.
-Palyginimas parodė, kad taškas su tašku lyginantys matai, tarp jų Euklido atstumas, yra sparčiausi, tačiau pagal tikslumą kai kurie iš jų, ypač Manheteno atstumo šeimos matai, Euklido atstumą lenkia, o dauguma elastinių matų statistiškai reikšmingai nepranoksta paprastesnių bazinių matų.
+Palyginimas parodė, kad taškas su tašku lyginantys matai, tarp jų Euklido atstumas, yra sparčiausi, tačiau pagal tikslumą kai kurie iš jų, ypač Manheteno atstumo, Euklido atstumą lenkia, o dauguma elastinių matų statistiškai reikšmingai nepranoksta paprastesnių bazinių matų.
 KNN laiko eilučių prognozės tyrimuose vis dėlto įsitvirtinęs Euklido atstumas \cite{martinez2019}.
 Autoriai pažymi, kad visi jų apžvelgti KNN laiko eilučių prognozavimo darbai naudoja būtent jį, o jų pačių eksperimentuose Euklido ir Manheteno atstumų tikslumas reikšmingai nesiskyrė.
 
-Svarbu atskirti dvi vietas, kuriose KNN metode gali atsirasti svoriai.
-Sąvoka „svertinis KNN“ literatūroje reiškia du visai skirtingus dalykus: svorius požymiams atstumo funkcijos viduje, kaip (\ref{eq:svertinis-euklidas}) formulėje, ir svorius kaimynams sudarant prognozę, kurie aptariami kitame poskyryje.
-Antrasis variantas literatūroje sutinkamas beveik visur ir dažnai vadinamas tiesiog svertiniu artimiausių kaimynų metodu, nors požymių svorių jame nėra.
+Sąvoka „svertinis KNN“ literatūroje gali reikšti du skirtingus dalykus -- svorius požymiams atstumo funkcijos viduje, kaip (\ref{eq:svertinis-euklidas}) formulėje, ir svorius kaimynams.
+Kaimynų svorių variantas literatūroje sutinkamas beveik visur ir dažnai vadinamas tiesiog svertiniu artimiausių kaimynų metodu, nors požymių svorių jame nėra.
 Skaitant mokslinius darbus, svarbu tikrinti, kuris variantas turimas omenyje.
 
 %------------------------------------------------------------------
@@ -120,7 +120,8 @@ Elektros kainų prognozėje \cite{troncoso2007} pagal paklaidą optimizuoja tiek
 
 Fiksuotas, visiems taškams vienodas $k$ apskritai nėra optimalus, ką teoriškai pagrindžia \cite{anava2016}.
 Kiekvieno prognozuojamo taško kaimynystės geometrija skiriasi, todėl autoriai kiekvienam taškui atskirai minimizuoja prognozės paklaidos rėžį pagal kaimynams priskiriamus svorius.
-Nustatyta, kad optimalus svoris mažėja tiesiškai didėjant atstumui, o nuo tam tikro atstumo tampa lygus nuliui -- prognozėje dalyvauja tik dalis kaimynų, ir jų skaičius kinta nuo taško prie taško.
+Nustatyta, kad optimalus svoris mažėja tiesiškai didėjant atstumui, o nuo tam tikro atstumo tampa lygus nuliui.
+Prognozėje dalyvauja tik dalis kaimynų, ir jų skaičius kinta nuo taško prie taško.
 
 Atrinkus kaimynus, prognozė sudaroma iš jų reikšmių.
 Paprasčiausias būdas -- aritmetinis vidurkis, kai visi kaimynai lygiaverčiai:
@@ -131,7 +132,7 @@ Paprasčiausias būdas -- aritmetinis vidurkis, kai visi kaimynai lygiaverčiai:
 \end{equation}
 
 čia $y_i$ -- $i$-ojo pagal atstumą kaimyno reikšmė.
-Regresijoje -- prognozuojamo dydžio reikšmė, laiko eilutėje -- po kaimyno lango sekanti reikšmė.
+Regresijoje tai prognozuojamo dydžio reikšmė, o laiko eilutėje -- po kaimyno lango sekanti reikšmė.
 Dažnai kaimynams priskiriami svoriai pagal atstumą.
 Kuo kaimynas arčiau, tuo didesnė jo įtaka.
 Tuomet prognozė yra svertinis kaimynų reikšmių vidurkis:
@@ -142,7 +143,7 @@ Tuomet prognozė yra svertinis kaimynų reikšmių vidurkis:
 \end{equation}
 
 čia $\omega_i \geq 0$ -- $i$-ojo kaimyno svoris.
-o svorio funkcijos literatūroje siūlomos įvairios.
+Svorio funkcijos literatūroje siūlomos įvairios.
 \cite{zamani2008} palygina tiesinę, atvirkštinę ir atvirkštinę kvadratinę svorio funkcijas, kuriose svoris skaičiuojamas tiesiogiai iš absoliutaus atstumo.
 Tačiau kai artimiausias kaimynas beveik sutampa su prognozuojamu tašku, atvirkštinis atstumas jam suteikia milžinišką svorį ir metodas praktiškai virsta vieno artimiausio kaimyno taisykle.
 
@@ -159,7 +160,7 @@ Iš $k$ atrinktų kaimynų paimami artimiausio kaimyno atstumas $d_1$ ir tolimia
 \end{equation}
 
 Artimiausias kaimynas gauna svorį, lygų vienetui, tolimiausias -- nuliui, o kitų kaimynų svoriai pasiskirsto visame šiame intervale net tada, kai visų kaimynų atstumai panašūs.
-Autorius parodė, kad bent viename mažos mokymo imties pavyzdyje svertinė taisyklė esant k>3 klydo rečiau už paprastą balsavimą ir iškėlė prielaidą, jog taip bus ir kitoms mažoms bei vidutinėms imtims \cite{dudani976}.
+Autorius parodė, kad viename mažos mokymo imties atvejyje svertinė taisyklė esant k>3 klydo rečiau už paprastą balsavimą ir iškėlė prielaidą, jog taip bus ir kitoms mažoms bei vidutinėms imtims \cite{dudani976}.
 
 Dvigubai svertinis variantas \cite{gou2011} normalizuotą svorį papildomai daugina iš kaimyno eilės numerio atvirkštinės reikšmės:
 
@@ -185,19 +186,19 @@ Taigi kaimynų svėrimo nauda priklauso nuo duomenų ir turi būti tikrinama.
 \subsection{Atsisakymo mechanizmas}
 %------------------------------------------------------------------
 
-Kaimynų atrankos metu taikomas atsisakymo mechanizmas leidžia modeliui nepateikti prognozės, jei nėra pakankamai panašių pavyzdžių .
+Kaimynų atrankos metu taikomas atsisakymo mechanizmas leidžia modeliui nepateikti prognozės, jei nėra pakankamai panašių pavyzdžių.
 Modelio, kuris atsisako dalies prognozių, kokybė vertinama dviem rodikliais.
-Paklaida tais atvejais, kai prognozė pateikta, ir padengimu -- dalimi atvejų, kuriems prognozė apskritai pateikta.
+Paklaida tais atvejais, kai prognozė pateikta, ir padengimu -- dalis atvejų, kuriems prognozė apskritai pateikta.
 Šie rodikliai konkuruoja, nes griežtesnis atsisakymas mažina paklaidą, bet kartu ir padengimą.
 
 \cite{denis2020} nagrinėja regresiją su atsisakymu.
 Optimali atsisakymo taisyklė grindžiama sąlyginės dispersijos slenksčiavimu.
 Prognozė pateikiama tik tada, kai sąlyginė dispersija toje srityje neviršija slenksčio, o slenkstis kalibruojamas taip, kad atsisakymų dalis atitiktų iš anksto pasirinktą biudžetą.
 Taisyklę autoriai pritaiko būtent KNN prognozavimui ir pažymi, kad atsisakymas regresijoje nagrinėjamas itin retai, nors atmetus dalį nepatikimų atvejų likusiųjų prognozės paklaida sumažėja.
-Atsisakymas čia grindžiamas prognozės dispersija, o ne kaimynų panašumo pakankamumu.
+Atsisakymas čia grindžiamas prognozės dispersija, o ne kaimynų panašumu.
 
 Padengimo ir rizikos kompromisas kaip tiesioginis optimizavimo tikslas jau naudojamas giliuosiuose neuroniniuose tinkluose.
-\cite{geifman2019} pasiūlytas SelectiveNet mokosi prognozuoti ir atsisakyti vienu metu, minimizuodamas paklaidą su naudotojo nurodytu padengimo apribojimu.
+\cite{geifman2019} pasiūlytas SelectiveNet mokosi prognozuoti ir atsisakyti vienu metu, minimizuodamas paklaidą su vartotojo nurodytu padengimo apribojimu.
 KNN metode padengimas literatūroje naudojamas tik atsisakymo slenksčiui suderinti po to, kai modelis jau sudarytas, o ne renkantis patį $k$ ar panašumo ribą.
 
 %------------------------------------------------------------------

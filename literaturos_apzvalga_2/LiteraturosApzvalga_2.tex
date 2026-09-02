@@ -79,10 +79,11 @@
     Taip pat ištirta, kad oro tarša yra netiesinė ir stipriai priklauso nuo sudėtingų aerodinaminių sąlygų, tokių kaip vėjo kryptis ir greitis.
     Kadangi ne išmetamųjų dujų kilmės dalelės sudaro didžiąją dalį eismo sukeltos taršos, o perėjimo prie elektrinio transporto poveikis lieka neaiškus \cite{hicks2021}, \ce{KD_{2,5}} stebėjimas ir prognozavimas šioje gatvėje išliks aktualus ir ateityje.
 
-    \ce{KD_{2,5}} koncentracijai prognozuoti taikomi įvairūs metodai -- nuo klasikinių statistinių modelių iki giliojo mokymosi neuroninių tinklų, kurie šiuo metu srityje dominuoja \cite{wu2025}.
-    Gilieji modeliai pasiekia aukštą tikslumą, tačiau veikia kaip sunkiai interpretuojamos juodosios dėžės, o jų mokymas reikalauja didelių skaičiavimo sąnaudų \cite{wu2025}.
-    Alternatyva -- paprastesni, interpretuojami metodai, tarp kurių yra K artimiausių kaimynų (KNN) metodas, prognozę sudarantis tiesiogiai iš panašių istorinių įrašų.
-    Oro taršos prognozavimo darbuose KNN dažniausiai taikomas bazinis, nepatobulintas, todėl šiame darbe jį siekiama tobulinti: požymiams atstumo funkcijoje priskirti svorius, kurių reikšmės randamos optimizavimo būdu, minimizuojant prognozės paklaidą.
+    \ce{KD_{2,5}} koncentracijai prognozuoti taikomi įvairūs metodai -- nuo klasikinių statistinių modelių iki šioje srityje vyraujančių giliųjų neuroninių tinklų \cite{wu2025}.
+    Neuroniniai tinklai pasiekia aukštą tikslumą, tačiau veikia kaip sunkiai interpretuojamos juodosios dėžės ir jų mokymas reikalauja didelių skaičiavimo sąnaudų \cite{wu2025}.
+    Alternatyva -- paprastesni, interpretuojami metodai, tarp kurių yra K artimiausių kaimynų metodas, prognozę sudarantis tiesiogiai iš panašių istorinių įrašų.
+    Oro taršos prognozavimo darbuose KNN dažniausiai taikomas bazinis, nepatobulintas.
+    Šiame darbe jį siekiama patobulinti atstumo funkcijoje požymiams priskiriant svorius, kurių reikšmės randamos optimizavimo būdu siekiant minimizuoti prognozės paklaidą.
 
     \textbf{Darbo tikslas:} identifikuoti tyrimų spragą ir sukurti naują KNN metodą su svertiniu Euklido atstumu, palyginti jį su naivia prognoze, daugiasluoksniu perceptronu ir laiko suliejimo transformeriu.
 
@@ -114,9 +115,9 @@
     Laiko eilutė yra chronologinė duomenų seka, gauta vienodais laiko intervalais \cite{hyndman}, pavyzdžiui, kas valandą matuojami meteorologiniai rodikliai.
     Tuo pačiu metu gali būti matuojami ne vienas, o keli kintamieji, kurie dažnai yra tarpusavyje priklausomi, pavyzdžiui vėjo greitis, temperatūra, kietųjų dalelių koncentracija ore.
 
-    Vienas iš laiko eilučių analizės tikslų yra prognozavimas - numatyti būsimas prognozuojamo kintamojo reikšmes, remiantis praeities duomenimis \cite{cryer1986time}.
+    Vienas iš laiko eilučių analizės tikslų yra prognozavimas -- numatyti būsimas prognozuojamo kintamojo reikšmes, remiantis praeities duomenimis \cite{cryer1986time}.
     Vienmatis prognozavimas yra atliekamas naudojant tik vieną kintamąjį, pavyzdžiui, kitos dienos temperatūros prognozavimas, naudojant tik temperatūros duomenis iš oro monitoringo stoties.
-    Daugiamatis prognozavimas - kai naudojami keli kintamieji vienu metu, pavyzdžiui, kitos dienos temperatūros prognozavimas, naudojant turimus temperatūros, drėgmės ir vėjo greičio duomenis.
+    Daugiamatis prognozavimas -- kai naudojami keli kintamieji vienu metu, pavyzdžiui, kitos dienos temperatūros prognozavimas, naudojant turimus temperatūros, drėgmės ir vėjo greičio duomenis.
     Daugiamatis prognozavimas įprastai pagerina prognozės tikslumą, kadangi įtraukiamos sąveikos tarp kelių kintamųjų, tačiau modelis tampa sudėtingesnis, reikia daugiau duomenų \cite{kim2025comprehensivesurveydeeplearning}.
 
     Ateities laikotarpis, kuriam prognozuojama, vadinamas prognozės horizontu \cite{hyndman}.
@@ -171,7 +172,8 @@
 
     \ce{KD_{2,5}} koncentracijos kitimą padeda paaiškinti ir požymiai, atspindintys vykstančias lokalias ir atmosferines chemines reakcijas.
     Automobilių varikliai išmeta azoto monoksidą, o šis reaguoja su ozonu.
-    Ozonas nėra išmetamas tiesiogiai -- jis susidaro fotocheminėmis reakcijomis ir jo lygį lemia regioninis ir pusrutulio fonas.
+    Ozonas nėra išmetamas tiesiogiai.
+    Jis susidaro fotocheminėmis reakcijomis ir jo lygį lemia regioninis ir pusrutulio fonas.
     Kadangi automobilių išmetamas azoto monoksidas ozoną naikina, Merilebono kelio stotyje ozonas didžiausias vertes pasiekia prieš 06:00 val. ir apie 15:00 val., tuo metu, kai azoto monoksido emisijos mažiausios.
     Kai ozono lygis aukštas, vadinasi šviežio azoto monoksido mažai ir eismas mažas, tačiau \ce{KD_{2,5}} koncentracija vis tiek gali būti didelė.
     Tai lemia regioninis taršos transportas.
@@ -198,14 +200,16 @@
     Sisteminė giliojo mokymosi architektūrų apžvalga \cite{zhou2024} taip pat patvirtina, kad daugumoje naujausių giliojo mokymosi darbų taikomi būtent su LSTM susiję algoritmai arba jų hibridai.
 
     Tačiau giliojo mokymosi neuroniniai tinklai turi ir apribojimų.
-    Šie modeliai laikomi „juodosiomis dėžėmis“ -- jų veikimas yra sunkiai interpretuojamas, o ilgų laiko eilučių ir didelių duomenų kiekių apdorojimas reikalauja didelių skaičiavimo sąnaudų \cite{wu2025}.
+    Šie modeliai laikomi „juodosiomis dėžėmis“.
+    Jų veikimas yra sunkiai interpretuojamas, o ilgų laiko eilučių ir didelių duomenų kiekių apdorojimas reikalauja didelių skaičiavimo sąnaudų \cite{wu2025}.
     Duomenų prieinamumas ir nevienoda jų kokybė įvardijami kaip svarbiausios srities problemos.
     Klasikiniai mašininio mokymosi metodai reikalauja kruopštesnės požymių inžinerijos, tačiau pasižymi geresniu interpretuojamumu \cite{zhou2024}, todėl populiarėja hibridiniai sprendimai, sujungiantys giliojo mokymosi bei statistinius ar klasikinius mašininio mokymosi metodus \cite{wu2025}.
 
     Vienas iš klasikinių mašininio mokymosi metodų, naudojamas ir hibridiniuose modeliuose, ir savarankiškai atliekant \ce{KD_{2,5}} prognozę, yra K artimiausių kaimynų metodas.
     Lyginamajame eksperimente su penkiais oro taršos duomenų rinkiniais savaitės ir mėnesio prognozės horizontams jis pagal RMSE pranoko net giliuosius modelius \cite{das2021}.
     Vis dėlto šios srities darbuose KNN beveik visada taikomas bazinis, be patobulinimų.
-    Šiame darbe tiriama, ar patobulinto KNN su požymių svoriais tikslumas trumpalaikėje \ce{KD_{2,5}} prognozėje gali prilygti giliojo mokymosi modeliams.
+
+    Šioje literatūros apžvalgoje tiriama, ar patobulinto KNN su požymių svoriais tikslumas trumpalaikėje \ce{KD_{2,5}} prognozėje gali prilygti giliojo mokymosi modeliams.
     Kitame skyriuje nagrinėjami KNN sandara ir veikimo principas.
     %==================================================================
 
@@ -218,16 +222,16 @@
 
     \section{Požymių svorių radimo būdai}
     %==================================================================
-
-    Literatūroje nagrinėjami KNN metodo svoriai gali būti taikomi dviejose vietose: požymių svoriai atstumo funkcijoje atrenkant artimiausius kaimynus ir kaimynų svoriai, nurodantys jau surastų kaimynų daromą įtaką.
-    Kaimynų svėrimas yra literatūroje plačiai naudojama praktika, o požymių svoriai atstumo funkcijoje aptinkami rečiau.
-    Šiame darbe pagrindinis dėmesys skiriamas atstumo funkcijos tobulinimui ir požymių svorių optimizavimui.
+%
+%    Literatūroje nagrinėjami KNN metodo svoriai gali būti taikomi atstumo funkcijoje atrenkant artimiausius kaimynus arba jau rastiems kaimynams.
+%    Kaimynų svėrimas literatūroje yra plačiai naudojama praktika, o požymių svoriai atstumo funkcijoje aptinkami rečiau.
+%    Šiame darbe pagrindinis dėmesys skiriamas atstumo funkcijos tobulinimui ir požymių svorių optimizavimui.
 
     Mokslinėje literatūroje bazinis KNN algoritmas dažnai lyginamas su pažangesniais mašininio mokymosi modeliais, o dėl prastesnių rezultatų jo potencialas kartais nuvertinamas.
     Vienas iš būdų pagerinti KNN prognozavimo tikslumą yra atstumo funkcijos parametrizavimas, suteikiant požymiams svorius.
     Tai leidžia svarbesniems požymiams daryti didesnę įtaką atrenkant panašiausius kaimynus, nuo kurių priklauso modelio tikslumas.
 
-    Literatūroje \cite{wettschereck1997} išskiriamos įvairios požymių svėrimo metodų savybės, pavyzdžiui svorių tolydumas, bendrumas, tačiau pagrindinė savybė, kurią autoriai nagrinėja, yra svorių apskaičiavimo strategija.
+    Literatūroje išskiriamos įvairios požymių svėrimo metodų savybės, pavyzdžiui svorių tolydumas, bendrumas, \cite{wettschereck1997} tačiau pagrindinė savybė, kurią nagrinėja autoriai, yra svorių apskaičiavimo strategija.
     Svorių apskaičiavimo strategijos skirstomos į dvi kryptis: kai svoriai nustatomi iš anksto, arba atsižvelgiant į modelio grįžtamąjį ryšį.
 
     Iš anksto nustatomi svoriai apskaičiuojami iš pačių duomenų statistinių savybių, pavyzdžiui tarpusavio informacijos, informacijos prieaugio ar koreliacijos su prognozuojamu dydžiu.
@@ -244,7 +248,8 @@
     Vienas iš požymių svorių nustatymo būdų yra juos apskaičiuoti iš anksto, remiantis duomenų statistinėmis savybėmis ir vėliau nekoreguoti pagal modelio rezultatus.
     Akcijų rinkų indeksų kainos prognozei \cite{chen2017} naudoja hibridinį svertinį SVM ir svertinį KNN modelį.
     Iš pradžių svertinis SVM modelis prognozuoja, ar kaina kils, ar kris.
-    Autoriai svoriams rasti naudoja informacijos prieaugį -- matą, kuris rodo, kiek požymio žinojimas sumažina neapibrėžtumą (entropiją) dėl prognozuojamo dydžio.
+    Autoriai svoriams rasti naudoja informacijos prieaugį.
+    Tao yra matas, kuris rodo, kiek požymio žinojimas sumažina neapibrėžtumą (entropiją) dėl prognozuojamo dydžio.
     Entropija čia skaičiuojama pagal kainos kilimo arba kritimo tikimybes.
     Tuomet atliekama kainos prognozė svertiniu KNN metodu.
     Naudojant informacijos prieaugį, iš naujo randami KNN svoriai, tačiau dabar sąlyginė entropija skaičiuojama pagal pačią kainą, kuri yra paverčiama dvejetaine klase pagal tai, ar kaina viršija numatytą slenkstį.
@@ -258,9 +263,7 @@
     Pagal gautą atstumą kiekvienam kaimynui priskiriamas svoris, kuriuo kaimyno reikšmė įtraukiama į prognozės vidurkį.
     Požymių svarba šiame darbe nustatoma tarpusavio informacija.
     Šis matas nusako, kiek sužinojus vieną kintamąjį, sumažėja neapibrėžtumas dėl kito.
-    Skirtingai nei koreliacija, šis matas aptinka ir netiesinius ryšius.
-    Kintamieji, kurių savitarpio informacija su prognozuojamu dydžiu buvo maža, į modelius neįtraukiami.
-    Toks požymių svarbos vertinimas atliekamas vieną kartą, prieš modeliavimą ir vėliau nekoreguojamas.
+    Kintamieji, kurių tarpusavio informacija su prognozuojamu dydžiu buvo maža, į modelius neįtraukiami.
     Kaimynų skaičių ir svorio funkciją autoriai parinko lygindami rezultatus testinėje aibėje.
     Autoriai taip pat pažymi, kad KNN modelius būtų galima optimizuoti pagal jų parametrus ir svertines funkcijas, lyginant rezultatus kryžmine patikra, tačiau jie to nepadarė, nes turėjo per mažai duomenų.
     Toks parinkimas remiasi jau ne duomenų statistinėmis savybėmis, o grįžtamuoju ryšiu iš veikiančio modelio.
@@ -268,16 +271,16 @@
 
     Ispanijos elektros rinkos kainų ir paklausos prognozei \cite{talaverallames2019} pasiūlė daugiamatį svertinį artimiausių kaimynų metodą MV-kWNN.
     Daugiamatiškumas čia reiškia, kad į kaimynų paiešką vienu metu įtraukiamos kelios atskiros laiko eilutės, o prognozė sudaroma kelių valandų laikotarpiui iš karto.
-    Dabartinė situacija aprašoma matrica, kurios eilutės yra atskiros laiko eilutės, o stulpeliai praeities reikšmės ir istorijoje ieškoma panašiausių tokios pat formos matricų.
+    Dabartinė situacija aprašoma matrica, kurios eilutės yra atskiros laiko eilutės, o stulpeliai praeities reikšmės.
+    Istorijoje ieškoma panašiausių tokios pat formos matricų.
     Atstumas skaičiuojamas per visas eilutes vienodai, o svoriai priskiriami tik kaimynams, atvirkščiai proporcingai atstumo kvadratui.
     Atskirai autoriai sprendžia, kuriuos papildomus kintamuosius apskritai verta įtraukti.
     Tam naudojama koreliacija su prognozuojamo kintamojo būsimomis reikšmėmis.
     Eilutė įtraukiama tik tada, kai koreliacija viršija tam tikrą slenkstį.
     Sintetiniais duomenimis parodyta, kad jei papildoma eilutė su ateities reikšmėmis koreliuoja stipriau nei pats prognozuojamas kintamasis, paklaida sumažėja ryškiai, o priešingu atveju padidėja tik nežymiai.
     Skirtingai nei tarpusavio informacija, koreliacija aptinka tik tiesinius ryšius.
-    Kaip ir ankstesniuose darbuose, kintamųjų svarba nustatoma vieną kartą, prieš modeliavimą, ir išreiškiama tik sprendimu įtraukti arba neįtraukti.
 
-    Apibendrinant, šios krypties metodai požymių svorius apskaičiuoja atskirai nuo modelio veikimo.
+    Šios krypties metodai požymių svorius apskaičiuoja atskirai nuo modelio veikimo.
     Nors galutinis prognozės pagerėjimas ir patikrinamas, patys svoriai nėra ieškomi taip, kad prognozės paklaida būtų kuo mažesnė.
     Be to, vertinant kiekvieną požymį atskirai, neatsižvelgiama į jų tarpusavio sąveikas.
     Šiuos trūkumus sprendžia toliau apžvelgiami optimizavimo metodai.
@@ -340,10 +343,9 @@
     Optimizuoti svoriai pagerino prognozę iki 20 procentų, palyginti su vienodais svoriais.
     Optimalus prediktorių derinys stipriai priklauso nuo vietovės reljefo ir vietinio vėjo režimo, todėl vienos universalios svorių kombinacijos nėra.
     Svorių perskaičiavimas kas mėnesį, atsižvelgiant į sezoną, rezultatų nepagerino.
-
     Toks perrinkimas reikalauja daugiau nei milijono modelio paleidimų, o svoriai apriboti dešimties procentų žingsniu, tad tarp tinklelio taškų esantys sprendiniai nepasiekiami.
     Autoriai nurodo, kad skaitiniai optimizavimo algoritmai būtų efektyvesni, tačiau jų bandymai su gradientiniu BFGS algoritmu parodė, kad tikslo funkcijos paviršius yra plokščias ir turi kelis lokalius minimumus, o rastas sprendinys nesutapo su perrinkimu nustatytu minimumu.
-    Taip pat svoriai šiame darbe priskiriami pavieniams prediktoriams, o kaimynai į ansamblį įtraukiami lygiaverčiai, be svorių.
+    Kaimynai į ansamblį įtraukiami lygiaverčiai, be svorių.
 
     Abu aptarti darbai rodo, kad svorių traktavimas kaip optimizuojamų parametrų prognozę gerina, tačiau tačiau jų taikymo metodikos turi tam tikrų ribojumų.
     \cite{jafarizadeh2022} svoriai optimizuojami, bet uždavinys statinis, o svertinė atstumo funkcija neaprašyta.
@@ -360,45 +362,35 @@
     Svorių parinkimą galima formuluoti ir kaip daugiakriterinį uždavinį, kai vienu metu vertinami keli tarpusavyje konkuruojantys rodikliai.
     KNN darbuose daugiakriterinis optimizavimas taikomas, tačiau ne visada pačių svorių paieškai.
 
-    Iki šiol aptartuose darbuose svoriai buvo parenkami pagal vieną rodiklį, dažniausiai prognozės paklaidą.
-    Praktikoje modelio kokybę neretai nusako keli rodikliai vienu metu, o jie tarpusavyje konkuruoja.
+    Modelio kokybę neretai nusako keli rodikliai, kurie tarpusavyje konkuruoja.
     Konkuruojantys tikslai reiškia, kad artėjant prie geriausios vieno rodiklio reikšmės, kito rodiklio reikšmė būtinai prastėja.
     Todėl sprendinio, kuris būtų geriausias pagal visus tikslus vienu metu, paprastai neegzistuoja.
-
-    Paprasčiausias būdas apeiti šią problemą yra visus tikslus sudėti į vieną skaičių, pavyzdžiui, kiekvienam priskiriant savo svarbos koeficientą.
-    Tokiu atveju gaunamas vienas sprendinys, tačiau tikslų santykį tenka nuspręsti iš anksto, dar nematant, kokie kompromisai apskritai įmanomi.
-    Daugiakriterinis optimizavimas tikslų nesulieja ir sprendžia juos kartu.
     Sprendiniai lyginami pagal dominavimą, kai vienas sprendinys laikomas geresniu už kitą tik tada, jei nė pagal vieną tikslą nėra blogesnis ir bent pagal vieną yra geresnis.
     Sprendiniai, kurių nedominuoja joks kitas, sudaro Pareto frontą.
 
-    Uždavinio atsakymas todėl yra ne vienas sprendinys, o jų aibė, kurioje kiekvienas taškas atitinka kitokį tikslų kompromisą.
-    Iš to plaukia ir pagrindinis šio metodo privalumas, nes matomas visas kompromiso vaizdas ir sprendimas, kurį tašką rinktis, priimamas jau turint rezultatus.
-    Kartu tai ir jo trūkumas, nes vieną sprendinį vis tiek reikia pasirinkti.
-    Rinkimuisi naudojami įvairūs būdai, pavyzdžiui, neraiškiosios aibės arba fronto lūžio taško paieška, o dalyje darbų sprendžia pats tyrėjas.
+    Todėl rezultatas yra ne vienas sprendinys, o jų aibė, kurioje kiekvienas taškas atitinka kitokį tikslų kompromisą.
+    Matomas visas kompromiso vaizdas ir sprendimas, kurį tašką rinktis, priimamas jau turint rezultatus.
+    Galutiniam sprendimui priimti naudojamos neraiškiosios aibės, fronto lūžio taško paieškos algoritmai arba ekspertinis vertinimas.
 
-    Daugiakriteriniam optimizavimui dažniausiai naudojami evoliuciniai ir populiacija grįsti algoritmai, nes jie vienu paleidimu duoda visą sprendinių aibę.
-    Skiriamos kelios pagrindinės šeimos.
+    Daugiakriteriniam optimizavimui dažniausiai naudojami evoliuciniai ir populiacija grįsti algoritmai, nes jie duoda visą sprendinių aibę.
     Dominavimu grįsti algoritmai, tarp kurių plačiausiai naudojamas NSGA-II \cite{deb2002}, populiaciją rūšiuoja pagal dominavimo lygius ir papildomai vertina sprendinių išsibarstymą, kad frontas būtų tolygiai padengtas.
     Dekompozicija grįsti algoritmai, pavyzdžiui MOEA/D \cite{zhangli2007}, daugiakriterinį uždavinį skaido į daug vieno kriterijaus uždavinių ir sprendžia juos lygiagrečiai.
-    Trečią šeimą sudaro spiečiaus algoritmų daugiakriteriniai variantai.
-    Bendras jų trūkumas yra skaičiavimo kaštai, nes kiekvienam populiacijos nariui reikia įvertinti visus tikslus, o tai reiškia daug modelio paleidimų.
+    Taip pat naudojami spiečiaus algoritmų daugiakriteriniai variantai.
+    Bendras metodų trūkumas yra skaičiavimo kaštai, nes kiekvienam populiacijos nariui reikia įvertinti visus tikslus, o tai reiškia daug modelio paleidimų.
 
     \cite{paul2015} vienu metu atrenka ir sveria požymius naudodami dekompozicija grįstą evoliucinį algoritmą MOEA/D.
-    Svoriai čia priskiriami tik požymiams, o kaimynams jokių svorių nėra.
+    Svoriai čia priskiriami požymiams, o kaimynams svorių nėra.
     Kiekvieno požymio reikšmės dauginamos iš to požymio svorio, taigi keičiamas duomenų mastelis atskirose ašyse.
     Taip taškai perstumiami erdvėje, o svarbesni požymiai ima labiau lemti atstumą tarp jų.
     Tikslas yra pasiekti, kad skirtingų klasių taškai atsidurtų kuo toliau vienas nuo kito, o tos pačios klasės taškai kuo arčiau.
-
     Optimizuojami du tikslai, iš kurių vienas maksimizuojamas, o kitas minimizuojamas.
     Maksimizuojamas tarpklasinis atstumas, tai yra suminis atstumas tarp skirtingoms klasėms priklausančių taškų.
     Minimizuojamas vidinklasinis atstumas, tai yra suminis atstumas tarp tos pačios klasės taškų.
     Šie du tikslai konkuruoja, nes didinant svorius auga abu atstumai vienu metu.
-
     Požymiai yra atrenkami ir sveriami vienu metu.
     Kiekvieno požymio svoris gali įgyti reikšmes nuo vieno iki dešimties, o mažesnis už vienetą svoris prilyginamas nuliui ir požymis atmetamas.
     Taip pat pridedama bauda už atrinktų požymių skaičių, kad modelis liktų paprastesnis.
     Iš Pareto fronto vienas sprendinys parenkamas neraiškiosios priklausomybės būdu.
-
     Gautas svorių vektorius naudojamas klasifikuojant KNN metodu su penkiais kaimynais.
     Metodas išbandytas su dvidešimčia duomenų rinkinių ir palygintas su aštuoniais požymių atrankos metodais, tarp jų nuosekliąja pirmyn ir atgal einančia atranka, požymių panašumu grįsta atranka, neraiškiųjų taisyklių metodu, šikšnosparnių algoritmu ir dviem kitais daugiakriteriniais metodais.
     Daugumoje rinkinių pasiektas didesnis tikslumas, o kai kuriuose skirtumas buvo ryškus, pavyzdžiui, širdies ligų duomenyse tikslumas siekė 80 procentų, o nuosekliosios atrankos metodai pasiekė 65 ir 63 procentus.
@@ -417,14 +409,12 @@
     KNN atrenka maždaug pusę požymių.
     Palyginti su kitais metodais, KNN pranoko sprendimų medį ir atsitiktinį mišką, bet nusileido papildomų medžių metodui.
     Kai optimizatoriui buvo leista rinktis ir patį algoritmą, KNN nebuvo pasirinktas nė karto.
-
     Palyginimai atlikti tarp skirtingų daugiakriterinių optimizatorių, o rezultatų su visais požymiais ir be atrankos nepateikiama.
     Todėl iš straipsnio negalima nustatyti, ar pati atranka pagerino prognozę, ar tik sumažino požymių skaičių.
 
     \cite{dong2021} prognozuoja elektros apkrovos intervalą, o ne vieną skaitinę reikšmę.
     Prognozei taikomas hibridinis modelis, sudarytas iš KNN ir giliojo tikimybinio tinklo.
     KNN panaudojamas mokymo aibę suskaidyti į $k$ kategorijų, kurias sudaro tarpusavyje panašūs istoriniai įrašai, o pačią prognozę atlieka tinklas.
-
     Kiekviena kategorija turi centrą -- vektorių, kuris yra požymių vidurkis per visus kategorijos įrašus.
     Naujas įrašas prognozės metu priskiriamas tai kategorijai, kurios centras artimiausias pagal Mahalanobio atstumą, kuris atsižvelgia į kintamųjų sklaidą ir tarpusavio koreliaciją.
 
@@ -440,25 +430,21 @@
     Šiame darbe optimizuojamas kategorijų skaičius, o ne atstumo funkcijos svoriai, kurių čia apskritai nėra.
     KNN atlieka duomenų paruošimo vaidmenį, o prognozę daro gilusis tinklas, todėl modelis lieka neinterpretuojamas.
 
-    Iš trijų aptartų darbų svorius optimizuoja tik vienas, tačiau sprendžiamas klasifikavimo, o ne prognozavimo uždavinys.
+    Iš trijų aptartų daugiakriterinio optimizavimo darbų požymių svorius optimizuoja tik vienas, tačiau sprendžiamas klasifikavimo, o ne prognozavimo uždavinys.
     Kituose dviejuose optimizuojama tai, kurie požymiai įtraukiami arba į kiek kategorijų suskaidomi duomenys.
-
-    Skyrių verta užbaigti platesniu žvilgsniu.
-    Požymių svoriai yra atskiras atvejis bendresnio uždavinio -- atstumo metrikos mokymosi (angl. \textit{distance metric learning}).
-    \cite{weinberger2009} pasiūlytas didelės ribos artimiausių kaimynų metodas (LMNN) mokosi pilnos Mahalanobio matricos, kad artimiausi kaimynai priklausytų tai pačiai klasei, o \cite{assi2014} šį metodą adaptavo regresijai.
-    Pilna matrica yra lanksčiausias variantas, tačiau jos elementai sunkiai interpretuojami, o parametrų skaičius auga kvadratiškai nuo požymių skaičiaus.
-    Tarp dviejų kraštutinumų -- pavienių požymių svorių ir pilnos metrikos -- yra tarpinis, literatūroje beveik netyrinėtas variantas: svoriai, priskiriami požymių grupėms ar atskiroms atstumo funkcijoms.
-    Toks grupavimas išlaiko interpretuojamumą, nes kiekvienas svoris atitinka prasmingą kintamųjų grupę, ir mažina optimizuojamų parametrų skaičių.
-    Artimiausias pavyzdys yra daugiaperspektyvis eismo prognozės modelis \cite{cheng2018}, kuriame kaimynų paieška vykdoma trijose erdvėlaikinėse perspektyvose, tačiau perspektyvos agreguojamos neuroniniu tinklu, taigi neinterpretuojamu būdu, ir skirtos erdvėlaikiniams vaizdams, o ne kintamųjų grupėms.
-    Apibendrinant, svorių radimo literatūroje matyti perėjimas nuo iš anksto nustatomų svorių prie optimizuojamų, o naujesni darbai parinkimą formuluoja kaip daugiakriterinį uždavinį.
-    Vis dėlto daugiakriterinis optimizavimas dažniausiai taikomas požymių atrankai arba kaimynų skaičiui, o grupių lygmens svoriai laiko eilučių regresijoje lieka netyrinėti.
-
+%    Skyrių verta užbaigti platesniu žvilgsniu.
+%    Požymių svoriai yra atskiras atvejis bendresnio uždavinio -- atstumo metrikos mokymosi (angl. \textit{distance metric learning}).
+%    \cite{weinberger2009} pasiūlytas didelės ribos artimiausių kaimynų metodas (LMNN) mokosi pilnos Mahalanobio matricos, kad artimiausi kaimynai priklausytų tai pačiai klasei, o \cite{assi2014} šį metodą adaptavo regresijai.
+%    Pilna matrica yra lanksčiausias variantas, tačiau jos elementai sunkiai interpretuojami, o parametrų skaičius auga kvadratiškai nuo požymių skaičiaus.
+%    Tarp dviejų kraštutinumų -- pavienių požymių svorių ir pilnos metrikos -- yra tarpinis, literatūroje beveik netyrinėtas variantas: svoriai, priskiriami požymių grupėms ar atskiroms atstumo funkcijoms.
+%    Toks grupavimas išlaiko interpretuojamumą, nes kiekvienas svoris atitinka prasmingą kintamųjų grupę, ir mažina optimizuojamų parametrų skaičių.
+%    Artimiausias pavyzdys yra daugiaperspektyvis eismo prognozės modelis \cite{cheng2018}, kuriame kaimynų paieška vykdoma trijose erdvėlaikinėse perspektyvose, tačiau perspektyvos agreguojamos neuroniniu tinklu, taigi neinterpretuojamu būdu, ir skirtos erdvėlaikiniams vaizdams, o ne kintamųjų grupėms.
+%    Apibendrinant, svorių radimo literatūroje matyti perėjimas nuo iš anksto nustatomų svorių prie optimizuojamų, o naujesni darbai parinkimą formuluoja kaip daugiakriterinį uždavinį.
+    Taigi daugiakriterinis optimizavimas KNN metodui taikomas požymių atrankai ar modelio struktūros parinkimui, bet ne atstumo funkcijos svorių paieškai prognozavimo uždaviniuose.
 
     %==================================================================
 
-
     \input{skyrius_nt}
-
 
     %==================================================================
 
@@ -466,25 +452,24 @@
     \section{Metodų taikymas ir palyginimas}
     %==================================================================
 
-    Ankstesniuose skyriuose metodai pristatyti teoriškai; šiame skyriuje apžvelgiama, kaip jie taikomi ir lyginami praktikoje.
-    Palyginimas literatūroje vyksta dviem ašimis: pagal prognozės tikslumą ir pagal tai, kiek modelio veikimą galima suprasti.
-    Pirmiausia nagrinėjami \ce{KD_{2,5}} prognozavimo darbai, tada tikslumo palyginimai kitose laiko eilučių srityse, o skyriaus pabaigoje -- interpretuojamumo klausimas ir Europos Sąjungos teisinis reguliavimas.
+    Šiame skyriuje apžvelgiama, kaip literatūroje taikomi ir lyginami KNN metodas ir neuroniniai tinklai.
+    Nagrinėjami \ce{KD_{2,5}} prognozavimo darbai, tikslumo palyginimai kitose laiko eilučių srityse, interpretuojamumas ir Europos Sąjungos dirbtinio intelekto reglamentas.
 
     %------------------------------------------------------------------
 
-    \subsection{Metodai \ce{KD_{2,5}} prognozėje}
+    \subsection{Metodų palyginimai prognozuojant oro taršą}
     %------------------------------------------------------------------
 
-    Pirmame skyriuje parodyta, kad \ce{KD_{2,5}} prognozavimo srityje vyrauja gilieji neuroniniai tinklai.
-    Šiame poskyryje nagrinėjama, kaip greta jų srityje taikomi kaimynais grįsti metodai ir ką rodo tiesioginiai jų palyginimai.
+    \ce{KD_{2,5}} prognozavimo srityje vyrauja gilieji neuroniniai tinklai \cite{wu2025}.
+    Šiame poskyryje nagrinėjama, kaip greta jų srityje taikomas KNN ir ką rodo tiesioginiai jų palyginimai.
 
     Išsamiausią palyginimą pateikia \cite{das2021}, penkiuose realiuose oro taršos duomenų rinkiniuose palyginę dešimt metodų, apimančių tiek klasikinius statistinius modelius (ARIMA, eksponentinį glodinimą), tiek mašininio ir giliojo mokymosi algoritmus (KNN, LSTM).
     Vienos paros prognozės horizontui tiksliausias buvo LSTM, tačiau savaitės ir mėnesio horizontams geriausius rezultatus visuose duomenų rinkiniuose pagal RMSE pasiekė KNN.
     Autoriai jį, kartu su sprendimų medžiais ir LSTM, rekomenduoja kaip pirmojo pasirinkimo metodus didelio dažnio \ce{KD_{2,5}} laiko eilutėms.
-    Papildomas KNN ir sprendimų medžių privalumas -- vieni mažiausių skaičiavimo laikų tarp visų dešimties lygintų metodų.
-    Tiesa, \cite{das2021} duomenys yra vienmačiai, laiko eilutes sudaro tik \ce{KD_{2,5}} vertės.
+    Papildomas KNN ir sprendimų medžių privalumas yra vieni mažiausių skaičiavimo laikų tarp visų dešimties lygintų metodų.
+    Tiesa, \cite{das2021} duomenys yra vienmačiai, laiko eilutes sudaro tik \ce{KD_{2,5}} reikšmės.
     KNN prognozuoja vien iš \ce{KD_{2,5}} istorijos, neįtraukiant nei meteorologinių, nei cheminių požymių, kurių informacinė vertė aptarta \ref{subsec:savitumas} poskyryje.
-    Vadinasi, konkurencingas tikslumas pasiektas naudojant tik vienmačius duomenis, o daugiamačio KNN galimybės \ce{KD_{2,5}} laiko eilučių prognozėje lieka neišnaudotos.
+    Taigi, konkurencingas tikslumas pasiektas naudojant tik vienmačius duomenis, o daugiamačio KNN galimybės \ce{KD_{2,5}} laiko eilučių prognozėje yra nepakankamai ištirtos.
 
     Kituose darbuose KNN integruojamas į sudėtingesnes sistemas.
     \cite{lin2017} taiko KNN su dinaminiu laiko kraipymo (angl. \emph{dynamic time warping}, DTW) atstumu surasti panašias istorines laiko sekas, kurios naudojamos kaip papildomų požymių šaltinis NARX tinklui ilgalaikei oro kokybės prognozei.
@@ -492,34 +477,35 @@
     Bendru tikslumu KNN buvo silpniausias iš keturių, tačiau uždavinys erdvinis -- dienos koncentracijos atkuriamos kilometriniame tinklelyje, o ne prognozuojamos į ateitį.
     Silpniausiai KNN veikė erdvinėje dimensijoje, o laiko kintamumą jis atkūrė ne prasčiau už neuroninį tinklą ($R^2$ atitinkamai 0,863 ir 0,861).
     Į galutinį ansamblį autoriai įtraukė KNN, o neuroninio tinklo atsisakė.
-    Analogišku artimiausių kaimynų principu grįstas ir analogų metodas skaitmeninio modelio korekcijai.
-    \cite{djalova2015} \ce{KD_{2,5}} prognozę atlieka skaitmeninis CMAQ oro kokybės modelis, o analogų metodas ją koreguoja: tarp istorinių CMAQ prognozių ieškoma panašiausių į dabartinę ir pagal tuometines jų paklaidas pataisoma dabartinė prognozė.
-    Geriausią rezultatą davė analogų metodo derinys su Kalmano filtru -- CMAQ prognozės MAE sumažėjo 65\,\%.
-    Autoriai taip pat nustatė, kad analogų paieškoje naudojamų kintamųjų rinkinys turi reikšmingą įtaką: įtraukus saulės spinduliuotę, vėjo greitį ir
-    kryptį, rezultatai buvo žymiai geresni nei ieškant vien pagal \ce{KD_{2,5}}.
 
-    Neuroniniai tinklai srityje taikomi ne tik prognozei, bet ir matavimų kokybei gerinti.
-    Taikant MLP laiko eilučių duomenims, įvestis formuojama iš praeities stebėjimų lango \cite{strategiestimeseries}, kurį sudaro vieno ar kelių rodiklių istoriniai matavimai.
-    Turine MLP taikytas pigių jutiklių \ce{KD_{2,5}} matavimų korekcijai pagal referentinę stotį: išbandžius 135 konfigūracijas, geriausias pasirodė septynių sluoksnių po 1500 neuronų tinklas, kurio įvestį sudarė 20 iš eilės einančių įrašų su meteorologiniais požymiais, o determinacijos koeficientas testavimo aibėje siekė 0,932 \cite{casari2023}.
-    Darbas kartu iliustruoja ir dvi būdingas problemas.
-    Pirma, tai korekcijos, o ne prognozavimo uždavinys -- tinklas taiso dabartinį matavimą, o ne numato ateitį.
-    Antra, duomenys prieš dalijimą į mokymo ir testavimo aibes buvo atsitiktinai sumaišyti, todėl gretimi, tarpusavyje labai panašūs laiko taškai galėjo patekti į abi aibes, ir patys autoriai pripažįsta, kad apibendrinimo galia gali būti pervertinta \cite{casari2023}.
-    Laiko eilutėms šis pavojus ypač aktualus, todėl šiame darbe modeliai vertintini skaidant duomenis chronologiškai.
+    Analogišku artimiausių kaimynų principu grįstas ir analogų metodas skaitmeninio modelio korekcijai.
+    \cite{djalova2015} \ce{KD_{2,5}} prognozę atlieka skaitmeninis CMAQ oro kokybės modelis, o analogų metodas ją koreguoja.
+    Tarp istorinių CMAQ prognozių ieškoma panašiausių į dabartinę ir pagal tuometines jų paklaidas pataisoma dabartinė prognozė.
+    Geriausią rezultatą davė analogų metodo derinys su Kalmano filtru -- CMAQ prognozės MAE sumažėjo 65\,\%.
+    Autoriai taip pat nustatė, kad analogų paieškoje naudojamų kintamųjų rinkinys turi reikšmingą įtaką: įtraukus saulės spinduliuotę, vėjo greitį ir kryptį, rezultatai buvo žymiai geresni nei ieškant tik pagal \ce{KD_{2,5}}.
+
+    Turine MLP pritaikytas pigių jutiklių \ce{KD_{2,5}} matavimų korekcijai pagal referentinę stotį.
+    Geriausias pasirodė septynių sluoksnių po 1500 neuronų tinklas, kurio įvestį sudarė 20 iš eilės einančių įrašų su šešiais požymiais, o determinacijos koeficientas testavimo aibėje siekė 0,932 \cite{casari2023}.
+    Tai yra korekcijos, o ne prognozavimo uždavinys, nes tinklas taiso dabartinį matavimą, o ne prognozuoja ateities reikšmes.
+    Duomenys prieš dalijimą į mokymo ir testavimo aibes buvo atsitiktinai sumaišyti, todėl gretimi, tarpusavyje labai panašūs laiko taškai galėjo patekti į abi aibes, ir patys autoriai pripažįsta, kad tikrasis modelio tikslumas gali būti pervertintas \cite{casari2023}.
+    Darbas parodo srityje realiai naudojamą MLP, tačiau alternatyvių metodų, tarp jų ir KNN, autoriai nelygina.
+    Pateikiami tik skirtingų to paties tinklo variantų rezultatai.
 
     Vertinimai dėl KNN tinkamumo \ce{KD_{2,5}} prognozei literatūroje nesutampa.
     Sisteminėje mašininio mokymosi metodų apžvalgoje \cite{pandya2024} daroma išvada, kad KNN labiau tinka trūkstamoms reikšmėms užpildyti nei koncentracijai prognozuoti, nors pripažįstama, jog šiai išvadai patvirtinti reikia daugiau tyrimų.
     Tačiau pati apžvalga apima ne vien laiko eilučių prognozės darbus.
     Greta oro taršos koncentracijos prognozės ji apima ir oro kokybės kategorijų klasifikavimo bei duomenų užpildymo uždavinius, todėl bendra išvada nebūtinai atspindi KNN gebėjimą prognozuoti oro taršos koncentraciją.
     Be to, toje pačioje apžvalgoje pateikiami ir tyrimai, kuriuose KNN pagal atskiras metrikas pranoko atsitiktinį mišką: viename jų KNN determinacijos koeficientas siekė 1,0 prieš miško 0,904, nors pagal MAPE miškas buvo tikslesnis (1,94 prieš 2,60) \cite{pandya2024}.
-    Palankūs KNN rezultatai sutampa su \cite{das2021} lyginamuoju eksperimentu, kuriame KNN penkiuose duomenų rinkiniuose pasiekė mažiausią RMSE ilgesniam prognozės horizontui.
+    Palankūs KNN rezultatai gaunami ir \cite{das2021} lyginamajame eksperimente, kuriame KNN penkiuose duomenų rinkiniuose pasiekė mažiausią RMSE ilgesniam prognozės horizontui.
 
-    Taip pat metodo tinkamumas priklauso nuo konkretaus duomenų rinkinio: skirtingose vietovėse skiriasi taršos šaltiniai, klimatas ir reljefas, todėl modelio tikslumas perkeliant jį į kitą vietovę krinta \cite{wu2025}, o modelių palyginimai, atlikti su skirtingais duomenų rinkiniais, tiesiogiai nepalyginami \cite{pandya2024}.
+    Taip pat metodo tinkamumas priklauso nuo konkretaus duomenų rinkinio.
+    Skirtingose vietovėse skiriasi taršos šaltiniai, klimatas ir reljefas, todėl modelio tikslumas perkeliant jį į kitą vietovę krinta \cite{wu2025}, o modelių palyginimai, atlikti su skirtingais duomenų rinkiniais, tiesiogiai nepalyginami \cite{pandya2024}.
     Dėl to metodo tinkamumą reikia vertinti kiekvienam duomenų rinkiniui atskirai.
 
     Apžvelgta literatūra rodo, kad giliojo mokymosi modelių pranašumas priklauso nuo uždavinio sąlygų.
-    Ilgesniuose prognozės horizontuose ir modeliuojant koncentracijos svyravimus laike KNN pasiekia konkurencingą ar net geresnį tikslumą nei neuroniniai tinklai mažomis skaičiavimo sąnaudomis, tuo tarpu trumpame horizonte pirmauja giliojo mokymosi modeliai \cite{das2021}.
+    Ilgesniuose prognozės horizontuose ir modeliuojant koncentracijos svyravimus laike KNN pasiekia konkurencingą ar net geresnį tikslumą nei neuroniniai tinklai mažomis skaičiavimo sąnaudomis.
+    Tuo tarpu trumpame horizonte pirmauja giliojo mokymosi modeliai \cite{das2021}.
     Nė viename iš apžvelgtų šios srities darbų požymių svoriai atstumo funkcijoje nebuvo optimizuojami.
-    Taip pat apžvelgtoje literatūroje nepavyko aptikti recenzuoto darbo, taikančio TFT \ce{KD_{2,5}} prognozei, nors būtent ši architektūra kurta kaip interpretuojamas laiko eilučių modelis.
 
     %------------------------------------------------------------------
 
@@ -528,31 +514,32 @@
 
     Už oro taršos srities ribų KNN ir neuroniniai tinklai tiesiogiai lyginti įvairiuose laiko eilučių uždaviniuose.
     Tokiuose palyginimuose neuroniniai tinklai dažnai pasiekia aukštesnį tikslumą, ypač ilgesniems prognozės horizontams.
-    \cite{zamani2008} vėjo bangų prognozėje nustatė, kad vienos valandos horizonte KNN pranoko dirbtinį neuroninį tinklą, tačiau trijų ir šešių valandų horizontuose pirmavo neuroninis tinklas; ekstremaliems pikams jis taip pat buvo tikslesnis, nes KNN, vidurkindamas kaimynus, išlygina staigius svyravimus.
-    Palyginimo rezultatas taigi priklauso nuo prognozės horizonto.
+    \cite{zamani2008} vėjo bangų prognozėje nustatė, kad vienos valandos horizonte KNN pranoko dirbtinį neuroninį tinklą, tačiau trijų ir šešių valandų horizontuose pirmavo neuroninis tinklas.
+    Jis taip pat buvo tikslesnis ekstremaliems pikams, nes KNN vidurkindamas kaimynus, išlygina staigius svyravimus.
+    Taigi palyginimo rezultatas priklauso nuo prognozės horizonto.
 
-    Stipriausią neuroninių tinklų pranašumo įrodymą vidutiniam horizontui pateikia \cite{windler2019}, lygindami svertinį artimiausių kaimynų metodą, statistinį eksponentinio glodinimo modelį TBATS ir gilųjį tiesioginio sklidimo tinklą elektros kainos prognozei iki 29 dienų į priekį.
-    Gilusis tinklas statistiškai reikšmingai pranoko kitus metodus net tolimam horizontui.
-    Svertinis kaimynų metodas šiame darbe naudotas su fiksuotu kaimynų skaičiumi ir Euklido atstumu be požymių svorių, taigi nepatobulintas.
-    Vis dėlto autoriai pabrėžia jo praktinį pranašumą: metodas paprastas, greitas, nereikalauja ilgo mokymo, o tikslumas daugeliu atvejų pakankamas.
-    Panašią išvadą duoda ir \cite{rana2014} valandinės elektros apkrovos prognozė, kurioje iteracinis neuroninis tinklas pranoko svertinį kaimynų metodą, naudotą kaip palyginimo bazę.
-
-    Klimato modelių ansambliavimo uždavinyje \cite{crawford2019} lygino šešis metodus, tarp jų svertinį KNN, neuroninį tinklą ir atsitiktinį mišką; geriausiai pasirodė atsitiktinis miškas. [TIKRINTI: rezultatų detalės iš pilno teksto -- santrauka jų tiesiogiai nenurodo.]
-    Tai primena, kad KNN pralaimi ne tik neuroniniams tinklams, bet ir medžių ansambliams, kai naudojamas be patobulinimų.
+    Neuroninių tinklų pranašumas gaunamas prognozuojant ilgesniam nei paros horizontui \cite{windler2019}.
+    Autoriai palygina svertinį artimiausių kaimynų metodą, statistinį eksponentinio glodinimo modelį TBATS ir gilųjį tiesioginio sklidimo tinklą elektros kainos prognozei iki 29 dienų į priekį.
+    Neuroninis tinklas pranoko kitus metodus visame 29 dienų horizonte.
+    Svertinis kaimynų metodas šiame darbe naudotas su fiksuotu kaimynų skaičiumi ir Euklido atstumu be požymių svorių.
+    Svoriai čia skiriami patiems kaimynams.
+%    Klimato modelių ansambliavimo uždavinyje \cite{crawford2019} lygino šešis metodus, tarp jų svertinį KNN, neuroninį tinklą ir atsitiktinį mišką; geriausiai pasirodė atsitiktinis miškas. [TIKRINTI: rezultatų detalės iš pilno teksto -- santrauka jų tiesiogiai nenurodo.]
+%    Tai primena, kad KNN pralaimi ne tik neuroniniams tinklams, bet ir medžių ansambliams, kai naudojamas be patobulinimų.
 
     Yra ir priešingų atvejų.
-    \cite{fan2019} trumpalaikei galios apkrovos prognozei taiko svertinį KNN su atvirkštinio Euklido atstumo svoriu ir nustato, kad jis pranoksta tiek gryną KNN, tiek klasikinį statistinį autoregresinį slenkamojo vidurkio modelį ARMA, tiek atgalinio sklidimo neuroninį tinklą, kurio paklaidos buvo didelės ir nepastovios dėl mažo mokymo rinkinio.
-    Prognozės tikslumas buvo geras tiek pikų, tiek slėnio laikotarpiais, ypač slėniams.
+    \cite{fan2019} trumpalaikei galios apkrovos prognozei taiko KNN, kuriame kiekvienam kaimynui skiriamas atvirkštiniam Euklido atstumui lygus svoris.
+    Šis KNN metodas pranoko bazinį KNN, klasikinį statistinį autoregresinį slenkamojo vidurkio modelį ARMA bei atgalinio sklidimo neuroninį tinklą, kurio paklaidos buvo didelės ir nepastovios.
+    Autoriai tai sieja su mažu mokymo rinkiniu.
     Tai rodo, kad mažos mokymo imties sąlygomis KNN gali būti pranašesnis už neuroninį tinklą.
-    Verta pastebėti, kad išvadose autoriai nurodo ateityje ieškosią optimizuoto būdo svoriams parinkti, taigi svorių optimizavimo poreikį pripažįsta ir šios srities darbai.
+    Išvadose autoriai nurodo ateityje ieškosią optimizuoto būdo svoriams parinkti, taigi svorių optimizavimo poreikį pripažįsta ir šios srities darbai.
 
-    Platų palyginimą pateikia \cite{parmezan2019}, 95 duomenų rinkiniuose lygindami vienuolika statistinių ir mašininio mokymosi prognozatorių.
-    SARIMA -- ARMA plėtinys, papildytas integravimo ir sezonine komponentėmis -- buvo vienintelis statistinis metodas, pranokstantis dirbtinį neuroninį tinklą, atramos vektorių mašiną ir KNN, tačiau be statistiškai reikšmingo skirtumo ir didesnio parametrų skaičiaus sąskaita.
+    Platų palyginimą pateikia \cite{parmezan2019}, 95 duomenų rinkiniuose lygindami vienuolika statistinių ir mašininio mokymosi prognozavimo metodų.
+    SARIMA-ARMA plėtinys, papildytas integravimo ir sezonine komponentėmis buvo vienintelis statistinis metodas, pranokstantis dirbtinį neuroninį tinklą, atramos vektorių mašiną ir KNN, tačiau be statistiškai reikšmingo skirtumo ir didesnio parametrų skaičiaus sąskaita.
     Tai rodo, kad KNN gali būti konkurencingas su neuroniniais tinklais laiko eilučių prognozėje.
 
-    Apibendrinant, palyginimų literatūra nėra vienareikšmė: neuroniniai tinklai dažniau tikslesni ilgesniems horizontams ir pikams, tačiau KNN išlieka konkurencingas trumpiems horizontams ir mažoms imtims, be to, pasižymi paprastumu ir skaidrumu.
-    Svarbu ir tai, kad beveik visuose palyginimuose KNN dalyvauja be požymių svorių -- lyginamas nepatobulintas metodas, todėl iš šių darbų negalima spręsti, kiek atotrūkį sumažintų svorių optimizavimas.
-    Dėl to KNN vertė matuotina ne vien tikslumu, bet ir interpretuojamumu bei galimybe kontroliuoti, kada prognozė teikiama -- šios savybės aptariamos toliau.
+    Palyginimų literatūra nesutampa.
+    Metodo tinkamumas konkrečiam horizontui priklauso nuo srities ir turimų duomenų.
+    Beveik visuose palyginimuose KNN taikomas be požymių svorių, todėl iš šių darbų negalima spręsti, kiek KNN prognozavimo tikslumą pagerintų svorių optimizavimas.
 
     %------------------------------------------------------------------
 
@@ -568,55 +555,87 @@
     Tipiškas pavyzdys yra gilieji neuroniniai tinklai.
 
     Interpretuojami modeliai atsako į klausimą, kaip rezultatas gautas, nes jų veikimas matomas tiesiogiai.
-    Skaičiavimai atliekami pagal užrašytas formules, o ne paslėpti tarp milijonų parametrų.
-    Tokiems modeliams priskiriami sprendimų medžiai, tiesinė regresija ir artimiausių kaimynų metodas.
-    Pastarojo atveju prognozė sudaroma iš konkrečių istorinių situacijų, kurias galima parodyti, o svoriai atstumo funkcijoje rodo, kurie požymiai lėmė jų atranką.
+    Tokiems modeliams priskiriami sprendimų medžiai, tiesinė regresija ir k artimiausių kaimynų metodas.
+    KNN atveju prognozė sudaroma iš konkrečių pavyzdžių, kuriuos galima parodyti, o svoriai atstumo funkcijoje rodo, kurie požymiai lėmė jų atranką.
     Todėl interpretuojamam modeliui papildomų aiškinimo priemonių nereikia.
 
-    Šią perskyrą aštriausiai formuluoja \cite{rudin2019}: aukštos svarbos sprendimams juodosios dėžės modelių aiškinimas post hoc metodais yra ydinga praktika, nes paaiškinimas, kuris tik apytiksliai atkuria modelį, gali būti klaidinantis, ir tokiais atvejais siūloma iš karto naudoti interpretuojamus modelius.
-    Autorė taip pat ginčija paplitusią nuostatą, kad tarp tikslumo ir interpretuojamumo visada egzistuoja kompromisas -- struktūrizuotiems duomenims su prasmingais požymiais interpretuojami modeliai neretai pasiekia palyginamą tikslumą.
-    Ši pozicija tiesiogiai palaiko interpretuojamo metodo tobulinimo kryptį: užuot aiškinus juodąją dėžę, verta patikrinti, ar patobulintas skaidrus metodas gali pasiekti konkurencingą tikslumą.
+    Tai formuluoja C Rudin~\cite{rudin2019}: aukštos svarbos sprendimams juodosios dėžės modelių aiškinimas \textit{post hoc} metodais yra ydinga praktika, nes paaiškinimas, kuris tik apytiksliai atkuria modelį, gali būti klaidinantis, ir tokiais atvejais siūloma iš karto naudoti interpretuojamus modelius.
+    Autorė taip pat ginčija paplitusią nuostatą, kad tarp tikslumo ir interpretuojamumo visada egzistuoja kompromisas.
+    Struktūrizuotiems duomenims su prasmingais požymiais interpretuojami modeliai neretai pasiekia palyginamą tikslumą.
+    Ši pozicija tiesiogiai palaiko interpretuojamo KNN metodo tobulinimo kryptį.
+    Užuot aiškinus juodąją dėžę, verta patikrinti, ar patobulintas skaidrus metodas gali pasiekti konkurencingą tikslumą.
 
     %------------------------------------------------------------------
 
     \subsection{ES dirbtinio intelekto reglamentas}
     %------------------------------------------------------------------
 
-    Interpretuojamumo klausimas turi ir teisinę pusę.
-    Europos Sąjungos dirbtinio intelekto reglamentas \cite{reglamentas2024} dirbtinio intelekto sistemas skirsto pagal keliamą riziką: nepriimtinos rizikos sistemos draudžiamos, didelės rizikos sistemoms keliami griežti reikalavimai, ribotos ir minimalios rizikos sistemoms -- tik skaidrumo ar jokių įpareigojimų.
-    Didelės rizikos kategorijai priskiriamos sistemos, naudojamos, be kita ko, kritinėje infrastruktūroje ir esminėse viešosiose paslaugose.
+    Interpretuojamumo poreikį stiprina ir reguliacinė aplinka.
+    Europos Sąjungos dirbtinio intelekto reglamentas sistemas skirsto pagal keliamą riziką: kuo ji didesnė, tuo griežtesni reikalavimai \cite{reglamentas2024}.
+    Didelės rizikos sistemoms keliamas skaidrumo reikalavimas: jų veikimas turi būti pakankamai aiškus, kad diegėjas galėtų teisingai suprasti ir panaudoti gautą rezultatą \cite{reglamentas2024}.
 
-    Didelės rizikos sistemoms reglamentas kelia skaidrumo reikalavimą: sistema turi veikti taip, kad ją naudojantis asmuo galėtų interpretuoti gaunamą rezultatą ir tinkamai jį panaudoti.
-    Verta pažymėti, kad pačiame reglamente vartojama skaidrumo, o ne paaiškinamumo sąvoka, tačiau praktikoje šis reikalavimas nukreipia į tuos pačius metodus: arba modelis interpretuojamas pats savaime, arba jo rezultatai paaiškinami papildomomis priemonėmis.
-    Mašininio mokymosi modeliams sudėtingėjant ir plintant, tikėtina, kad tokie reikalavimai apims vis daugiau sričių, kuriose modelių rezultatais remiasi sprendimai.
-
-    Oro taršos prognozės kontekste tai reiškia štai ką.
-    Jei prognozės pagrindu priimami viešojo administravimo sprendimai -- eismo ribojimai, įspėjimai gyventojams, sveikatos apsaugos priemonės -- už sprendimą atsakingas asmuo turi galėti supranti, kodėl modelis prognozuoja būtent tokią koncentraciją.
-    Interpretuojamas modelis, kuris parodo konkrečias istorines situacijas, iš kurių sudaryta prognozė, ir gali pasakyti, kada patikimos prognozės pateikti negali, šį reikalavimą tenkina iš prigimties, o juodosios dėžės modeliui reikėtų papildomo paaiškinimo sluoksnio su visomis jo ribomis, aptartomis ankstesniame poskyryje.
-    Tai pagrindžia, kodėl verta tirti, ar patobulintas interpretuojamas metodas gali pasiekti giliesiems modeliams konkurencingą tikslumą.
+    Kai modelio rezultatu remiasi žmogaus priimamas sprendimas, vien tikslumo nebepakanka, reikia ir suprantamumo.
+    Jei oro taršos prognoze grindžiami viešojo administravimo veiksmai, tokie kaip eismo ribojimai, įspėjimai gyventojams ar sveikatos apsaugos priemonės, už juos atsakingas asmuo turi galėti suprasti, kodėl modelis prognozuoja būtent tokią koncentraciją.
+    Interpretuojamas modelis šį poreikį tenkina iš prigimties.
+    Jis parodo konkrečius istorinius pavyzdžius, iš kurių sudaryta prognozė, ir gali nurodyti, kada patikimos prognozės pateikti negali.
+%    Interpretuojamumo klausimas turi ir teisinę pusę.
+%    Europos Sąjungos dirbtinio intelekto reglamentas \cite{reglamentas2024} dirbtinio intelekto sistemas skirsto pagal keliamą riziką: nepriimtinos rizikos sistemos draudžiamos, didelės rizikos sistemoms keliami griežti reikalavimai, ribotos ir minimalios rizikos sistemoms -- tik skaidrumo ar jokių įpareigojimų.
+%    Didelės rizikos kategorijai priskiriamos sistemos, naudojamos kritinėje infrastruktūroje ir esminėse viešosiose paslaugose.
+%
+%    Didelės rizikos sistemoms reglamentas kelia skaidrumo reikalavimą: sistema turi veikti taip, kad ją naudojantis asmuo galėtų interpretuoti gaunamą rezultatą ir tinkamai jį panaudoti.
+%    Verta pažymėti, kad pačiame reglamente vartojama skaidrumo, o ne paaiškinamumo sąvoka, tačiau praktikoje šis reikalavimas nukreipia į tuos pačius metodus: arba modelis interpretuojamas pats savaime, arba jo rezultatai paaiškinami papildomomis priemonėmis.
+%    Mašininio mokymosi modeliams sudėtingėjant ir plintant, tikėtina, kad tokie reikalavimai apims vis daugiau sričių, kuriose modelių rezultatais remiasi sprendimai.
+%
+%    Jei oro taršos prognozės pagrindu priimami viešojo administravimo sprendimai, tokie kaip eismo ribojimai, įspėjimai gyventojams, sveikatos apsaugos priemonės, už sprendimą atsakingas asmuo turi galėti suprasti, kodėl modelis prognozuoja būtent tokią koncentraciją.
+%    Interpretuojamas modelis, kuris parodo konkrečias istorines situacijas, iš kurių sudaryta prognozė, ir gali pasakyti, kada patikimos prognozės pateikti negali, šį reikalavimą tenkina iš prigimties, o juodosios dėžės modeliui reikėtų papildomo paaiškinimo sluoksnio su visomis jo ribomis, aptartomis ankstesniame poskyryje.
+%    Tai pagrindžia, kodėl verta tirti, ar patobulintas interpretuojamas metodas gali pasiekti giliesiems modeliams konkurencingą tikslumą.
 
 
     %==================================================================
 
 
     \section{Tyrimo naujumas}
-    %==================================================================
+%==================================================================
 
-    Iš apžvelgtos literatūros pirmiausia matyti bendra tendencija: požymių svorių traktavimas kaip optimizuojamų parametrų KNN prognozę gerina \cite{wettschereck1997, jafarizadeh2022, junk2015}, tačiau laiko eilučių regresijoje šis principas iki galo neišplėtotas.
-    Svorių optimizavimo poreikį daugiamatėje KNN laiko eilučių regresijoje tiesiogiai įvardija \cite{alqahtani2013}, o \cite{fan2019} jį nurodo kaip būsimą darbą.
-    Šiame fone išryškėja dvi viena kitą papildančios spragos.
+    Šiame darbe siūlomas patobulintas KNN metodas su svertiniu Euklido atstumu, kurio svoriai randami daugiakriteriniu optimizavimu, papildytas atsisakymo mechanizmu ir pritaikytas \ce{KD_{2,5}} koncentracijos prognozei.
 
-    Pirma, \textbf{padengimas kaip optimizavimo tikslas}.
-    Atsisakymo mechanizmas KNN regresijoje yra retas \cite{denis2020} ir netaikytas taršos prognozei.
-    Padengimo ir paklaidos kompromisas kaip tiesioginis optimizavimo tikslas naudojamas giliuosiuose tinkluose \cite{geifman2019}, tačiau KNN metode kartu su svorių optimizavimu -- ne.
-    Esami daugiakriteriniai KNN darbai \cite{dong2021, moldovan2021, paul2015} optimizuoja kaimynų skaičių arba požymių atranką, o ne atstumo funkcijos svorius, ir nenaudoja tikslų poros ,,paklaida + atsisakymo padengimas``.
+    \begin{enumerate}
 
-    Antra, \textbf{interpretuojamas patobulintas KNN \ce{KD_{2,5}} srityje}.
-    Bibliometriniai duomenys ir srities apžvalgos \cite{zhou2024} rodo, kad \ce{KD_{2,5}} prognozę valdo juodosios dėžės gilieji modeliai, o KNN naudojamas tik bazinis ir pralaimi \cite{daneshyazdi2020}.
-    Skaidraus, kaimynais grindžiamo metodo, kuris būtų konkurencingas giliesiems modeliams ir galėtų pasakyti, kada patikimos prognozės pateikti negali, šioje srityje nėra.
-    Interpretuojamumo vertę savarankiškai pagrindžia tiek metodologinė literatūra \cite{rudin2019}, tiek ES dirbtinio intelekto reglamento skaidrumo reikalavimai.
+        \item \textbf{Svertinis Euklido atstumas.}
+        Įprastame KNN visi požymiai atstumo funkcijoje turi vienodą svorį, todėl mažai informatyvūs požymiai turi tokią pačią svarbą kaip ir informatyvūs požymiai.
+        Metodas tobulinamas siekiant, kad skaidrus $k$ artimiausių kaimynų metodas taptų konkurencingas sudėtingiems neuroniniams tinklams.
 
-    Šios spragos kartu apibrėžia tyrimo kryptį: KNN metodas su svertiniu Euklido atstumu, kurio svoriai randami daugiakriteriniu optimizavimu derinant prognozės paklaidą ir padengimą, su atsisakymo mechanizmu, taikomas \ce{KD_{2,5}} koncentracijos prognozei ir lyginamas su neuroniniais tinklais.
+        \item \textbf{Daugiakriterinis svorių optimizavimas pagal tikslumą ir padengimą.}
+        Svoriai ieškomi ne vien mažinant prognozės paklaidą, bet kartu vertinant, kada modelis apskritai gali pateikti patikimą prognozę.
+        Taip metodas įgyja gebėjimą atsisakyti prognozės, kai duomenyse nėra pakankamai panašių istorinių pavyzdžių.
+        Tai gerina interpretuojamumą.
+        Matoma ne tik prognozė ir konkretūs pavyzdžiai, iš kurių ji sudaryta, bet ir patys svoriai, kurie nusako, kurie požymiai yra svarbesni prognozei.
+        Atsisakymo mechanizmas parodo, kada modelis neturi pakankamo pagrindo prognozei.
+        Juodosios dėžės modelis prognozę pateikia visada.
+
+        \item \textbf{Pritaikymas oro taršos prognozei.}
+        Oro taršos prognozavimo srityje vyrauja gilieji neuroniniai tinklai, o KNN pasitelkiamas retai ir dažniausiai kaip bazinis metodas.
+        Todėl lieka neatsakyta, kokį tikslumą šioje srityje pasiekia patobulintas KNN su svertiniu Euklido atstumu.
+
+    \end{enumerate}
+
+    Patobulintas KNN su svertiniu Euklido atstumu bus palygintas su naivia prognoze, baziniu KNN, MLP, LSTM ir TFT modeliu.
+
+%    Iš apžvelgtos literatūros pirmiausia matyti bendra tendencija: požymių svorių traktavimas kaip optimizuojamų parametrų KNN prognozę gerina \cite{wettschereck1997, jafarizadeh2022, junk2015}, tačiau laiko eilučių regresijoje šis principas iki galo neišplėtotas.
+%    Svorių optimizavimo poreikį daugiamatėje KNN laiko eilučių regresijoje tiesiogiai įvardija \cite{alqahtani2013}, o \cite{fan2019} jį nurodo kaip būsimą darbą.
+%    Šiame fone išryškėja dvi viena kitą papildančios spragos.
+%
+%    Pirma, \textbf{padengimas kaip optimizavimo tikslas}.
+%    Atsisakymo mechanizmas KNN regresijoje yra retas \cite{denis2020} ir netaikytas taršos prognozei.
+%    Padengimo ir paklaidos kompromisas kaip tiesioginis optimizavimo tikslas naudojamas giliuosiuose tinkluose \cite{geifman2019}, tačiau KNN metode kartu su svorių optimizavimu -- ne.
+%    Esami daugiakriteriniai KNN darbai \cite{dong2021, moldovan2021, paul2015} optimizuoja kaimynų skaičių arba požymių atranką, o ne atstumo funkcijos svorius, ir nenaudoja tikslų poros ,,paklaida + atsisakymo padengimas``.
+%
+%    Antra, \textbf{interpretuojamas patobulintas KNN \ce{KD_{2,5}} srityje}.
+%    Bibliometriniai duomenys ir srities apžvalgos \cite{zhou2024} rodo, kad \ce{KD_{2,5}} prognozę valdo juodosios dėžės gilieji modeliai, o KNN naudojamas tik bazinis ir pralaimi \cite{daneshyazdi2020}.
+%    Skaidraus, kaimynais grindžiamo metodo, kuris būtų konkurencingas giliesiems modeliams ir galėtų pasakyti, kada patikimos prognozės pateikti negali, šioje srityje nėra.
+%    Interpretuojamumo vertę savarankiškai pagrindžia tiek metodologinė literatūra \cite{rudin2019}, tiek ES dirbtinio intelekto reglamento skaidrumo reikalavimai.
+%
+%    Šios spragos kartu apibrėžia tyrimo kryptį: KNN metodas su svertiniu Euklido atstumu, kurio svoriai randami daugiakriteriniu optimizavimu derinant prognozės paklaidą ir padengimą, su atsisakymo mechanizmu, taikomas \ce{KD_{2,5}} koncentracijos prognozei ir lyginamas su neuroniniais tinklais.
 
     % Visos citatos konvertuotos i \cite (2026-08-29), todel \nocite{*} nebereikalingas.
     % longtermlstm (Bengio ir kt., 1994) turi PDF, bet tekste dar necituojamas.

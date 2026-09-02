@@ -345,17 +345,17 @@
     bdsk-url-1 = {https://doi.org/10.1007/BF02551274},
     file = {./dokumentai/straipsniai/nt/cybenko.pdf} }
 
-@ARTICLE{longtermlstm,
-    author = {Bengio, Y. and Simard, P. and Frasconi, P.},
-    journal = {IEEE Transactions on Neural Networks},
-    title = {Learning long-term dependencies with gradient descent is difficult},
-    year = {1994},
-    volume = {5},
-    number = {2},
-    pages = {157-166},
-    keywords = {Recurrent neural networks;Production;Delay effects;Intelligent networks;Neural networks;Discrete transforms;Computer networks;Cost function;Neurofeedback;Displays},
-    doi = {10.1109/72.279181},
-    file = {./dokumentai/straipsniai/nt/Learning_long-term_dependencies_with_gradient_descent_is_difficult.pdf}, }
+%@ARTICLE{longtermlstm,
+%    author = {Bengio, Y. and Simard, P. and Frasconi, P.},
+%    journal = {IEEE Transactions on Neural Networks},
+%    title = {Learning long-term dependencies with gradient descent is difficult},
+%    year = {1994},
+%    volume = {5},
+%    number = {2},
+%    pages = {157-166},
+%    keywords = {Recurrent neural networks;Production;Delay effects;Intelligent networks;Neural networks;Discrete transforms;Computer networks;Cost function;Neurofeedback;Displays},
+%    doi = {10.1109/72.279181},
+%    file = {./dokumentai/straipsniai/nt/Learning_long-term_dependencies_with_gradient_descent_is_difficult.pdf}, }
 
 % PATVIRTINTA 2026-08-28 (is PDF: Neural Computation 9(8), 1735-1780)
 
@@ -475,15 +475,17 @@
     isbn = {978-92-832-0175-5}
 }
 
-@book{walton2015,
-    title = "Understanding the Health Impacts of Air Pollution in London",
-    abstract = "A new report, published by the Mayor of London, is the world{\textquoteright}s first to quantify the health effects of nitrogen dioxide, finding that up to 9,500 people die early each year in London due to long-term exposure to air pollution. This is more than twice as many as previously thought. Report author, Dr Heather Walton, Environmental Research Group, said: The evidence on the health effects of nitrogen dioxide has strengthened in recent years, including evidence linking long-term exposure to nitrogen dioxide with mortality. It is now thought that there is an additional effect beyond that previously quantified for the effects of long-term exposure to PM2.5. This report quantifies the possible maximum size of this additional effect in London in 2010, expressed as loss of life years and equivalent deaths, acknowledging uncertainties such as the contribution from traffic pollutants other than NO2.{\textquoteright} ",
-    author = "Walton, \{Heather Anne\} and David Dajnak and Beevers, \{Sean David\} and Williams, \{Martin Lloyd\} and Paul Watkiss and Alistair Hunt",
-    year = "2015",
-    month = jul,
-    day = "14",
-    language = "English",
-    publisher = "Transport for London and the Greater London Authority",
+@techreport{walton2015,
+    author = {Walton, Heather Anne and Dajnak, David and
+ Beevers, Sean David and Williams, Martin Lloyd and
+ Watkiss, Paul and Hunt, Alistair},
+    title = {Understanding the Health Impacts of Air Pollution in London},
+    institution = {{Transport for London and the Greater London Authority}},
+    year = {2015},
+    month = {7},
+    langid = {english},
+    url = {},
+    urldate = {},
 }
 
 @article{harrison2012,
@@ -611,14 +613,13 @@
     year = {2024},
     bdsk-url-1 = {https://doi.org/10.1186/s40537-024-00973-y} }
 
-@misc{anava2016,
-    title = {k*-Nearest Neighbors: From Global to Local},
-    author = {Oren Anava and Kfir Y. Levy},
+@article{anava2016,
+    author = {Anava, Oren and Levy, Kfir},
     year = {2017},
-    eprint = {1701.07266},
-    archivePrefix = {arXiv},
-    primaryClass = {stat.ML},
-    url = {https://arxiv.org/abs/1701.07266},
+    month = {01},
+    pages = {},
+    title = {k*-Nearest Neighbors: From Global to Local},
+    doi = {10.48550/arXiv.1701.07266}
 }
 
 % PATVIRTINTA 2026-07-04 (is PDF: J. Forecasting, DOI 10.1002/for.3093; pavarde Dakkon, ne Dakkoun)
@@ -646,41 +647,55 @@
 
 % PATVIRTINTA 2026-07-04: publikuota NeurIPS 2020 (proceedings autoriu tvarka: Zaoui, Denis, Hebiri)
 
-@misc{denis2020,
+@inproceedings{denis2020,
+    author = {Zaoui, Ahmed and Denis, Christophe and Hebiri, Mohamed},
     title = {Regression with reject option and application to kNN},
-    author = {Christophe Denis and Mohamed Hebiri and Ahmed Zaoui},
-    year = {2021},
-    eprint = {2006.16597},
-    archivePrefix = {arXiv},
-    primaryClass = {stat.ML},
-    url = {https://arxiv.org/abs/2006.16597},
+    year = {2020},
+    isbn = {9781713829546},
+    publisher = {Curran Associates Inc.},
+    address = {Red Hook, NY, USA},
+    abstract = {We investigate the problem of regression where one is allowed to abstain from predicting. We refer to this framework as regression with reject option as an extension of classification with reject option. In this context, we focus on the case where the rejection rate is fixed and derive the optimal rule which relies on thresholding the conditional variance function. We provide a semi-supervised estimation procedure of the optimal rule involving two datasets: a first labeled dataset is used to estimate both regression function and conditional variance function while a second unlabeled dataset is exploited to calibrate the desired rejection rate. The resulting predictor with reject option is shown to be almost as good as the optimal predictor with reject option both in terms of risk and rejection rate. We additionally apply our methodology with kNN algorithm and establish rates of convergence for the resulting kNN predictor under mild conditions. Finally, a numerical study is performed to illustrate the benefit of using the proposed procedure.},
+    booktitle = {Proceedings of the 34th International Conference on Neural Information Processing Systems},
+    articleno = {1685},
+    numpages = {10},
+    keywords = {regression, regression with reject option, kNN, predictor with reject option},
+    location = {Vancouver, BC, Canada},
+    series = {NIPS '20}
 }
 
 % Padengimo-rizikos kompromisas kaip OPTIMIZAVIMO TIKSLAS giliuose NN (3 skyriui):
 % artimiausias "padengimas kaip tikslas" pavyzdys, bet NE KNN -> patvirtina spraga.
 
-@misc{geifman2019,
-    title = {SelectiveNet: A Deep Neural Network with an Integrated Reject Option},
-    author = {Yonatan Geifman and Ran El-Yaniv},
+
+@InProceedings{geifman2019,
+    title = {{S}elective{N}et: A Deep Neural Network with an Integrated Reject Option},
+    author = {Geifman, Yonatan and El-Yaniv, Ran},
+    booktitle = {Proceedings of the 36th International Conference on Machine Learning},
+    pages = {2151--2159},
     year = {2019},
-    eprint = {1901.09192},
-    archivePrefix = {arXiv},
-    primaryClass = {cs.LG},
-    url = {https://arxiv.org/abs/1901.09192},
+    editor = {Chaudhuri, Kamalika and Salakhutdinov, Ruslan},
+    volume = {97},
+    series = {Proceedings of Machine Learning Research},
+    month = {09--15 Jun},
+    publisher = {PMLR},
+    pdf = {http://proceedings.mlr.press/v97/geifman19a/geifman19a.pdf},
+    url = {https://proceedings.mlr.press/v97/geifman19a.html},
+    abstract = {We consider the problem of selective prediction (also known as reject option) in deep neural networks, and introduce SelectiveNet, a deep neural architecture with an integrated reject option. Existing rejection mechanisms are based mostly on a threshold over the prediction confidence of a pre-trained network. In contrast, SelectiveNet is trained to optimize both classification (or regression) and rejection simultaneously, end-to-end. The result is a deep neural network that is optimized over the covered domain. In our experiments, we show a consistently improved risk-coverage trade-off over several well-known classification and regression datasets, thus reaching new state-of-the-art results for deep selective classification.}
 }
+
 
 % LMNN adaptacija REGRESIJAI (2 skyriui) - metrikos mokymasis regresijoje yra,
 % bet pilna matrica, ne grupiu svoriai, ne laiko eilutes.
 
-@article{assi2014,
-    author = {Assi, Kondo C. and Labelle, Hubert and Cheriet, Farida},
-    title = {Modified large margin nearest neighbor metric learning for regression},
-    journal = {IEEE Signal Processing Letters},
-    volume = {21},
-    number = {3},
-    pages = {292--296},
-    year = {2014}
-}
+%@article{assi2014,
+%    author = {Assi, Kondo C. and Labelle, Hubert and Cheriet, Farida},
+%    title = {Modified large margin nearest neighbor metric learning for regression},
+%    journal = {IEEE Signal Processing Letters},
+%    volume = {21},
+%    number = {3},
+%    pages = {292--296},
+%    year = {2014}
+%}
 
 % ..... Pozymiu svoriai
 
@@ -760,33 +775,42 @@
 }
 
 @article{paul2015,
-    author = {Paul, Sujoy and Das, Swagatam},
-    title = {Simultaneous feature selection and weighting -- an evolutionary multi-objective optimization approach},
+    title = {Simultaneous feature selection and weighting – An evolutionary multi-objective optimization approach},
     journal = {Pattern Recognition Letters},
     volume = {65},
-    pages = {51--59},
+    pages = {51-59},
     year = {2015},
-    doi = {10.1016/j.patrec.2015.07.007}
+    issn = {0167-8655},
+    doi = {https://doi.org/10.1016/j.patrec.2015.07.007},
+    url = {https://www.sciencedirect.com/science/article/pii/S016786551500210X},
+    author = {Sujoy Paul and Swagatam Das},
+    keywords = {Feature selection, Feature weighting, Evolutionary multi-objective optimization, MOEA/D, Inter- and intra-class distances},
 }
 
 @article{moldovan2021,
-    author = {Moldovan, Dorin and Slowik, Adam},
     title = {Energy consumption prediction of appliances using machine learning and multi-objective binary grey wolf optimization for feature selection},
     journal = {Applied Soft Computing},
     volume = {111},
     pages = {107745},
     year = {2021},
-    doi = {10.1016/j.asoc.2021.107745}
+    issn = {1568-4946},
+    doi = {https://doi.org/10.1016/j.asoc.2021.107745},
+    url = {https://www.sciencedirect.com/science/article/pii/S1568494621006669},
+    author = {Dorin Moldovan and Adam Slowik},
+    keywords = {Grey wolf optimizer, Multi-objective, Feature selection, Energy consumption prediction of appliances, MOORA}
 }
 
 @article{dong2021,
-    author = {Dong, Yunxuan and Ma, Xuejiao and Fu, Tonglin},
     title = {Electrical load forecasting: A deep learning approach based on K-nearest neighbors},
     journal = {Applied Soft Computing},
     volume = {99},
     pages = {106900},
     year = {2021},
-    doi = {10.1016/j.asoc.2020.106900}
+    issn = {1568-4946},
+    doi = {https://doi.org/10.1016/j.asoc.2020.106900},
+    url = {https://www.sciencedirect.com/science/article/pii/S1568494620308383},
+    author = {Yunxuan Dong and Xuejiao Ma and Tonglin Fu},
+    keywords = {Electrical load interval forecasting, Deep learning approach, -nearest neighbors, Kernel density estimation}
 }
 
 % ..... Palyginimai ir taikymai kitose srityse
@@ -805,51 +829,57 @@
     abstract = {One month-ahead electricity prices open up a great potential for manufacturing companies that aim at reducing energy costs. On the machine level, an energy cost-oriented scheduling can be realized through determining the least electricity cost-intensive launch times for job processing during a day. To obtain reliable price information at production planning stage in advance, well-performing forecast models are required. In this paper, we apply a Weighted Nearest Neighbor (WNN) approach, a TBATS approach, and a Deep Feedforward Neural Network (DFNN) approach to forecast EPEX Spot day-ahead electricity prices of the European Energy Exchange in Germany/Austria, while accounting for a forecast horizon of up to one month. Model performances are compared by means of established error measures as well as by adjusted error measures to better interpret results from a production planner's point of view. For evaluation purposes, 1357 different forecasts were computed for each of the methods, allowing valid conclusions as to their performance. The results show that all approaches lead to acceptable accuracies. However, the DFNN outperforms WNN and TBATS, providing well-fitting forecasts even 29 days ahead.}
 }
 
-@article{fan2019,
-    author = {Fan, Guo-Feng and Guo, Yan-Hui and Zheng, Jia-Mei and Hong, Wei-Chiang},
-    title = {Application of the weighted k-nearest neighbor algorithm for short-term load forecasting},
-    journal = {Energies},
-    volume = {12},
-    number = {5},
-    pages = {916},
-    year = {2019},
-    doi = {10.3390/en12050916}
+@Article{fan2019,
+    AUTHOR = {Fan, Guo-Feng and Guo, Yan-Hui and Zheng, Jia-Mei and Hong, Wei-Chiang},
+    TITLE = {Application of the Weighted K-Nearest Neighbor Algorithm for Short-Term Load Forecasting},
+    JOURNAL = {Energies},
+    VOLUME = {12},
+    YEAR = {2019},
+    NUMBER = {5},
+    ARTICLE-NUMBER = {916},
+    URL = {https://www.mdpi.com/1996-1073/12/5/916},
+    ISSN = {1996-1073},
+    ABSTRACT = {In this paper, the historical power load data from the National Electricity Market (Australia) is used to analyze the characteristics and regulations of electricity (the average value of every eight hours). Then, considering the inverse of Euclidean distance as the weight, this paper proposes a novel short-term load forecasting model based on the weighted k-nearest neighbor algorithm to receive higher satisfied accuracy. In addition, the forecasting errors are compared with the back-propagation neural network model and the autoregressive moving average model. The comparison results demonstrate that the proposed forecasting model could reflect variation trend and has good fitting ability in short-term load forecasting.},
+    DOI = {10.3390/en12050916}
 }
 
 @article{parmezan2019,
-    author = {Parmezan, Antonio R. S. and Souza, Vinicius M. A. and Batista, Gustavo E. A. P. A.},
-    title = {Evaluation of statistical and machine learning models for time prediction: Identifying the state-of-the-art and the best conditions for the use of each model},
+    title = {Evaluation of statistical and machine learning models for time series prediction: Identifying the state-of-the-art and the best conditions for the use of each model},
     journal = {Information Sciences},
     volume = {484},
-    pages = {302--337},
+    pages = {302-337},
     year = {2019},
-    doi = {10.1016/j.ins.2019.01.076}
+    issn = {0020-0255},
+    doi = {https://doi.org/10.1016/j.ins.2019.01.076},
+    url = {https://www.sciencedirect.com/science/article/pii/S0020025519300945},
+    author = {Antonio Rafael Sabino Parmezan and Vinicius M.A. Souza and Gustavo E.A.P.A. Batista},
+    keywords = {Univariate analysis, Automatic parameter tuning, Multi-step-ahead prediction, Time series forecasting, Data mining},
 }
 
 % PATVIRTINTA 2026-07-04 (web: IJCNN 2014, Pekinas; INN = iterative neural network)
 
-@INPROCEEDINGS{rana2014,
-    author = {Rana, Mashud and Koprinska, Irena and Troncoso, Alicia},
-    booktitle = {2014 International Joint Conference on Neural Networks (IJCNN)},
-    title = {Forecasting hourly electricity load profile using neural networks},
-    year = {2014},
-    volume = {},
-    number = {},
-    pages = {824-831},
-    keywords = {Electricity;Forecasting;Artificial neural networks;Predictive models;Iterative methods;Load modeling;Australia;electricity load prediction;iterative neural network;mutual information},
-    doi = {10.1109/IJCNN.2014.6889489} }
+%@INPROCEEDINGS{rana2014,
+%    author = {Rana, Mashud and Koprinska, Irena and Troncoso, Alicia},
+%    booktitle = {2014 International Joint Conference on Neural Networks (IJCNN)},
+%    title = {Forecasting hourly electricity load profile using neural networks},
+%    year = {2014},
+%    volume = {},
+%    number = {},
+%    pages = {824-831},
+%    keywords = {Electricity;Forecasting;Artificial neural networks;Predictive models;Iterative methods;Load modeling;Australia;electricity load prediction;iterative neural network;mutual information},
+%    doi = {10.1109/IJCNN.2014.6889489} }
 
 
 % PATVIRTINTA 2026-07-04 (web: J. Hydrology 568, 160-173). TIKRINTI: DOI
 
-@article{crawford2019,
-    author = {Crawford, J. and Venkataraman, K. and Booth, J.},
-    title = {Developing climate model ensembles: A comparative case study},
-    journal = {Journal of Hydrology},
-    volume = {568},
-    pages = {160--173},
-    year = {2019}
-}
+%@article{crawford2019,
+%    author = {Crawford, J. and Venkataraman, K. and Booth, J.},
+%    title = {Developing climate model ensembles: A comparative case study},
+%    journal = {Journal of Hydrology},
+%    volume = {568},
+%    pages = {160--173},
+%    year = {2019}
+%}
 
 @INPROCEEDINGS{alqahtani2013,
     author = {Al-Qahtani, Fahad H. and Crone, Sven F.},
@@ -865,16 +895,16 @@
 
 % PATVIRTINTA 2026-07-04 (web: MDPI IJGI 7(6), 218)
 
-@article{cheng2018,
-    author = {Cheng, S. and Lu, F. and Peng, P. and Wu, S.},
-    title = {A spatiotemporal multi-view-based learning method for short-term traffic forecasting},
-    journal = {ISPRS International Journal of Geo-Information},
-    volume = {7},
-    number = {6},
-    pages = {218},
-    year = {2018},
-    doi = {10.3390/ijgi7060218}
-}
+%@article{cheng2018,
+%    author = {Cheng, S. and Lu, F. and Peng, P. and Wu, S.},
+%    title = {A spatiotemporal multi-view-based learning method for short-term traffic forecasting},
+%    journal = {ISPRS International Journal of Geo-Information},
+%    volume = {7},
+%    number = {6},
+%    pages = {218},
+%    year = {2018},
+%    doi = {10.3390/ijgi7060218}
+%}
 
 %@article{sudheer2015,
 %    author = {Sudheer, G. and Suseelatha, A.},
@@ -891,16 +921,17 @@
 % PRIDETA 2026-08-29 konvertuojant tekstines citatas i \cite.
 % Metaduomenys is bendru ziniu, ne is PDF - PATIKRINTI pries galutine versija.
 
-@article{deb2002,
-    author = {Deb, Kalyanmoy and Pratap, Amrit and Agarwal, Sameer and Meyarivan, T.},
-    title = {A fast and elitist multiobjective genetic algorithm: NSGA-II},
+@ARTICLE{deb2002,
+    author = {Deb, K. and Pratap, A. and Agarwal, S. and Meyarivan, T.},
     journal = {IEEE Transactions on Evolutionary Computation},
+    title = {A fast and elitist multiobjective genetic algorithm: NSGA-II},
+    year = {2002},
     volume = {6},
     number = {2},
-    pages = {182--197},
-    year = {2002},
-    doi = {10.1109/4235.996017}
-}
+    pages = {182-197},
+    keywords = {Genetic algorithms;Sorting;Computational complexity;Evolutionary computation;Computational modeling;Testing;Decision making;Associate members;Diversity reception;Constraint optimization},
+    doi = {10.1109/4235.996017} }
+
 
 @ARTICLE{zhangli2007,
     author = {Zhang, Qingfu and Li, Hui},
@@ -913,17 +944,24 @@
     keywords = {Evolutionary computation;Pareto optimization;Computational complexity;Sorting;Genetic algorithms;Optimization methods;Testing;Scalability;Computer science;Mathematical model;Computational complexity;decomposition;evolutionary algorithm;multiobjective optimization;Pareto optimality;Computational complexity;decomposition;evolutionary algorithm;multiobjective optimization;Pareto optimality},
     doi = {10.1109/TEVC.2007.892759} }
 
-
 @article{rudin2019,
+    abstract = {Black box machine learning models are currently being used for high-stakes decision making throughout society, causing problems in healthcare, criminal justice and other domains. Some people hope that creating methods for explaining these black box models will alleviate some of the problems, but trying to explain black box models, rather than creating models that are interpretable in the first place, is likely to perpetuate bad practice and can potentially cause great harm to society. The way forward is to design models that are inherently interpretable. This Perspective clarifies the chasm between explaining black boxes and using inherently interpretable models, outlines several key reasons why explainable black boxes should be avoided in high-stakes decisions, identifies challenges to interpretable machine learning, and provides several example applications where interpretable models could potentially replace black box models in criminal justice, healthcare and computer vision.},
     author = {Rudin, Cynthia},
-    title = {Stop explaining black box machine learning models for high stakes decisions and use interpretable models instead},
+    date = {2019/05/01},
+    date-added = {2026-09-01 22:53:59 +0300},
+    date-modified = {2026-09-01 22:53:59 +0300},
+    doi = {10.1038/s42256-019-0048-x},
+    id = {Rudin2019},
+    isbn = {2522-5839},
     journal = {Nature Machine Intelligence},
-    volume = {1},
     number = {5},
     pages = {206--215},
+    title = {Stop explaining black box machine learning models for high stakes decisions and use interpretable models instead},
+    url = {https://doi.org/10.1038/s42256-019-0048-x},
+    volume = {1},
     year = {2019},
-    doi = {10.1038/s42256-019-0048-x}
-}
+    bdsk-url-1 = {https://doi.org/10.1038/s42256-019-0048-x} }
+
 
 @misc{reglamentas2024,
     author = {{Europos Parlamentas ir Taryba}},
