@@ -34,9 +34,9 @@ Todėl autoriai teigia, kad vieno artimiausio kaimyno metode slypi pusė visos b
 Nors teorinis įrodymas gautas klasifikavimo uždaviniams, pati KNN idėja praktikoje plačiai taikoma ir regresijai bei laiko eilučių prognozavimui.
 
 Skirtingai nuo daugumos mašininio mokymosi metodų, KNN neturi mokymo etapo.
-\cite{wettschereck1997} tokius metodus vadina tingiuoju mokymusi (angl. \textit{lazy learning}). Metodas tiesiog saugo visą mokymo aibę, o pronozės skaičiavimą atideda iki užklausos pateikimo momento.
+\cite{wettschereck1997} tokius metodus vadina tingiuoju mokymusi (angl. \textit{lazy learning}). Metodas tiesiog saugo visą mokymo aibę, o prognozės skaičiavimą atideda iki užklausos pateikimo momento.
 KNN yra neparametrinis metodas, reiškiantis, kad jis nedaro išankstinių prielaidų apie duomenų pasiskirstymą.
-Taip pat, kadangi algoritmas neturi permokymo etapo, nauji duomenys panaudojami iš karto, o kiekvieną prognozė yra interpretuojama, nes ją galima paaiškinti parodant kaimynus, iš kurių ji sudaryta.
+Taip pat, kadangi algoritmas neturi permokymo etapo, nauji duomenys panaudojami iš karto, o kiekviena prognozė yra interpretuojama, nes ją galima paaiškinti parodant kaimynus, iš kurių ji sudaryta.
 Tačiau šis metodas turi ir trūkumų.
 Kiekvienai prognozei atstumas skaičiuojamas iki visų istorinių pavyzdžių, todėl skaičiavimo kaštai tenka prognozės momentui ir auga kartu su istorijos ilgiu \cite{halder2024}.
 Didelės dimensijos duomenyse metodo efektyvumas mažėja, nes atstumai tarp taškų praranda skiriamąją gebą \cite{halder2024}.

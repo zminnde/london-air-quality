@@ -84,3 +84,27 @@ http-client.private.env.json
 
 # Github Copilot persisted session migrations, see: https://github.com/microsoft/copilot-intellij-feedback/issues/712#issuecomment-3322062215
 .idea/**/copilot.data.migration.*.xml
+# C++ / Python evaluator exchange
+cpp/optimizer_example
+cpp/population.csv
+cpp/objectives.csv
+
+literaturos_apzvalga_2/dokumentai/
+
+.DS_Store
+__pycache__/
+.idea/
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.run.xml
+*.toc
+*.synctex.gz
+*-SAVE-ERROR
+cpp/benchmark_python_function
+data/2_unscaled/
+data/3_scaled/

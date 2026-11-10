@@ -63,8 +63,42 @@ Paklaidos paviršiuje gali susidaryti lokalūs minimumai, todėl gradiento nusil
 Visgi jie pažymi, kad praktikoje tinklas retai įstringa sprendiniuose, kurie būtų reikšmingai prastesni už optimalų \cite{rumelhart1986}.
 
 Teorinį tokio tinklo pajėgumą apibrėžia universaliojo aproksimavimo teorema: vieno paslėpto sluoksnio tinklas su sigmoidine aktyvacijos funkcija gali norimu tikslumu aproksimuoti bet kokią tolydžią funkciją vienetiniame hiperkube \cite{cybenko1989}.
-Teorema tik įrodo tokio tinklo egzistavimą, tačiau nepateikia būdo, kaip surasti reikiamus tinklo svorius ar parinkti optimalų neuronų skaičių.
+Vėliau įrodyta, kad universalaus aproksimavimo savybė nepriklauso nuo konkrečios aktyvacijos funkcijos.
+Tokią savybę turi vieno paslėpto sluoksnio tinklas su bet kokia nemažėjančia aktyvacijos funkcija, kurios reikšmės kinta nuo 0 iki 1 (angl. \textit{squashing function}) \cite{hornik1989}.
+Nemažėjanti reiškia, kad didėjant argumentui funkcijos reikšmė nemažėja.
+Į šią klasę patenka ne tik sigmoidė, bet ir netolydžios, pavyzdžiui slenkstinė.
+Turėdamas pakankamai paslėptųjų neuronų, toks tinklas norimu tikslumu aproksimuoja bet kurią mačią funkciją.
+Universalumas kyla iš pačios architektūros, o ne iš aktyvacijos funkcijos parinkimo.
+Todėl praktinės modelių nesėkmės siejamos su nepakankamu mokymu, per mažu paslėptųjų neuronų skaičiumi arba stochastiniu, o ne deterministiniu ryšiu tarp įvesties ir išvesties \cite{hornik1989}.
 
+Leshno ir kt. \cite{leshno1993} įrodė, kad nemažėjimo ir kitimo nuo 0 iki 1 reikalavimas yra nebūtinas.
+Vieno paslėpto sluoksnio tinklas skaičiuoja funkciją:
+
+\begin{equation}
+    f(x) = \sum_{j=1}^{k} \beta_j \, \sigma(w_j \cdot x - \theta_j)
+    \label{eq:leshno}
+\end{equation}
+
+čia $k$ -- paslėptųjų neuronų skaičius, $w_j$ -- $j$-ojo paslėptojo neurono įvesties svorių vektorius, $\beta_j$ -- svoris, jungiantis $j$-ąjį paslėptąjį neuroną su išvesties neuronu, $\theta_j$ -- $j$-ojo neurono slenkstis, $\sigma$ -- lokaliai aprėžta ir dalimis tolydi aktyvacijos funkcija.
+Tokio pavidalo funkcijos norimu tikslumu aproksimuoja bet kurią tolydžią funkciją tada ir tik tada, kai $\sigma$ nėra polinomas \cite{leshno1993}.
+Aktyvacijos funkcija neprivalo būti nei tolydi, nei glodi, tačiau slenkstis $\theta_j$ yra būtinas.
+Be jo teorema negalioja \cite{leshno1993}.
+
+Šios teoremos nagrinėja tinklus, kurių gylis ribotas, o paslėptojo sluoksnio plotis gali būti kiek norima didelis.
+Giliesiems tinklams aktualus priešingas atvejis, kai plotis fiksuotas, o sluoksnių skaičius auga.
+Tokie tinklai taip pat yra universalūs aproksimatoriai \cite{kidger2020}.
+Pakanka, kad aktyvacijos funkcija būtų tolydi, neafininė (neužrašoma pavidalu $az + b$) ir bent viename taške būtų tolydžiai diferencijuojama su nenuline išvestine.
+Tuomet pakankamas paslėptųjų sluoksnių plotis yra:
+
+\begin{equation}
+    p = n + m + 2
+    \label{eq:kidger-plotis}
+\end{equation}
+
+čia $p$ -- kiekvieno paslėptojo sluoksnio neuronų skaičius, $n$ -- įvesties neuronų skaičius, $m$ -- išvesties neuronų skaičius \cite{kidger2020}.
+Toks tinklas aproksimuoja bet kurią tolydžią funkciją kompaktiškoje srityje, o keliama sąlyga yra tokia silpna, kad ją tenkina bet kuri praktikoje naudojama aktyvacijos funkcija \cite{kidger2020}.
+
+Šios teoremos tik įrodo tinkamo tinklo egzistavimą, tačiau nepateikia būdo, kaip surasti reikiamus tinklo svorius ar parinkti optimalų neuronų skaičių.
 Neuroninio tinklo svoriai yra vidiniai modelio parametrai, kurių kiekis priklausomai nuo architektūros gali būti itin didelis.
 Pavienės šių svorių reikšmės tiesiogiai neatskleidžia aiškios semantinės reikšmės, o pati prognozė gaunama per ilgą netiesinių transformacijų grandinę.
 Todėl modelis dažnai įvardijamas kaip sunkiai interpretuojama „juodoji dėžė“ (angl. \textit{black box}).
@@ -152,7 +186,7 @@ Prognozė pateikiama kvantiliais su neapibrėžtumo rėžiais visam horizontui �
 
     $s_i$ -- statiniai, laike nekintantys požymiai pvz. stebėjimo objekto kategorija ar geografinė vieta.
 
-Eilučių sekas pirmiausia apdoroja apdoroja LSTM koduotuvas (angl. \textit{encoder}) ir dekoderis (angl. \textit{decoder}), kurie užfiksuoja trumpalaikius dėsningumus bei pozicinį kodavimą.
+Eilučių sekas pirmiausia apdoroja LSTM koduotuvas (angl. \textit{encoder}) ir dekoderis (angl. \textit{decoder}), kurie užfiksuoja trumpalaikius dėsningumus bei pozicinį kodavimą.
 Tuomet daugiagalvis dėmesio sluoksnis sieja tolimus laiko momentus ir nustato ilgalaikes priklausomybes.
 Architektūroje išskiriami trys įvesčių tipai:
 \begin{itemize}

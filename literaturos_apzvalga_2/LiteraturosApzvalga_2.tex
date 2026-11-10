@@ -40,6 +40,7 @@
 \autorius{Mindaugas Žiemys}
 
 \vadovas{Linas Litvinas, Asist., Dr.}
+\recenzentas{Olga Kurasova, Prof., Dr.}
 
 \begin{document}
     \selectlanguage{lithuanian}
@@ -47,11 +48,66 @@
     \onehalfspacing
     \input{titulinis}
 
+    %==================================================================
+
+    \sectionnonum{Santrauka}
+    %==================================================================
+
+    Kietosios dalelės \ce{KD_{2,5}} yra kancerogeniškos ir kelia pavojų miestų gyventojų sveikatai.
+    Oro taršos monitoringo jutikliai brangūs ir neretai genda, todėl patikima kelių valandų oro taršos koncentracijos prognozė yra itin aktuali.
+    Oro taršos prognozavimo srityje vyrauja gilieji neuroniniai tinklai, kurie pasiekia aukštą tikslumą, tačiau veikia kaip sunkiai interpretuojamos juodosios dėžės.
+    Priimant prognoze paremtus sprendimus, tokius kaip eismo ribojimai ar įspėjimai gyventojams, vien tikslumo nepakanka.
+    Už sprendimą atsakingas žmogus turi suprasti, kodėl gauta tokia prognozė.
+    Alternatyva yra $k$ artimiausių kaimynų metodas, kuris prognozę sudaro iš konkrečių istorinių pavyzdžių, kuriuos galima parodyti, tačiau oro taršos darbuose įprastai jis taikomas bazinis, visiems požymiams suteikiant vienodą svarbą.
+    Darbo kryptis yra KNN metodo patobulinimas svertiniu Euklido atstumu, kurio svoriai randami daugiakriterinio optimizavimo algoritmu, papildytas atsisakymo mechanizmu.
+    Šis metodas palyginamas su neuroniniais tinklais Londono Merilebono kelio oro taršos laiko eilutėse.
+
+    \textbf{Raktiniai žodžiai:} \ce{KD_{2,5}}, oro tarša, laiko eilutės, prognozavimas, $k$ artimiausių kaimynų metodas, svertinis Euklido atstumas, požymių svoriai, daugiakriterinis optimizavimas, interpretuojamumas, neuroniniai tinklai.
+
+    %==================================================================
+
+    \begin{otherlanguage}{english}
+    \sectionnonum{Summary}
+    %==================================================================
+
+    Fine particulate matter \ce{PM_{2.5}} is carcinogenic and poses a health risk to urban populations.
+    Air pollution monitoring sensors are expensive and prone to failure, so a reliable forecast of pollutant concentration several hours ahead is of practical relevance.
+    Air pollution forecasting is dominated by deep neural networks, which achieve high accuracy but operate as hard-to-interpret black boxes.
+    When decisions such as traffic restrictions or public warnings are based on a forecast, accuracy alone is not sufficient -- the person responsible for the decision must understand why the forecast was obtained.
+    An alternative is the K-nearest neighbours method, which builds its forecast from concrete historical examples that can be shown, yet in air pollution studies it is usually applied in its basic form, giving every feature equal importance.
+    The direction of this thesis is an improvement of the KNN method with a weighted Euclidean distance, whose weights are found by a multi-objective optimisation algorithm, extended with a rejection mechanism.
+    The method is compared against neural networks on London Marylebone Road air pollution time series.
+
+    \textbf{Keywords:} \ce{PM_{2.5}}, air pollution, time series, forecasting, K-nearest neighbours, weighted Euclidean distance, feature weights, multi-objective optimisation, interpretability, neural networks.
+
+    \end{otherlanguage}
+
+    %==================================================================
+
     \singlespacing
 
     \tableofcontents
     \onehalfspacing
 
+    %==================================================================
+
+    \sectionnonum{Santrumpos}
+    %==================================================================
+
+    \begin{tabular}{rcp{.75\textwidth}}
+        {\ce{KD_{2,5}}} & {} & {kietosios dalelės, kurių skersmuo mažesnis nei 2,5~µm} \\
+    {\ce{KD10}} & {} & {kietosios dalelės, kurių skersmuo mažesnis nei 10~µm} \\
+    {KNN}       & {} & {$k$ artimiausių kaimynų metodas (angl. \textit{K-Nearest Neighbours})} \\
+    {MLP}       & {} & {daugiasluoksnis perceptronas (angl. \textit{Multilayer Perceptron})} \\
+    {LSTM}      & {} & {ilgos trumpalaikės atminties tinklas (angl. \textit{Long Short-Term Memory})} \\
+    {TFT}       & {} & {laiko suliejimo transformeris (angl. \textit{Temporal Fusion Transformer})} \\
+    {ARIMA}     & {} & {integruotas autoregresinis slenkamojo vidurkio modelis (angl. \textit{Autoregressive Integrated Moving Average})} \\
+    {PSO}       & {} & {dalelių spiečiaus optimizavimas (angl. \textit{Particle Swarm Optimization})} \\
+    {NSGA-II}   & {} & {nedominuojamo rūšiavimo genetinis algoritmas (angl. \textit{Non-dominated Sorting Genetic Algorithm II})} \\
+    {MOEA/D}    & {} & {dekompozicija grįstas daugiakriterinis evoliucinis algoritmas (angl. \textit{Multiobjective Evolutionary Algorithm based on Decomposition})} \\
+    {RMSE}      & {} & {vidutinė kvadratinė paklaida (angl. \textit{Root Mean Square Error})} \\
+    {MAE}       & {} & {vidutinė absoliučioji paklaida (angl. \textit{Mean Absolute Error})}
+    \end{tabular}
 
     %==================================================================
 
@@ -81,19 +137,20 @@
 
     \ce{KD_{2,5}} koncentracijai prognozuoti taikomi įvairūs metodai -- nuo klasikinių statistinių modelių iki šioje srityje vyraujančių giliųjų neuroninių tinklų \cite{wu2025}.
     Neuroniniai tinklai pasiekia aukštą tikslumą, tačiau veikia kaip sunkiai interpretuojamos juodosios dėžės ir jų mokymas reikalauja didelių skaičiavimo sąnaudų \cite{wu2025}.
-    Alternatyva -- paprastesni, interpretuojami metodai, tarp kurių yra K artimiausių kaimynų metodas, prognozę sudarantis tiesiogiai iš panašių istorinių įrašų.
+    Alternatyva -- paprastesni, interpretuojami metodai, tarp kurių yra $k$ artimiausių kaimynų metodas, prognozę sudarantis tiesiogiai iš panašių istorinių įrašų.
     Oro taršos prognozavimo darbuose KNN dažniausiai taikomas bazinis, nepatobulintas.
     Šiame darbe jį siekiama patobulinti atstumo funkcijoje požymiams priskiriant svorius, kurių reikšmės randamos optimizavimo būdu siekiant minimizuoti prognozės paklaidą.
 
-    \textbf{Darbo tikslas:} identifikuoti tyrimų spragą ir sukurti naują KNN metodą su svertiniu Euklido atstumu, palyginti jį su naivia prognoze, daugiasluoksniu perceptronu ir laiko suliejimo transformeriu.
+    \textbf{Darbo tikslas:} sukurti patobulintą KNN metodą su svertiniu Euklido atstumu ir palyginti jo \ce{KD_{2,5}} prognozavimo tikslumą su naivia prognoze, daugiasluoksniu perceptronu, LSTM ir TFT.
 
     \textbf{Darbo uždaviniai:}
     \begin{enumerate}
-        \item Atlikti duomenų normalizavimą, trūkstamų reikšmių tvarkymą, duomenų savybių inžineriją (dienos kategorija, valanda ir kiti);
-        \item Įgyvendinti naivų prognozavimo metodą kaip etaloną;
-        \item Išnagrinėti tyrimų spragą ir sukurti naują KNN metodą su svertiniu Euklido atstumu ir pateikti realizaciją \textit{Python} kalba;
-        \item Apmokyti daugiasluoksnio perceptrono modelį;
-        \item Apmokyti TFT giliojo mokymosi modelį;
+        \item Atlikti duomenų normalizavimą, trūkstamų reikšmių tvarkymą, duomenų savybių inžineriją (dienos kategorija, valanda ir kiti).
+        \item Įgyvendinti naivų prognozavimo metodą kaip etaloną.
+        \item Išnagrinėti tyrimų spragą ir sukurti patobulintą KNN metodą su svertiniu Euklido atstumu ir pateikti realizaciją \textit{Python} kalba.
+        \item Apmokyti daugiasluoksnio perceptrono modelį.
+        \item Apmokyti LSTM modelį.
+        \item Apmokyti TFT giliojo mokymosi modelį.
         \item Atlikti rezultatų analizę: palyginti visų metodų prognozavimo paklaidas ir nustatyti, kuris metodas duoda geriausius rezultatus.
     \end{enumerate}
 
@@ -122,7 +179,7 @@
 
     Ateities laikotarpis, kuriam prognozuojama, vadinamas prognozės horizontu \cite{hyndman}.
     Kuo ilgesnis prognozės horizontas, tuo didesnis ateities neapibrėžtumas, todėl ilgesnio horizonto prognozės paprastai yra mažiau tikslios.
-    Prognozuojama gali būti viena reikšmė $h$ žingsnių į priekį arba visos horizonto reikšmės $y_{t+1}, \dots, y_{t+H}$, kur $H$ -- horizonto ilgis.
+    Prognozuojama gali būti viena reikšmė $h$ žingsnių į priekį arba visos horizonto reikšmės $y_{t+1}, \dots, y_{t+h}$, kur $h$ -- horizonto ilgis.
     Tokia prognozė vadinama daugiažingsne (angl. \textit{multi-step}) \cite{strategiestimeseries}.
     Daugiažingsnė prognozė gali būti sudaroma rekursyviai, kai kiekviena gauta prognozė grąžinama kaip įvestis kito žingsnio prognozei.
     Taip pat tiesiogiai, vadinama daugiahorizonte prognoze (angl. \textit{multi-horizon forecasting}) \cite{lim2021}, kai modelis vienu metu išveda vieną prognozuojamų reikšmių vektorių.
@@ -205,7 +262,7 @@
     Duomenų prieinamumas ir nevienoda jų kokybė įvardijami kaip svarbiausios srities problemos.
     Klasikiniai mašininio mokymosi metodai reikalauja kruopštesnės požymių inžinerijos, tačiau pasižymi geresniu interpretuojamumu \cite{zhou2024}, todėl populiarėja hibridiniai sprendimai, sujungiantys giliojo mokymosi bei statistinius ar klasikinius mašininio mokymosi metodus \cite{wu2025}.
 
-    Vienas iš klasikinių mašininio mokymosi metodų, naudojamas ir hibridiniuose modeliuose, ir savarankiškai atliekant \ce{KD_{2,5}} prognozę, yra K artimiausių kaimynų metodas.
+    Vienas iš klasikinių mašininio mokymosi metodų, naudojamas ir hibridiniuose modeliuose, ir savarankiškai atliekant \ce{KD_{2,5}} prognozę, yra $k$ artimiausių kaimynų metodas.
     Lyginamajame eksperimente su penkiais oro taršos duomenų rinkiniais savaitės ir mėnesio prognozės horizontams jis pagal RMSE pranoko net giliuosius modelius \cite{das2021}.
     Vis dėlto šios srities darbuose KNN beveik visada taikomas bazinis, be patobulinimų.
 
@@ -249,7 +306,7 @@
     Akcijų rinkų indeksų kainos prognozei \cite{chen2017} naudoja hibridinį svertinį SVM ir svertinį KNN modelį.
     Iš pradžių svertinis SVM modelis prognozuoja, ar kaina kils, ar kris.
     Autoriai svoriams rasti naudoja informacijos prieaugį.
-    Tao yra matas, kuris rodo, kiek požymio žinojimas sumažina neapibrėžtumą (entropiją) dėl prognozuojamo dydžio.
+    Tai yra matas, kuris rodo, kiek požymio žinojimas sumažina neapibrėžtumą (entropiją) dėl prognozuojamo dydžio.
     Entropija čia skaičiuojama pagal kainos kilimo arba kritimo tikimybes.
     Tuomet atliekama kainos prognozė svertiniu KNN metodu.
     Naudojant informacijos prieaugį, iš naujo randami KNN svoriai, tačiau dabar sąlyginė entropija skaičiuojama pagal pačią kainą, kuri yra paverčiama dvejetaine klase pagal tai, ar kaina viršija numatytą slenkstį.
@@ -347,7 +404,7 @@
     Autoriai nurodo, kad skaitiniai optimizavimo algoritmai būtų efektyvesni, tačiau jų bandymai su gradientiniu BFGS algoritmu parodė, kad tikslo funkcijos paviršius yra plokščias ir turi kelis lokalius minimumus, o rastas sprendinys nesutapo su perrinkimu nustatytu minimumu.
     Kaimynai į ansamblį įtraukiami lygiaverčiai, be svorių.
 
-    Abu aptarti darbai rodo, kad svorių traktavimas kaip optimizuojamų parametrų prognozę gerina, tačiau tačiau jų taikymo metodikos turi tam tikrų ribojumų.
+    Abu aptarti darbai rodo, kad svorių traktavimas kaip optimizuojamų parametrų prognozę gerina, tačiau jų taikymo metodikos turi tam tikrų ribojumų.
     \cite{jafarizadeh2022} svoriai optimizuojami, bet uždavinys statinis, o svertinė atstumo funkcija neaprašyta.
     \cite{junk2015} atstumo funkcija užrašyta aiškiai ir uždavinys yra laiko eilučių, tačiau svoriai randami perrinkimu diskrečiame tinklelyje pagal vieną kriterijų.
 %    Abiem atvejais svoris tenka pavieniam požymiui ar prediktoriui, o ne jų grupei.
@@ -555,7 +612,7 @@
     Tipiškas pavyzdys yra gilieji neuroniniai tinklai.
 
     Interpretuojami modeliai atsako į klausimą, kaip rezultatas gautas, nes jų veikimas matomas tiesiogiai.
-    Tokiems modeliams priskiriami sprendimų medžiai, tiesinė regresija ir k artimiausių kaimynų metodas.
+    Tokiems modeliams priskiriami sprendimų medžiai, tiesinė regresija ir $k$ artimiausių kaimynų metodas.
     KNN atveju prognozė sudaroma iš konkrečių pavyzdžių, kuriuos galima parodyti, o svoriai atstumo funkcijoje rodo, kurie požymiai lėmė jų atranką.
     Todėl interpretuojamam modeliui papildomų aiškinimo priemonių nereikia.
 
