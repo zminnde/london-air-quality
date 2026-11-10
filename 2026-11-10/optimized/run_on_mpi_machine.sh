@@ -51,7 +51,7 @@ command -v mpirun > /dev/null || { echo "mpirun not found."; exit 1; }
 # Step 2: check the Python side alone. Expected first row: equal ... 6.566 861 84.71
 "$PYTHON_BIN" "$SCRIPT_DIR/run_examples.py"
 
-# Step 3: check the worker protocol alone. Expected output line: 6.566438924356107 861
+# Step 3: check the worker protocol alone. Expected output line: 6.566439 861
 echo "0.2 0.2 0.2 0.2 0.2 0.5" | "$PYTHON_BIN" -u "$WORKER"
 
 # Step 4: build the optimizer with the interpreter, the worker path and the evaluation count compiled in.

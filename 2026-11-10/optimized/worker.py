@@ -38,8 +38,8 @@ def main():
             distances, is_candidate, candidate_futures, true_futures, pm25_range, weights, threshold
         )
 
-        # Send both results back as one line; !r prints the number with full precision.
-        sys.stdout.write(f"{mean_error!r} {refused_count}\n")
+        # Send both results back as one line; :.6f prints the error with 6 digits after the decimal point.
+        sys.stdout.write(f"{mean_error:.6f} {refused_count}\n")
         # Push the line out immediately, otherwise the C++ side would wait forever.
         sys.stdout.flush()
 
